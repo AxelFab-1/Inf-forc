@@ -10,15 +10,21 @@ body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+            main {
+             width: 100%;
+             display: flex;
+             justify-content: center;
+             }
+
         /* Tarjeta de Login */
-        .login-card {
+            .login-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 2.5rem 2rem;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-        }
+             border-radius: 15px;
+            padding: 2.5rem 2rem; /* El espacio interno */
+            width: 90%; /* <--- ESTE ES EL CAMBIO CLAVE: De 100% a 90% */
+             max-width: 400px; /* Sigue limitando el tamaño en PC */
+             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+             }
 
         /* Espacio para el logo */
         .logo-placeholder {
