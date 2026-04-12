@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymApp - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <style>
+        /* Simulador de vista móvil para PC (Opcional, para que se vea como app) */
+        body {
+            background-color: #f8f9fa;
+        }
+        .app-container {
+            max-width: 450px;
+            margin: 0 auto;
+            background-color: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Header y Footer Fijos */
+        .header-custom {
+            background-color: #002b5e; /* Azul oscuro del boceto */
+            color: white;
+        }
+        .footer-custom {
+            background-color: #002b5e;
+        }
+        
+        /* Ajuste de márgenes para que el contenido no se oculte tras el header/footer */
+        .main-content {
+            padding-top: 80px;
+            padding-bottom: 80px;
+        }
+
+        /* Estilos del Calendario con CSS Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .calendar-day {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            color: #002b5e;
+            font-weight: 500;
+        }
+        .calendar-day.active {
+            border: 2px solid red; /* El círculo rojo de tu boceto */
+            border-radius: 50%;
+            color: red;
+            font-weight: bold;
+        }
+        .calendar-header {
+            color: #6c757d;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+        }
+
+        /* Iconos del Footer */
+        .nav-item-custom {
+            color: #a0aec0;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+        .nav-item-custom.active {
+            color: white;
+        }
+        .nav-item-custom i {
+            font-size: 1.5rem;
+            margin-bottom: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <nav class="navbar fixed-top header-custom app-container border-bottom border-4 border-primary">
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center">
+                <img src="https://ui-avatars.com/api/?name=Fabian&background=0D8ABC&color=fff" alt="Perfil" class="rounded-circle" width="45" height="45">
+                <span class="ms-3 fw-bold fs-5">#10045</span>
+            </div>
+            <div class="position-relative">
+                <i class="bi bi-bell-fill fs-3"></i>
+                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                    <span class="visually-hidden">Nuevas notificaciones</span>
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content container px-4">
+        
+        <div class="mt-4 mb-5">
+            <h1 class="text-primary fw-light mb-0">Bienvenido</h1>
+            <h1 class="text-primary fw-bold">Fabian</h1>
+        </div>
+
+        <div class="text-center mb-5">
+            <h5 id="estadoEntrenamiento" class="text-success fw-bold d-none mb-3">
+                <i class="bi bi-activity"></i> ¡Entrenamiento en curso!
+            </h5>
+            
+            <button id="btnAccion" class="btn btn-outline-primary btn-lg w-100 fw-bold py-3 text-uppercase">
+                Iniciar Entrenamiento
+            </button>
+        </div>
+
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <h6 class="text-center mb-3 fw-bold text-secondary">REGISTRO MENSUAL</h6>
+                
+                <div class="calendar-grid calendar-header">
+                    <div>L</div><div>M</div><div>M</div><div>J</div><div>V</div><div>S</div><div>D</div>
+                </div>
+                
+                <div class="calendar-grid">
+                    <div class="calendar-day">1</div>
+                    <div class="calendar-day">2</div>
+                    <div class="calendar-day">3</div>
+                    <div class="calendar-day">4</div>
+                    <div class="calendar-day">5</div>
+                    <div class="calendar-day">6</div>
+                    <div class="calendar-day">7</div>
+                    <div class="calendar-day">8</div>
+                    <div class="calendar-day">9</div>
+                    <div class="calendar-day active">10</div> <div class="calendar-day">11</div>
+                    <div class="calendar-day">12</div>
+                    <div class="calendar-day">13</div>
+                    <div class="calendar-day">14</div>
+                    <div class="calendar-day">15</div>
+                    <div class="calendar-day">16</div>
+                    <div class="calendar-day">17</div>
+                    <div class="calendar-day">18</div>
+                    <div class="calendar-day">19</div>
+                    <div class="calendar-day">20</div>
+                    <div class="calendar-day">21</div>
+                    <div class="calendar-day">22</div>
+                    <div class="calendar-day">23</div>
+                    <div class="calendar-day">24</div>
+                    <div class="calendar-day">25</div>
+                    <div class="calendar-day">26</div>
+                    <div class="calendar-day">27</div>
+                    <div class="calendar-day">28</div>
+                    <div class="calendar-day">29</div>
+                    <div class="calendar-day">30</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navbar fixed-bottom footer-custom app-container">
+        <div class="container-fluid d-flex justify-content-around py-1">
+            <a href="#" class="nav-item-custom active">
+                <i class="bi bi-house-door-fill"></i>
+                Inicio
+            </a>
+            <a href="#" class="nav-item-custom">
+                <i class="bi bi-lightning-charge-fill"></i>
+                Rutinas
+            </a>
+            <a href="#" class="nav-item-custom">
+                <i class="bi bi-people-fill"></i>
+                Comunidad
+            </a>
+            <a href="#" class="nav-item-custom">
+                <i class="bi bi-grid-fill"></i>
+                Catálogo
+            </a>
+        </div>
+    </nav>
+
+</div>
+
+<div class="modal fade" id="encuestaModal" tabindex="-1" aria-labelledby="encuestaModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="encuestaModalLabel">Configurar Sesión</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="fw-bold mb-3">¿Qué deseas entrenar hoy?</p>
+                <select class="form-select form-select-lg mb-3" id="tipoEntrenamiento">
+                    <option value="" selected disabled>Selecciona un enfoque...</option>
+                    <option value="brazos">Brazos (Bíceps/Tríceps)</option>
+                    <option value="empuje">Empuje (Pecho/Hombros/Tríceps)</option>
+                    <option value="jalon">Jalón (Espalda/Bíceps)</option>
+                    <option value="superior">Tren Superior Completo</option>
+                    <option value="inferior">Tren Inferior (Piernas)</option>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirmarEntrenamiento">¡A darle!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Lógica para el botón y el modal
+    const btnAccion = document.getElementById('btnAccion');
+    const estadoEntrenamiento = document.getElementById('estadoEntrenamiento');
+    const btnConfirmar = document.getElementById('btnConfirmarEntrenamiento');
+    const selectTipo = document.getElementById('tipoEntrenamiento');
+    
+    // Instanciar el modal de Bootstrap
+    const modalEncuesta = new bootstrap.Modal(document.getElementById('encuestaModal'));
+    
+    let enCurso = false;
+
+    // Al presionar el botón principal
+    btnAccion.addEventListener('click', () => {
+        if (!enCurso) {
+            // Si no está en curso, abrimos la encuesta
+            modalEncuesta.show();
+        } else {
+            // Si ya estaba en curso, lo terminamos
+            enCurso = false;
+            btnAccion.textContent = 'INICIAR ENTRENAMIENTO';
+            btnAccion.classList.replace('btn-danger', 'btn-outline-primary');
+            estadoEntrenamiento.classList.add('d-none');
+        }
+    });
+
+    // Al confirmar en el modal
+    btnConfirmar.addEventListener('click', () => {
+        if (selectTipo.value === "") {
+            alert("Por favor, selecciona qué vas a entrenar hoy.");
+            return;
+        }
+        
+        // Simular que te envía al segundo apartado y cambia el estado
+        modalEncuesta.hide();
+        enCurso = true;
+        
+        // Cambiar el diseño del botón principal
+        btnAccion.textContent = 'TERMINAR ENTRENAMIENTO';
+        btnAccion.classList.replace('btn-outline-primary', 'btn-danger');
+        
+        // Mostrar el texto de estado
+        estadoEntrenamiento.classList.remove('d-none');
+        
+        // Aquí podrías agregar un window.location.href = "rutinas.html" en el futuro
+        console.log("Iniciando rutina de: " + selectTipo.value);
+    });
+</script>
+
+</body>
+</html>
