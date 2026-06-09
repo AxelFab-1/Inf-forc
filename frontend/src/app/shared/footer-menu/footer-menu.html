@@ -1,0 +1,49 @@
+<footer
+  class="fixed-bottom border-top border-dark"
+  style="background-color: #1a1a1a; z-index: 1040"
+>
+  <div class="container d-flex justify-content-around py-2">
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="text-warning"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="btn btn-link text-decoration-none d-flex flex-column align-items-center p-1 text-secondary"
+    >
+      <i class="bi bi-house-door-fill fs-4"></i>
+      <span style="font-size: 0.75rem; font-weight: bold">Inicio</span>
+    </a>
+
+    <a
+      routerLink="/entrenar"
+      routerLinkActive="text-warning"
+      class="btn btn-link text-secondary text-decoration-none d-flex flex-column align-items-center p-1"
+    >
+      <i class="bi bi-activity fs-4"></i>
+      <span style="font-size: 0.75rem">Entrenar</span>
+    </a>
+
+    <a
+      routerLink="/comunidad"
+      routerLinkActive="text-warning"
+      class="btn btn-link text-secondary text-decoration-none d-flex flex-column align-items-center p-1"
+    >
+      <i class="bi bi-people fs-4"></i>
+      <span style="font-size: 0.75rem">Comunidad</span>
+    </a>
+
+    <a
+      routerLink="/catalogo"
+      routerLinkActive="text-warning"
+      class="btn btn-link text-secondary text-decoration-none d-flex flex-column align-items-center p-1"
+    >
+      <i class="bi bi-journal-bookmark fs-4"></i>
+      <span style="font-size: 0.75rem">Catálogo</span>
+    </a>
+  </div>
+</footer>
+
+<style>
+  .text-warning {
+    color: #ffd700 !important;
+  }
+</style>

@@ -1,0 +1,169 @@
+<div class="bg-dark" style="background-color: #121212 !important; min-height: 100vh; padding-bottom: 50px">
+  <nav class="navbar navbar-expand-lg mb-4 mb-md-5 shadow-sm" style="background-color: #1a1a1a">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4" style="color: #ffd700">
+        Infinity Force Admin
+        <span *ngIf="nombreAdmin" class="fs-6 text-white-50 fw-normal ms-2">| {{ nombreAdmin }}</span>
+      </a>
+      <div class="d-flex align-items-center">
+        <button class="btn btn-outline-danger btn-sm px-4 rounded-pill fw-bold" (click)="cerrarSesion()">Salir</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        
+        <div class="d-flex justify-content-center mb-4 border-bottom border-secondary">
+          <button class="btn fw-bold px-4 py-2 me-2"
+                  [ngClass]="tabActiva === 'usuarios' ? 'btn-warning' : 'btn-outline-light border-0'"
+                  [style.backgroundColor]="tabActiva === 'usuarios' ? '#ffd700' : 'transparent'"
+                  [style.color]="tabActiva === 'usuarios' ? '#000' : '#fff'"
+                  (click)="cambiarTab('usuarios')">
+            <i class="bi bi-person-plus-fill me-2"></i>Usuarios
+          </button>
+          <button class="btn fw-bold px-4 py-2"
+                  [ngClass]="tabActiva === 'productos' ? 'btn-warning' : 'btn-outline-light border-0'"
+                  [style.backgroundColor]="tabActiva === 'productos' ? '#ffd700' : 'transparent'"
+                  [style.color]="tabActiva === 'productos' ? '#000' : '#fff'"
+                  (click)="cambiarTab('productos')">
+            <i class="bi bi-box-seam me-2"></i>Inventario
+          </button>
+        </div>
+
+        <div *ngIf="tabActiva === 'usuarios'" class="card shadow-lg border-0 mb-5" style="background-color: #1a1a1a; border-top: 4px solid #ffd700 !important">
+          <div class="card-header border-0 pt-4 pb-2 bg-transparent">
+            <h4 class="mb-0 text-center fw-bold text-uppercase" style="color: #ffd700; letter-spacing: 2px">Registrar Nuevo Usuario</h4>
+          </div>
+          <div class="card-body p-4 p-md-5">
+            <form #registroForm="ngForm" (ngSubmit)="registrarUsuario(registroForm)" [ngClass]="{ 'was-validated': registroForm.submitted && registroForm.invalid }" novalidate>
+              
+              <div class="row g-4 mb-4">
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-warning">Nombres</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-light shadow-none" name="nombres" [(ngModel)]="nuevoUsuario.nombres" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" required />
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-warning">Apellidos</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-light shadow-none" name="apellidos" [(ngModel)]="nuevoUsuario.apellidos" pattern="[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+" required />
+                </div>
+              </div>
+
+              <div class="row g-4 mb-4">
+                <div class="col-12 col-md-4">
+                  <label class="form-label fw-semibold text-warning">DNI</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-light shadow-none" name="dni" [(ngModel)]="nuevoUsuario.dni" (input)="sincronizarContrasena()" pattern="[0-9]{8}" maxlength="8" required />
+                </div>
+                <div class="col-12 col-md-4">
+                  <label class="form-label fw-semibold text-warning">Código de Acceso</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-light shadow-none" name="codigoAcceso" [(ngModel)]="nuevoUsuario.codigoAcceso" pattern="[0-9]{5}" maxlength="5" required />
+                  <div class="form-text text-white-50 small">Asigna 5 dígitos.</div>
+                </div>
+                <div class="col-12 col-md-4">
+                  <label class="form-label fw-semibold text-warning">Contraseña</label>
+                  <input type="text" class="form-control bg-dark border-secondary text-light shadow-none" name="contrasena" [(ngModel)]="nuevoUsuario.contrasena" required />
+                </div>
+              </div>
+
+              <div class="row g-4 mb-5">
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-warning">Sede</label>
+                  <select class="form-select bg-dark border-secondary text-light shadow-none" name="sede" [(ngModel)]="nuevoUsuario.sede" required>
+                    <option value="" disabled selected>Selecciona una sede...</option>
+                    <option value="Sede 1">Sede 1</option>
+                    <option value="Sede 2">Sede 2</option>
+                    <option value="Sede 3">Sede 3</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label class="form-label fw-semibold text-warning">Rol</label>
+                  <select class="form-select bg-dark border-secondary text-light shadow-none" name="rol" [(ngModel)]="nuevoUsuario.rol" required>
+                    <option value="cliente">Cliente</option>
+                    <option value="administrador">Administrador</option>
+                  </select>
+                </div>
+              </div>
+
+              <button type="submit" class="btn w-100 py-3 fw-bold text-uppercase mt-2" style="background-color: #ffd700; color: #000; box-shadow: 0 4px 10px rgba(230, 194, 0, 0.2);">
+                Crear Usuario
+              </button>
+
+              <div *ngIf="alerta && tabActiva === 'usuarios'" class="alert alert-{{ alerta.tipo }} alert-dismissible fade show mt-4 mb-0 shadow-sm" role="alert">
+                <strong>{{ alerta.tipo === 'success' ? '¡Listo!' : 'Error:' }}</strong> {{ alerta.mensaje }}
+                <button type="button" class="btn-close" (click)="cerrarAlerta()"></button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <div *ngIf="tabActiva === 'productos'">
+          <div class="card shadow-sm border-0 mb-4" style="background-color: #1a1a1a; border-left: 4px solid #ffd700 !important">
+            <div class="card-body p-4">
+              <h5 class="fw-bold mb-4" style="color: #ffd700">Agregar Nuevo Producto</h5>
+              
+              <form #productoForm="ngForm" (ngSubmit)="crearProducto(productoForm)">
+                <div class="row g-3">
+                  <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold text-warning small mb-1">Nombre del Producto</label>
+                    <input type="text" class="form-control bg-dark text-light border-secondary shadow-none" name="nombre" [(ngModel)]="nuevoProducto.nombre" required />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label fw-semibold text-warning small mb-1">Categoría</label>
+                    <select class="form-select bg-dark text-light border-secondary shadow-none" name="categoria" [(ngModel)]="nuevoProducto.categoria" required>
+                      <option value="" disabled selected>Selecciona...</option>
+                      <option value="suplementos">Suplementos</option>
+                      <option value="ropa">Ropa</option>
+                      <option value="accesorios">Accesorios</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label class="form-label fw-semibold text-warning small mb-1">Precio (S/)</label>
+                    <input type="number" class="form-control bg-dark text-light border-secondary shadow-none" name="precio" [(ngModel)]="nuevoProducto.precio" min="0" required />
+                  </div>
+                  <div class="col-12 col-md-8">
+                    <label class="form-label fw-semibold text-warning small mb-1">URL de la Imagen</label>
+                    <input type="text" class="form-control bg-dark text-light border-secondary shadow-none" name="imagenUrl" [(ngModel)]="nuevoProducto.imagenUrl" required />
+                  </div>
+                  <div class="col-12 mt-4">
+                    <button type="submit" class="btn fw-bold w-100 py-2" style="background-color: #ffd700; color: #000">Guardar Producto</button>
+                  </div>
+                </div>
+
+                <div *ngIf="alerta && tabActiva === 'productos'" class="alert alert-{{ alerta.tipo }} alert-dismissible fade show mt-4 mb-0 shadow-sm" role="alert">
+                  <strong>{{ alerta.tipo === 'success' ? '¡Listo!' : 'Error:' }}</strong> {{ alerta.mensaje }}
+                  <button type="button" class="btn-close" (click)="cerrarAlerta()"></button>
+                </div>
+
+              </form>
+            </div>
+          </div>
+
+          <h5 class="fw-bold text-white mb-3 mt-4">Inventario Actual</h5>
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            <div class="col" *ngFor="let prod of productos">
+              <div class="card bg-dark border-secondary p-3" [ngClass]="{ 'opacity-50': !prod.activo }">
+                <div class="d-flex align-items-center">
+                  <img [src]="prod.imagenUrl" class="rounded me-3" width="60" height="60" style="object-fit: cover" (error)="$event.target.src = 'https://placehold.co/60x60'" />
+                  <div class="flex-grow-1">
+                    <h6 class="text-white mb-1 fw-bold text-truncate" style="max-width: 200px">{{ prod.nombre }}</h6>
+                    <div class="d-flex align-items-center">
+                      <span class="text-white-50 small me-2">S/</span>
+                      <input type="number" class="form-control form-control-sm bg-transparent border-secondary text-gold p-0 fw-bold" style="width: 70px; color: #ffd700 !important" [(ngModel)]="prod.precio" (change)="actualizarProducto(prod)" />
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <button class="btn btn-sm fw-bold border-0" [ngClass]="prod.activo ? 'btn-outline-success text-success' : 'btn-outline-danger text-danger'" (click)="toggleDisponibilidad(prod)">
+                      {{ prod.activo ? 'Disponible' : 'Agotado' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

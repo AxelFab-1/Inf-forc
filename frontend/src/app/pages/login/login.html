@@ -1,0 +1,79 @@
+<div class="body-login text-dark d-flex align-items-center" style="min-height: 100vh; width: 100%">
+  <main class="w-100 d-flex justify-content-center">
+    <div class="login-card">
+      <div class="text-center">
+        <div
+          class="bg-black text-gold rounded-circle d-flex align-items-center justify-content-center fw-bold fs-3 mx-auto mb-4 border border-3 shadow"
+          style="width: 90px; height: 90px; border-color: var(--gym-gold) !important"
+        >
+          GYM
+        </div>
+        <h4 class="mb-4 fw-bold">Acceso a Socios</h4>
+      </div>
+
+      <form (ngSubmit)="hacerLogin()" class="needs-validation" novalidate>
+        <div
+          *ngIf="mensajeError"
+          class="alert alert-danger alert-dismissible fade show mb-4"
+          role="alert"
+        >
+          <strong>¡Error!</strong> {{ mensajeError }}
+          <button
+            type="button"
+            class="btn-close"
+            (click)="mensajeError = ''"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="mb-3">
+          <label for="codigoAcceso" class="form-label fw-semibold">Código de Acceso</label>
+          <input
+            type="text"
+            [(ngModel)]="codigo"
+            (input)="codigo = codigo.replace(/[^0-9]/g, '')"
+            name="codigo"
+            inputmode="numeric"
+            pattern="[0-9]{5}"
+            maxlength="5"
+            class="form-control"
+            id="codigoAcceso"
+            placeholder="Ej: 10045"
+            required
+          />
+        </div>
+
+        <div class="mb-4">
+          <label for="contrasena" class="form-label fw-semibold">Contraseña</label>
+          <div class="input-group">
+            <input
+              [type]="mostrarPassword ? 'text' : 'password'"
+              [(ngModel)]="contrasena"
+              name="contrasena"
+              inputmode="numeric"
+              pattern="[0-9]{8}"
+              maxlength="50"
+              class="form-control"
+              id="contrasena"
+              placeholder="Ingresa tu contraseña"
+              required
+            />
+            <button 
+              class="btn btn-outline-secondary" 
+              type="button" 
+              (click)="mostrarPassword = !mostrarPassword"
+              style="border-color: #dee2e6;">
+              <i class="bi" [ngClass]="mostrarPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
+            </button>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-gold w-100 py-2 fs-5">Entrar</button>
+
+        <div class="help-text mt-3 text-center" style="font-size: 0.85rem">
+          Si es tu primera vez ingresando, usa tu DNI como contraseña.
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

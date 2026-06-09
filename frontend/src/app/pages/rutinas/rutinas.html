@@ -1,0 +1,48 @@
+<div class="body-app bg-dark text-white" style="min-height: 100vh;">
+    <header class="fixed-top border-bottom border-dark shadow-sm" style="background-color: #1a1a1a;">
+        <div class="container d-flex align-items-center p-3">
+            <a routerLink="/entrenar" class="text-white text-decoration-none me-3">
+                <i class="bi bi-arrow-left fs-3"></i>
+            </a>
+            <h4 class="mb-0 fw-bold" style="color: #ffd700;">Nuestras Rutinas</h4>
+        </div>
+    </header>
+
+    <main class="container pt-5" style="margin-top: 70px; padding-bottom: 30px;">
+        
+        <div class="d-flex justify-content-center gap-3 mb-4">
+            <button (click)="filtrarPlantillas('predeterminada')" 
+                    class="btn fw-bold px-3 py-2 rounded-pill" 
+                    [ngClass]="tipoSeleccionado === 'predeterminada' ? 'btn-warning text-dark' : 'btn-outline-warning'">
+                Predeterminadas
+            </button>
+            <button (click)="filtrarPlantillas('personalizada')" 
+                    class="btn fw-bold px-3 py-2 rounded-pill" 
+                    [ngClass]="tipoSeleccionado === 'personalizada' ? 'btn-warning text-dark' : 'btn-outline-warning'">
+                Armar Personalizada
+            </button>
+        </div>
+
+        <div id="contenedorPlantillas" class="row g-3">
+            <div class="col-12" *ngFor="let plantilla of plantillasMostradas">
+                <div class="card p-3 d-flex flex-column gap-2" style="background-color: #222; border: 1px solid #333;">
+                    <div class="d-flex align-items-center gap-3">
+                        <i class="bi bi-lightning-charge fs-1" style="color: #ffd700;"></i>
+                        <div class="flex-grow-1">
+                            <h5 class="fw-bold text-white mb-1">{{ plantilla.nombre }}</h5>
+                            <p class="small text-white-50 mb-2">{{ plantilla.descripcion }}</p>
+                        </div>
+                    </div>
+                    <button (click)="seleccionarPlantilla(plantilla)" class="btn fw-bold mt-2 w-100" style="background-color: #ffd700; color: #000;">
+                        {{ plantilla.tipo === 'predeterminada' ? 'Elegir esta Rutina' : 'Empezar a Armar' }}
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="plantillasMostradas.length === 0" class="col-12 text-center text-white-50 mt-4">
+                <p>No se encontraron rutinas disponibles.</p>
+            </div>
+        </div>
+        
+    </main>
+</div>
