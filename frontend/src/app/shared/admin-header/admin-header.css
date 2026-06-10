@@ -1,0 +1,20 @@
+/* ─── Admin Header ──────────────────────────────────────────────────────── */
+
+.nav-link-admin {
+  color: #aaa;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.nav-link-admin:hover {
+  color: #ffd700;
+  border-color: #444;
+  background-color: #252525;
+}
+
+.nav-link-admin.active {
+  background-color: #ffd700;
+  color: #000 !important;
+  border-color: #ffd700;
+}

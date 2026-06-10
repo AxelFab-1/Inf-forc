@@ -1,0 +1,9 @@
+.admin-content {
+  padding: 2rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .admin-content {
+    padding: 2rem 2rem;
+  }
+}

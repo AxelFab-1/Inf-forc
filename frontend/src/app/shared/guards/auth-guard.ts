@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
 
     if (expectedRole && userRole !== expectedRole) {
       if (userRole === 'administrador') {
-        this.router.navigate(['/admin-dashboard']);
+        this.router.navigate(['/admin/usuarios']);
       } else {
         this.router.navigate(['/dashboard']);
       }

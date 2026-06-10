@@ -8,6 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Document(collection = "usuarios")
 public class Usuario {
 
@@ -42,91 +46,98 @@ public class Usuario {
     private Integer totalAsistencias;
     private String estadoMembresia;
 
-    public String getId() {
-        return id;
+    // ─── Campos biométricos estáticos ────────────────────────────────────────
+    private String sexo;
+    private Date fechaNacimiento;
+    private Double estaturaCm;
+
+    // ─── Historial biométrico (Bucket Pattern) ───────────────────────────────
+    private List<RegistroBiometrico> historialBiometrico = new ArrayList<>();
+
+    // ─── Clase anidada: un registro del historial ────────────────────────────
+    public static class RegistroBiometrico {
+        private Date fechaRegistro;
+        private Double pesoKg;
+        private String objetivo;       // Volumen, Definición, Mantenimiento
+        private String nivelActividad; // Sedentario, Ligero, Moderado, Intenso
+        private Double imcCalculado;
+        private Double caloriasRecomendadas;
+        private Double proteinasG;
+        private Double carbohidratosG;
+        private Double grasasG;
+
+        public Date getFechaRegistro() { return fechaRegistro; }
+        public void setFechaRegistro(Date fechaRegistro) { this.fechaRegistro = fechaRegistro; }
+
+        public Double getPesoKg() { return pesoKg; }
+        public void setPesoKg(Double pesoKg) { this.pesoKg = pesoKg; }
+
+        public String getObjetivo() { return objetivo; }
+        public void setObjetivo(String objetivo) { this.objetivo = objetivo; }
+
+        public String getNivelActividad() { return nivelActividad; }
+        public void setNivelActividad(String nivelActividad) { this.nivelActividad = nivelActividad; }
+
+        public Double getImcCalculado() { return imcCalculado; }
+        public void setImcCalculado(Double imcCalculado) { this.imcCalculado = imcCalculado; }
+
+        public Double getCaloriasRecomendadas() { return caloriasRecomendadas; }
+        public void setCaloriasRecomendadas(Double caloriasRecomendadas) { this.caloriasRecomendadas = caloriasRecomendadas; }
+
+        public Double getProteinasG() { return proteinasG; }
+        public void setProteinasG(Double proteinasG) { this.proteinasG = proteinasG; }
+
+        public Double getCarbohidratosG() { return carbohidratosG; }
+        public void setCarbohidratosG(Double carbohidratosG) { this.carbohidratosG = carbohidratosG; }
+
+        public Double getGrasasG() { return grasasG; }
+        public void setGrasasG(Double grasasG) { this.grasasG = grasasG; }
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+    // ─── Getters y Setters ───────────────────────────────────────────────────
 
-    public String getNombres() {
-        return nombres;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
-    public void setNombres(String nombres) {
-        this.nombres = nombres;
-    }
+    public String getNombres() { return nombres; }
+    public void setNombres(String nombres) { this.nombres = nombres; }
 
-    public String getApellidos() {
-        return apellidos;
-    }
+    public String getApellidos() { return apellidos; }
+    public void setApellidos(String apellidos) { this.apellidos = apellidos; }
 
-    public void setApellidos(String apellidos) {
-        this.apellidos = apellidos;
-    }
+    public String getDni() { return dni; }
+    public void setDni(String dni) { this.dni = dni; }
 
-    public String getDni() {
-        return dni;
-    }
+    public String getCodigoAcceso() { return codigoAcceso; }
+    public void setCodigoAcceso(String codigoAcceso) { this.codigoAcceso = codigoAcceso; }
 
-    public void setDni(String dni) {
-        this.dni = dni;
-    }
+    public String getContrasena() { return contrasena; }
+    public void setContrasena(String contrasena) { this.contrasena = contrasena; }
 
-    public String getCodigoAcceso() {
-        return codigoAcceso;
-    }
+    public String getSede() { return sede; }
+    public void setSede(String sede) { this.sede = sede; }
 
-    public void setCodigoAcceso(String codigoAcceso) {
-        this.codigoAcceso = codigoAcceso;
-    }
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
 
-    public String getContrasena() {
-        return contrasena;
-    }
+    public String getFechaCreacion() { return fechaCreacion; }
+    public void setFechaCreacion(String fechaCreacion) { this.fechaCreacion = fechaCreacion; }
 
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
+    public Integer getTotalAsistencias() { return totalAsistencias; }
+    public void setTotalAsistencias(Integer totalAsistencias) { this.totalAsistencias = totalAsistencias; }
 
-    public String getSede() {
-        return sede;
-    }
+    public String getEstadoMembresia() { return estadoMembresia; }
+    public void setEstadoMembresia(String estadoMembresia) { this.estadoMembresia = estadoMembresia; }
 
-    public void setSede(String sede) {
-        this.sede = sede;
-    }
+    public String getSexo() { return sexo; }
+    public void setSexo(String sexo) { this.sexo = sexo; }
 
-    public String getRol() {
-        return rol;
-    }
+    public Date getFechaNacimiento() { return fechaNacimiento; }
+    public void setFechaNacimiento(Date fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
+    public Double getEstaturaCm() { return estaturaCm; }
+    public void setEstaturaCm(Double estaturaCm) { this.estaturaCm = estaturaCm; }
 
-    public String getFechaCreacion() {
-        return fechaCreacion;
-    }
-
-    public void setFechaCreacion(String fechaCreacion) {
-        this.fechaCreacion = fechaCreacion;
-    }
-
-    public Integer getTotalAsistencias() {
-        return totalAsistencias;
-    }
-
-    public void setTotalAsistencias(Integer totalAsistencias) {
-        this.totalAsistencias = totalAsistencias;
-    }
-
-    public String getEstadoMembresia() {
-        return estadoMembresia;
-    }
-
-    public void setEstadoMembresia(String estadoMembresia) {
-        this.estadoMembresia = estadoMembresia;
-    }
+    public List<RegistroBiometrico> getHistorialBiometrico() { return historialBiometrico; }
+    public void setHistorialBiometrico(List<RegistroBiometrico> historialBiometrico) { this.historialBiometrico = historialBiometrico; }
 }

@@ -1,0 +1,338 @@
+/* ─── Layout base ───────────────────────────────────────────────────────── */
+
+:host {
+  display: block;
+  padding: 1.5rem;
+  background-color: #121212;
+  min-height: 100vh;
+}
+
+.global-alert {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  min-width: 300px;
+  max-width: 420px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+
+.loading-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+/* ─── Encabezado ────────────────────────────────────────────────────────── */
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.page-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* ─── Grid de secciones ─────────────────────────────────────────────────── */
+
+.sections-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .sections-grid { grid-template-columns: 1fr; }
+}
+
+/* ─── Tarjeta de sección ────────────────────────────────────────────────── */
+
+.info-card {
+  background-color: #1a1a1a;
+  border-radius: 14px;
+  padding: 1.5rem;
+  border-top: 3px solid #ffd700;
+}
+
+.card-badge {
+  display: inline-flex;
+  align-items: center;
+  background-color: rgba(255,215,0,0.12);
+  color: #ffd700;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 1.25rem;
+}
+
+/* ─── IMC ───────────────────────────────────────────────────────────────── */
+
+.imc-display {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.imc-circle {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 4px solid #ffd700;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: border-color 0.3s ease;
+}
+
+.imc-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+  transition: color 0.3s ease;
+}
+
+.imc-label {
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 2px;
+}
+
+.imc-details {
+  flex: 1;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #252525;
+}
+
+.detail-row:last-child { border-bottom: none; }
+
+.detail-label {
+  color: #888;
+  font-size: 0.82rem;
+}
+
+.detail-value {
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* ─── Calorías totales ──────────────────────────────────────────────────── */
+
+.calories-display {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  background-color: #111;
+  border-radius: 10px;
+}
+
+.calories-value {
+  display: block;
+  font-size: 3rem;
+  font-weight: 900;
+  color: #ffd700;
+  line-height: 1;
+}
+
+.calories-unit {
+  display: block;
+  font-size: 0.8rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+/* ─── Macros ────────────────────────────────────────────────────────────── */
+
+.macros-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.macro-item { }
+
+.macro-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.macro-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ccc;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.macro-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.macro-grams {
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.macro-bar-bg {
+  background-color: #252525;
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.macro-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.macro-pct {
+  font-size: 0.72rem;
+  color: #555;
+  margin-top: 3px;
+  display: block;
+}
+
+/* ─── Disclaimer ────────────────────────────────────────────────────────── */
+
+.disclaimer-box {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  background-color: rgba(255,215,0,0.06);
+  border-left: 3px solid #ffd700;
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-size: 0.78rem;
+  color: #aaa;
+  line-height: 1.5;
+}
+
+/* ─── Botón actualizar ──────────────────────────────────────────────────── */
+
+.btn-update {
+  background-color: #ffd700;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1.25rem;
+  font-weight: 700;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-update:hover {
+  background-color: #e6c200;
+  transform: translateY(-1px);
+  color: #000;
+}
+
+.btn-update:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ─── Estado vacío ──────────────────────────────────────────────────────── */
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+
+/* ─── Modales ───────────────────────────────────────────────────────────── */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.75);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-card {
+  background-color: #1e1e1e;
+  border-radius: 14px;
+  padding: 1.75rem;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-top: 3px solid #ffd700;
+  animation: slideUp 0.25s ease;
+}
+
+.modal-card--sm {
+  max-width: 420px;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.modal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  color: #fff;
+}
+
+.btn-close-modal {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.btn-close-modal:hover {
+  color: #fff;
+  background-color: #333;
+}

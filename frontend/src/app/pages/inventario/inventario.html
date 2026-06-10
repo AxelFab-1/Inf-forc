@@ -1,0 +1,189 @@
+<div class="master-detail-layout">
+
+  <!-- ═══════════════════════════════════ PANEL LATERAL (DETAIL) ═══════════════ -->
+  <aside class="detail-panel">
+
+    <div class="panel-header">
+      <h5 class="mb-0 fw-bold" style="color: #ffd700;">
+        <i class="bi" [ngClass]="modo === 'crear' ? 'bi-plus-circle-fill' : 'bi-pencil-fill'"></i>
+        {{ modo === 'crear' ? 'Nuevo Producto' : 'Editar Producto' }}
+      </h5>
+      <button *ngIf="modo === 'editar'" class="btn btn-sm btn-outline-secondary rounded-pill"
+              (click)="limpiarPanel()">
+        <i class="bi bi-x-lg me-1"></i> Limpiar
+      </button>
+    </div>
+
+    <!-- Alerta -->
+    <div *ngIf="alerta" class="alert alert-{{ alerta.tipo }} alert-dismissible py-2 px-3 mb-3 small" role="alert">
+      {{ alerta.mensaje }}
+      <button type="button" class="btn-close btn-sm" (click)="cerrarAlerta()"></button>
+    </div>
+
+    <!-- ── FORMULARIO CREAR ── -->
+    <form *ngIf="modo === 'crear'" #formCrear="ngForm" (ngSubmit)="crearProducto(formCrear)">
+
+      <div class="mb-3">
+        <label class="form-label text-warning fw-semibold small">Nombre</label>
+        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               name="nombre" [(ngModel)]="nuevoProducto.nombre" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-warning fw-semibold small">Categoría</label>
+        <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                name="categoria" [(ngModel)]="nuevoProducto.categoria" required>
+          <option value="" disabled selected>Selecciona...</option>
+          <option *ngFor="let cat of categorias" [value]="cat">{{ cat | titlecase }}</option>
+        </select>
+      </div>
+
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <label class="form-label text-warning fw-semibold small">Precio (S/)</label>
+          <input type="number" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 name="precio" [(ngModel)]="nuevoProducto.precio" min="0" required />
+        </div>
+        <div class="col-6">
+          <label class="form-label text-warning fw-semibold small">Stock</label>
+          <input type="number" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 name="stock" [(ngModel)]="nuevoProducto.stock" min="0" />
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label text-warning fw-semibold small">URL de Imagen</label>
+        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               name="imagenUrl" [(ngModel)]="nuevoProducto.imagenUrl" required />
+        <div *ngIf="nuevoProducto.imagenUrl" class="mt-2 text-center">
+          <img [src]="nuevoProducto.imagenUrl" class="img-preview rounded"
+               (error)="$any($event.target).src='https://placehold.co/120x80'" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn w-100 fw-bold py-2" style="background-color:#ffd700; color:#000;">
+        <i class="bi bi-plus-circle me-1"></i> Guardar Producto
+      </button>
+    </form>
+
+    <!-- ── FORMULARIO EDITAR ── -->
+    <form *ngIf="modo === 'editar'" #formEditar="ngForm" (ngSubmit)="guardarEdicion(formEditar)">
+
+      <div class="mb-3">
+        <label class="form-label text-warning fw-semibold small">Nombre</label>
+        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               name="nombreEdit" [(ngModel)]="productoEditando.nombre" required />
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-warning fw-semibold small">Categoría</label>
+        <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                name="categoriaEdit" [(ngModel)]="productoEditando.categoria" required>
+          <option *ngFor="let cat of categorias" [value]="cat">{{ cat | titlecase }}</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label text-warning fw-semibold small">Precio (S/)</label>
+        <input type="number" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               name="precioEdit" [(ngModel)]="productoEditando.precio" min="0" required />
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label text-warning fw-semibold small">URL de Imagen</label>
+        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               name="imagenEdit" [(ngModel)]="productoEditando.imagenUrl" required />
+        <div *ngIf="productoEditando.imagenUrl" class="mt-2 text-center">
+          <img [src]="productoEditando.imagenUrl" class="img-preview rounded"
+               (error)="$any($event.target).src='https://placehold.co/120x80'" />
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="submit" class="btn fw-bold py-2 flex-grow-1" style="background-color:#ffd700; color:#000;">
+          <i class="bi bi-check-lg me-1"></i> Actualizar
+        </button>
+        <button type="button" class="btn btn-outline-danger fw-bold py-2"
+                (click)="eliminarProducto(productoEditando)">
+          <i class="bi bi-trash3"></i>
+        </button>
+      </div>
+    </form>
+
+  </aside>
+
+  <!-- ═══════════════════════════════════ ZONA MASTER ═══════════════════════════ -->
+  <main class="master-zone">
+
+    <!-- Barra de búsqueda y filtros -->
+    <div class="d-flex flex-wrap gap-2 mb-4 align-items-center">
+      <div class="flex-grow-1" style="min-width: 180px;">
+        <div class="input-group input-group-sm">
+          <span class="input-group-text bg-dark border-secondary text-white-50">
+            <i class="bi bi-search"></i>
+          </span>
+          <input type="text" class="form-control bg-dark border-secondary text-light shadow-none"
+                 placeholder="Buscar producto..."
+                 [(ngModel)]="textoBusqueda"
+                 (input)="aplicarFiltros()" />
+        </div>
+      </div>
+
+      <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+              style="max-width: 160px;"
+              [(ngModel)]="filtroCategoria"
+              (change)="aplicarFiltros()">
+        <option value="">Todas las categorías</option>
+        <option *ngFor="let cat of categorias" [value]="cat">{{ cat | titlecase }}</option>
+      </select>
+
+      <button class="btn btn-outline-secondary btn-sm" (click)="limpiarFiltros()"
+              *ngIf="textoBusqueda || filtroCategoria">
+        <i class="bi bi-x-circle me-1"></i> Limpiar
+      </button>
+
+      <span class="text-white-50 small ms-auto">
+        {{ productosFiltrados.length }} producto(s)
+      </span>
+    </div>
+
+    <!-- Sin resultados -->
+    <div *ngIf="productosFiltrados.length === 0" class="text-center text-white-50 py-5">
+      <i class="bi bi-box-seam fs-1 mb-3 d-block opacity-50"></i>
+      <p class="mb-0">No se encontraron productos.</p>
+    </div>
+
+    <!-- Grid de tarjetas -->
+    <div class="products-grid">
+      <div *ngFor="let prod of productosFiltrados"
+           class="product-card"
+           [ngClass]="{ 'product-card--selected': productoSeleccionado?._id === prod._id, 'product-card--inactive': !prod.activo }"
+           (click)="seleccionarProducto(prod)">
+
+        <!-- Imagen -->
+        <div class="product-img-wrapper">
+          <img [src]="prod.imagenUrl" class="product-img"
+               (error)="$any($event.target).src='https://placehold.co/200x140'" />
+          <span class="badge-categoria">{{ prod.categoria | titlecase }}</span>
+        </div>
+
+        <!-- Info -->
+        <div class="product-info">
+          <h6 class="product-name">{{ prod.nombre }}</h6>
+          <div class="product-footer">
+            <span class="product-precio">S/ {{ prod.precio | number:'1.2-2' }}</span>
+            <!-- Toggle disponibilidad (stopPropagation para no abrir edición) -->
+            <button class="btn btn-xs fw-bold"
+                    [ngClass]="prod.activo ? 'btn-outline-success' : 'btn-outline-danger'"
+                    (click)="$event.stopPropagation(); toggleDisponibilidad(prod)">
+              {{ prod.activo ? 'Disponible' : 'Agotado' }}
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+</div>
