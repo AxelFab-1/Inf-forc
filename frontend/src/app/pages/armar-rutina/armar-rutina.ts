@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
 import { decodificarToken } from '../../shared/utils/jwt-decoder';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 declare var bootstrap: any;
 
@@ -31,7 +33,7 @@ export class ArmarRutina implements OnInit {
   }
 
   cargarDatosIniciales() {
-    fetch('http://localhost:8090/api/plantillas', {
+    fetch(`${API_URL}/api/plantillas`, {
       headers: obtenerCabeceras(),
     })
       .then((res) => res.json())
@@ -42,7 +44,7 @@ export class ArmarRutina implements OnInit {
         }
       });
 
-    fetch('http://localhost:8090/api/ejercicios', {
+    fetch(`${API_URL}/api/ejercicios`, {
       headers: obtenerCabeceras(),
     })
       .then((res) => res.json())
@@ -111,7 +113,7 @@ export class ArmarRutina implements OnInit {
       dias: this.plantillaEnConstruccion.dias,
     };
 
-    fetch('http://localhost:8090/api/rutinas-socios', {
+    fetch(`${API_URL}/api/rutinas-socios`, {
       method: 'POST',
       headers: obtenerCabeceras(),
       body: JSON.stringify(rutinaSocio),

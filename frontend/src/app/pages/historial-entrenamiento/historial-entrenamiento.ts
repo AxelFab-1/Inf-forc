@@ -4,6 +4,8 @@ import { Router } from '@angular/router';
 import { FooterMenu } from '../../shared/footer-menu/footer-menu';
 import { Header } from '../../shared/header/header';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 declare var bootstrap: any;
 
@@ -90,7 +92,7 @@ export class HistorialEntrenamiento implements OnInit {
     this.mapaDiaSesionId     = {};
 
     fetch(
-      `http://localhost:8090/api/asistencias?anio=${this.anioActual}&mes=${this.mesActual}`,
+      `${API_URL}/api/asistencias?anio=${this.anioActual}&mes=${this.mesActual}`,
       { headers: obtenerCabeceras() }
     )
       .then(res => res.json())
@@ -179,7 +181,7 @@ export class HistorialEntrenamiento implements OnInit {
     this.sesionDetalle   = null;
 
     fetch(
-      `http://localhost:8090/api/asistencias/sesion/${this.sesionIdSeleccionada}`,
+      `${API_URL}/api/asistencias/sesion/${this.sesionIdSeleccionada}`,
       { headers: obtenerCabeceras() }
     )
       .then(res => res.json())
@@ -221,7 +223,7 @@ export class HistorialEntrenamiento implements OnInit {
       dia:      this.diaSeleccionado,
     };
 
-    fetch('http://localhost:8090/api/asistencias/registro', {
+    fetch(`${API_URL}/api/asistencias/registro`, {
       method:  'DELETE',
       headers: obtenerCabeceras(),
       body:    JSON.stringify(payload),

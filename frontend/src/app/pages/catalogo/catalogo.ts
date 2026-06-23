@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Header } from '../../shared/header/header';
 import { FooterMenu } from '../../shared/footer-menu/footer-menu';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 @Component({
   selector: 'app-catalogo',
@@ -24,7 +26,7 @@ export class Catalogo implements OnInit {
   }
 
   cargarProductos() {
-    fetch('http://localhost:8090/api/productos', {
+    fetch(`${API_URL}/api/productos`, {
       headers: obtenerCabeceras(),
     })
       .then((res) => res.json())

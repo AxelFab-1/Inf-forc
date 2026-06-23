@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 declare var bootstrap: any;
 
@@ -88,7 +90,7 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
 
   private cargarCatalogoEjercicios() {
     this.cargandoCatalogo = true;
-    fetch('http://localhost:8090/api/ejercicios', { headers: obtenerCabeceras() })
+    fetch(`${API_URL}/api/ejercicios`, { headers: obtenerCabeceras() })
       .then(res => res.json())
       .then(data => {
         if (data.exito && data.datos) {
@@ -247,7 +249,7 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
       ejerciciosRealizados,
     };
 
-    fetch('http://localhost:8090/api/sesiones', {
+    fetch(`${API_URL}/api/sesiones`, {
       method: 'POST',
       headers: obtenerCabeceras(),
       body: JSON.stringify(sesion),

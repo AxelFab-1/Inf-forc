@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 @Component({
   selector: 'app-usuarios',
@@ -45,7 +47,7 @@ export class Usuarios implements OnInit {
   // ─── Carga de usuarios ───────────────────────────────────────
   cargarUsuarios() {
     this.cargandoUsuarios = true;
-    fetch('http://localhost:8090/api/usuarios', { headers: obtenerCabeceras() })
+    fetch(`${API_URL}/api/usuarios`, { headers: obtenerCabeceras() })
       .then(res => res.json())
       .then(data => {
         if (data.exito) {
@@ -92,7 +94,7 @@ export class Usuarios implements OnInit {
       return;
     }
 
-    fetch('http://localhost:8090/api/usuarios', {
+    fetch(`${API_URL}/api/usuarios`, {
       method: 'POST',
       headers: obtenerCabeceras(),
       body: JSON.stringify(this.nuevoUsuario),
@@ -128,7 +130,7 @@ export class Usuarios implements OnInit {
       apellidos: this.usuarioEditando.apellidos,
     };
 
-    fetch(`http://localhost:8090/api/usuarios/${this.usuarioEditando._id}`, {
+    fetch(`${API_URL}/api/usuarios/${this.usuarioEditando._id}`, {
       method: 'PUT',
       headers: obtenerCabeceras(),
       body: JSON.stringify(payload),

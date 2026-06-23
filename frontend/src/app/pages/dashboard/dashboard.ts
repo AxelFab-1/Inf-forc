@@ -6,6 +6,8 @@ import { FooterMenu } from '../../shared/footer-menu/footer-menu';
 import { Header } from '../../shared/header/header';
 import { decodificarToken } from '../../shared/utils/jwt-decoder';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 declare var bootstrap: any;
 
@@ -80,7 +82,7 @@ export class Dashboard implements OnInit {
   cargarAsistenciasMesActual() {
     this.cargandoAsistencias = true;
 
-    fetch('http://localhost:8090/api/asistencias/mes-actual', {
+    fetch(`${API_URL}/api/asistencias/mes-actual`, {
       headers: obtenerCabeceras(),
     })
       .then(res => res.json())
@@ -104,7 +106,7 @@ export class Dashboard implements OnInit {
   cargarRutinaActiva() {
     this.cargandoRutina = true;
 
-    fetch('http://localhost:8090/api/rutinas-socios/mi-rutina', {
+    fetch(`${API_URL}/api/rutinas-socios/mi-rutina`, {
       headers: obtenerCabeceras(),
     })
       .then(res => res.json())
@@ -127,7 +129,7 @@ export class Dashboard implements OnInit {
   }
 
   cargarIndiceSiguienteDia(totalDias: number) {
-    fetch(`http://localhost:8090/api/sesiones/siguiente-dia?totalDias=${totalDias}`, {
+    fetch(`${API_URL}/api/sesiones/siguiente-dia?totalDias=${totalDias}`, {
       headers: obtenerCabeceras(),
     })
       .then(res => res.json())

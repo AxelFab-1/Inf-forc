@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { decodificarToken } from '../../shared/utils/jwt-decoder';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 @Component({
   selector: 'app-login',
@@ -52,7 +54,7 @@ export class Login implements OnInit {
       contrasena: this.contrasena,
     };
 
-    this.http.post<any>('http://localhost:8090/api/login', body).subscribe({
+    this.http.post<any>(`${API_URL}/api/login`, body).subscribe({
       next: (data) => {
         if (data.exito && data.token) {
           localStorage.setItem('jwt_token', data.token);

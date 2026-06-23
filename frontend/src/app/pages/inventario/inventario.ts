@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 @Component({
   selector: 'app-inventario',
@@ -44,7 +46,7 @@ export class Inventario implements OnInit {
 
   // ─── Carga y filtrado ────────────────────────────────────────
   cargarProductos() {
-    fetch('http://localhost:8090/api/productos', { headers: obtenerCabeceras() })
+    fetch(`${API_URL}/api/productos`, { headers: obtenerCabeceras() })
       .then(res => res.json())
       .then(data => {
         if (data.exito) {
@@ -109,7 +111,7 @@ export class Inventario implements OnInit {
       return;
     }
 
-    fetch('http://localhost:8090/api/productos', {
+    fetch(`${API_URL}/api/productos`, {
       method: 'POST',
       headers: obtenerCabeceras(),
       body: JSON.stringify(this.nuevoProducto),
@@ -138,7 +140,7 @@ export class Inventario implements OnInit {
       return;
     }
 
-    fetch(`http://localhost:8090/api/productos/${this.productoEditando._id}`, {
+    fetch(`${API_URL}/api/productos/${this.productoEditando._id}`, {
       method: 'PUT',
       headers: obtenerCabeceras(),
       body: JSON.stringify(this.productoEditando),
@@ -167,7 +169,7 @@ export class Inventario implements OnInit {
     );
     if (!confirmado) return;
 
-    fetch(`http://localhost:8090/api/productos/${prod._id}`, {
+    fetch(`${API_URL}/api/productos/${prod._id}`, {
       method: 'DELETE',
       headers: obtenerCabeceras(),
     })
@@ -188,7 +190,7 @@ export class Inventario implements OnInit {
   // ─── Borrado lógico (toggle disponibilidad) ───────────────────
   toggleDisponibilidad(prod: any) {
     const actualizado = { ...prod, activo: !prod.activo };
-    fetch(`http://localhost:8090/api/productos/${prod._id}`, {
+    fetch(`${API_URL}/api/productos/${prod._id}`, {
       method: 'PUT',
       headers: obtenerCabeceras(),
       body: JSON.stringify(actualizado),

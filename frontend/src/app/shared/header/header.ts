@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { decodificarToken } from '../utils/jwt-decoder';
 import { obtenerCabeceras } from '../utils/auth-headers';
+import { API_URL } from '../utils/api-config';
+
 
 @Component({
   selector: 'app-header',
@@ -75,7 +77,7 @@ export class Header implements OnInit {
       nuevaClave: this.nuevaClave,
     };
 
-    fetch('http://localhost:8090/api/usuarios/cambiar-password', {
+    fetch(`${API_URL}/api/usuarios/cambiar-password`, {
       method: 'PUT',
       headers: obtenerCabeceras(),
       body: JSON.stringify(body),

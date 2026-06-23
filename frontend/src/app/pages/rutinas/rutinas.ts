@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
 import { decodificarToken } from '../../shared/utils/jwt-decoder';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 @Component({
   selector: 'app-rutinas',
@@ -26,7 +28,7 @@ export class Rutinas implements OnInit {
   }
 
   cargarPlantillas() {
-    fetch('http://localhost:8090/api/plantillas', {
+    fetch(`${API_URL}/api/plantillas`, {
       headers: obtenerCabeceras(),
     })
       .then((res) => res.json())
@@ -71,7 +73,7 @@ export class Rutinas implements OnInit {
         dias: plantilla.dias,
       };
 
-      fetch('http://localhost:8090/api/rutinas-socios', {
+      fetch(`${API_URL}/api/rutinas-socios`, {
         method: 'POST',
         headers: obtenerCabeceras(),
         body: JSON.stringify(rutinaSocio),

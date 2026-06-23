@@ -2,6 +2,8 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { obtenerCabeceras } from '../../shared/utils/auth-headers';
+import { API_URL } from '../../shared/utils/api-config';
+
 
 @Component({
   selector: 'app-nutricion',
@@ -54,7 +56,7 @@ export class Nutricion implements OnInit {
   // ─── Cargar perfil desde el backend ──────────────────────────
   cargarPerfil() {
     this.cargando = true;
-    fetch('http://localhost:8090/api/nutricion/perfil', {
+    fetch(`${API_URL}/api/nutricion/perfil`, {
       headers: obtenerCabeceras(),
     })
       .then(res => res.json())
@@ -90,7 +92,7 @@ export class Nutricion implements OnInit {
     this.guardando = true;
     this.alertaModal = null;
 
-    fetch('http://localhost:8090/api/nutricion/registrar', {
+    fetch(`${API_URL}/api/nutricion/registrar`, {
       method: 'POST',
       headers: obtenerCabeceras(),
       body: JSON.stringify(this.primeraEvaluacion),
@@ -128,7 +130,7 @@ export class Nutricion implements OnInit {
     this.guardando = true;
     this.alertaModal = null;
 
-    fetch('http://localhost:8090/api/nutricion/registrar', {
+    fetch(`${API_URL}/api/nutricion/registrar`, {
       method: 'POST',
       headers: obtenerCabeceras(),
       body: JSON.stringify(this.actualizacion),
