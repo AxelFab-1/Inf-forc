@@ -10,6 +10,12 @@ Para asegurar que la aplicación en Angular pueda consumir la API de producción
 * **`api-config.ts`**: Se creó este archivo en la ruta `src/app/shared/utils/api-config.ts` para centralizar la URL de consumo (`API_URL`) hacia el backend en Railway. Se refactorizaron 11 componentes para inyectar esta constante en las llamadas `fetch`.
 * **`vercel.json`**: Se creó en la raíz del frontend para configurar las reglas de `rewrites`. Esto asegura que Vercel redirija todas las peticiones a `index.html`, permitiendo que el router de Angular maneje las rutas correctamente sin arrojar errores 404 al recargar la página.
 
+> [!IMPORTANT]
+> **Configuración Crítica en Vercel:** Angular 17+ utiliza el nuevo *application builder* que empaqueta los archivos finales dentro de una subcarpeta llamada `browser`. Por lo tanto, para evitar errores **404 Not Found**, en la configuración de Vercel debes asegurarte de que:
+> - **Framework Preset:** Angular
+> - **Root Directory:** `frontend`
+> - **Output Directory:** `frontend/dist/infinity-force/browser` (¡Es vital incluir `/browser` al final, de lo contrario Vercel no encontrará el `index.html`!).
+
 ---
 
 ## 2. 🛡️ Backend (Preparación para Railway y Refactorización de Seguridad)
