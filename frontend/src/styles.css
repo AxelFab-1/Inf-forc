@@ -1,0 +1,256 @@
+
+
+:root {
+    --gym-bg: #121212;         
+    --gym-dark: #1a1a1a;      
+    --gym-gold: #ffd700;       
+    --gym-gold-hover: #e6c200; 
+    --font-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+body { 
+    font-family: var(--font-principal);
+    background-color: var(--gym-bg); 
+    color: #ffffff; 
+    margin: 0;
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+.bg-gym-dark { background-color: var(--gym-dark) !important; }
+.text-gold { color: var(--gym-gold) !important; }
+.bg-gold { 
+    background-color: var(--gym-gold) !important; 
+    color: #000 !important; 
+}
+
+.btn-gold { 
+    background-color: var(--gym-gold); 
+    color: #000; 
+    font-weight: bold; 
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-gold:hover { 
+    background-color: var(--gym-gold-hover); 
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(230, 194, 0, 0.4);
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+.fade-out {
+    opacity: 0 !important;
+    transition: opacity 0.5s ease-in-out;
+}
+
+
+.body-app {
+    padding-bottom: 80px; 
+}
+
+#calendarioGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+}
+.dia-calendario {
+    aspect-ratio: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; 
+    font-size: 0.95rem;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    cursor: default;
+}
+.dia-actual {
+    border: 2px solid var(--gym-gold);
+    font-weight: bold;
+    color: var(--gym-gold);
+}
+.dia-asistido {
+    background-color: #198754 !important;
+    color: #ffffff !important;
+    border-color: #198754 !important;
+}
+.dias-semana span {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+}
+
+.body-login {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at top left, var(--gym-gold) 0%, var(--gym-dark) 60%, #000000 100%);
+    background-attachment: fixed;
+    padding-bottom: 0; 
+}
+
+.login-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 2.5rem 2rem; 
+    width: 90%; 
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+.help-text {
+    font-size: 0.85rem;
+    color: #6c757d;
+    text-align: center;
+    margin-top: 15px;
+}
+
+
+.custom-card {
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4) !important;
+    
+}
+
+
+.custom-input {
+    background-color: #2a2a2a !important; 
+    border: 1px solid #404040 !important; 
+    color: #ffffff !important; 
+    transition: all 0.3s ease;
+}
+
+.custom-input:focus {
+    background-color: #333333 !important;
+    border-color: var(--gym-gold) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25) !important;
+}
+
+select.custom-input option {
+    background-color: var(--gym-dark);
+    color: #fff;
+}
+
+.help-text-dark {
+    color: #888888 !important;
+    font-size: 0.85rem;
+}
+
+
+
+.card-seleccion-grande {
+    background-color: var(--gym-dark) !important;
+    border: 1px solid #333 !important;
+    border-radius: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2.5rem;
+    height: 100%;
+}
+
+.card-seleccion-grande:hover {
+    border-color: var(--gym-gold) !important;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.card-seleccion-grande i {
+    font-size: 3.5rem;
+    color: var(--gym-gold);
+    margin-bottom: 1rem;
+}
+
+.card-seleccion-grande h3 {
+    font-weight: bold;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.routine-item-card {
+    background-color: var(--gym-dark);
+    border: 1px solid #333;
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+}
+
+.routine-item-card:hover {
+    border-color: #555;
+    transform: translateX(5px);
+}
+
+.badge-dificultad {
+    background-color: rgba(255, 215, 0, 0.1);
+    color: var(--gym-gold);
+    border: 1px solid var(--gym-gold);
+}
+
+
+
+.scroll-horizontal {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    padding-bottom: 0.5rem;
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+}
+.scroll-horizontal::-webkit-scrollbar {
+    display: none; 
+}
+
+.tarjeta-categoria {
+    min-width: 100px;
+    background-color: var(--gym-dark);
+    border: 2px solid #333;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.tarjeta-categoria:hover {
+    border-color: var(--gym-gold);
+    transform: translateY(-2px);
+}
+
+.categoria-activa {
+    border-color: var(--gym-gold) !important;
+    background-color: rgba(255, 215, 0, 0.05);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.card-producto {
+    background-color: var(--gym-dark);
+    border: 1px solid #333;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.card-producto:hover {
+    transform: translateY(-5px);
+}
+
+.producto-img {
+    height: 140px;
+    width: 100%;
+    object-fit: contain;
+    background-color: #ffffff; 
+    padding: 15px;
+}
+
+.item-producto {
+    animation: fadeIn 0.4s ease-in-out;
+}

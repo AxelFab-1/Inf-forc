@@ -1,0 +1,42 @@
+/* ─── Calendario — Grid ───────────────────────────────────────────────────── */
+
+#calendarioGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.dia-calendario {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #aaa;
+  cursor: default;
+  transition: background-color 0.2s ease;
+}
+
+/* Día de hoy (sin entrenar) */
+.dia-calendario.dia-actual {
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-weight: 700;
+}
+
+/* Día entrenado (cualquier día del mes) */
+.dia-calendario.dia-entrenado {
+  background-color: #2a6b2a;
+  color: #8eff8e;
+  font-weight: 700;
+}
+
+/* Día de hoy Y entrenado */
+.dia-calendario.dia-hoy-entrenado {
+  background-color: #2a6b2a;
+  border: 2px solid #ffd700;
+  color: #ffd700;
+  font-weight: 700;
+}

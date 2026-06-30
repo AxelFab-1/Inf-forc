@@ -1,0 +1,29 @@
+Actúa como un Desarrollador Full-Stack Senior experto en Angular y Spring Boot.
+
+Vamos a crear el nuevo módulo de "Nutrición" para nuestro gimnasio. Este módulo calculará el IMC y los macronutrientes del cliente usando la fórmula de Mifflin-St Jeor multiplicada por el Factor de Actividad. Guardaremos un historial biométrico en MongoDB, pero por ahora NO lo mostraremos en pantalla (se usará para gráficos a futuro). Solo mostraremos los resultados del último registro.
+
+NOTA IMPORTANTE FRONTEND: En Angular NO usamos Angular Services ni HttpClient. Todas las peticiones al backend se hacen con 'fetch' nativo en el archivo .ts.
+
+Por favor, genérame el código cumpliendo estas 4 tareas:
+
+TAREA 1: ESQUEMA Y BACKEND CON FACTOR DE ACTIVIDAD (SPRING BOOT)
+- Actualiza el modelo del Usuario para que en su raíz contenga: `sexo`, `fechaNacimiento` (Date) y `estaturaCm`.
+- Crea una clase anidada `RegistroBiometrico` con: `fechaRegistro`, `pesoKg`, `objetivo` (Volumen, Definición, Mantenimiento), `nivelActividad` (Sedentario, Ligero, Moderado, Intenso), `imcCalculado` y `caloriasRecomendadas`. El modelo del Usuario debe tener un array: `List<RegistroBiometrico> historialBiometrico`.
+- Crea el endpoint (PUT/POST) que maneje dos escenarios: 
+  1. Primera vez: Recibe todos los datos, actualiza la raíz, calcula la edad, IMC, TMB base (Mifflin-St Jeor). Multiplica la TMB por el factor de actividad (Sedentario 1.2, Ligero 1.375, Moderado 1.55, Intenso 1.725) para obtener mantenimiento, ajusta calorías según el objetivo, reparte macros y hace push al historial.
+  2. Actualización: Recibe solo peso, objetivo y nivel de actividad, hace los cálculos con la data estática ya existente y hace push de un nuevo registro.
+
+TAREA 2: LÓGICA DE INICIO Y MODAL DE PRIMERA VEZ (ANGULAR)
+- En el `ngOnInit` de `nutricion.ts`, haz un `fetch` GET. 
+- Si el usuario NO tiene `estaturaCm` o `fechaNacimiento` en la BD, abre un Modal de Bootstrap para la "Primera Evaluación" (pidiendo Sexo, Fecha Nacimiento, Estatura, Peso, Nivel de Actividad y Objetivo).
+- Si YA TIENE estos datos, el modal no debe aparecer. Carga directamente la vista principal leyendo el último registro del array `historialBiometrico`.
+
+TAREA 3: VISTA PRINCIPAL - DIAGNÓSTICO Y MACROS (ANGULAR)
+- Crea un botón destacado "Actualizar datos".
+- Sección 1 (IMC): Muestra el último IMC calculado, la categoría y el objetivo actual. Agrega debajo: "Nota: Esta es una recomendación inicial. El IMC no tiene en cuenta el índice de masa muscular ni de grasa corporal, por lo que puede haber imprecisiones. Para un diagnóstico exacto, consulte a un médico o nutricionista."
+- Sección 2 (Macros): Muestra las calorías totales calculadas y la distribución de Proteínas, Carbohidratos y Grasas. Agrega debajo: "Nota: Estos cálculos son estimaciones matemáticas (Mifflin-St Jeor). Consulte a un profesional para un plan personalizado."
+
+TAREA 4: MODAL DE ACTUALIZACIÓN (ANGULAR)
+- Al hacer clic en "Actualizar datos", abre un segundo Modal.
+- Este modal SOLO debe pedir: "Nuevo Peso (Kg)", "Nuevo Nivel de Actividad" y "Nuevo Objetivo".
+- Al guardar, ejecuta el `fetch` al backend para añadir este nuevo registro al historial y recarga los datos en pantalla sin refrescar la página.

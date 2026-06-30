@@ -1,0 +1,434 @@
+/* ═══════════════════════════════════════════════════════
+   SESIÓN DE ENTRENAMIENTO — Estilos
+   Dark mode con acentos dorados (#ffd700)
+   Mobile-first, pantalla completa
+═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:host {
+  display: block;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Layout base ─────────────────────────────────────── */
+.sesion-app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #0f0f0f;
+  color: #fff;
+}
+
+/* ── Header ──────────────────────────────────────────── */
+.sesion-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background-color: #1a1a1a;
+  border-bottom: 2px solid #ffd700;
+  gap: 12px;
+}
+
+.btn-salir {
+  background: transparent;
+  border: 1px solid #444;
+  color: #aaa;
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-salir:hover {
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+}
+
+.sesion-dia-nombre {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffd700;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sesion-cronometro {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 1px;
+  flex-shrink: 0;
+}
+
+/* ── Main content ────────────────────────────────────── */
+.sesion-main {
+  flex: 1;
+  padding: 16px;
+  padding-bottom: 100px;
+  overflow-y: auto;
+}
+
+.sesion-loading,
+.sesion-vacia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  text-align: center;
+}
+
+/* ── Lista de ejercicios ─────────────────────────────── */
+.ejercicios-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Tarjeta de ejercicio ────────────────────────────── */
+.ejercicio-card {
+  background-color: #1e1e1e;
+  border: 1px solid #2e2e2e;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.25s;
+}
+
+.ejercicio-card.ejercicio-expandido {
+  border-color: #ffd700;
+}
+
+.ejercicio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  user-select: none;
+  gap: 10px;
+}
+
+.ejercicio-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ejercicio-numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #ffd700;
+  color: #000;
+  font-size: 0.75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.ejercicio-nombre {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge-pc {
+  font-size: 0.65rem;
+  background: rgba(255, 215, 0, 0.15);
+  color: #ffd700;
+  border: 1px solid rgba(255, 215, 0, 0.4);
+  border-radius: 20px;
+  padding: 2px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ejercicio-acciones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-video {
+  background: transparent;
+  border: none;
+  color: #ffd700;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s;
+}
+
+.btn-video:hover {
+  transform: scale(1.2);
+}
+
+.chevron-icon {
+  color: #888;
+  font-size: 1rem;
+  transition: transform 0.25s;
+}
+
+/* ── Cuerpo expandible ───────────────────────────────── */
+.ejercicio-body {
+  border-top: 1px solid #2e2e2e;
+  padding: 16px;
+  animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Imagen ──────────────────────────────────────────── */
+.ejercicio-imagen-wrap {
+  margin-bottom: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.ejercicio-imagen {
+  width: 100%;
+  max-height: 180px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* ── Video ───────────────────────────────────────────── */
+.ejercicio-video-wrap {
+  margin-bottom: 12px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #000;
+}
+
+.ejercicio-video {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+}
+
+/* ── Tabla de series ─────────────────────────────────── */
+.series-tabla-wrap {
+  width: 100%;
+}
+
+.series-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.series-tabla thead th {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #888;
+  padding: 6px 8px;
+  border-bottom: 1px solid #333;
+  font-weight: 600;
+}
+
+.series-tabla tbody tr {
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.series-tabla tbody tr:last-child {
+  border-bottom: none;
+}
+
+.td-numero {
+  color: #ffd700;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 8px;
+  width: 42px;
+  text-align: center;
+}
+
+.td-pc-label {
+  padding: 8px;
+}
+
+.input-serie {
+  background: #2a2a2a;
+  border: 1px solid #3a3a3a;
+  border-radius: 8px;
+  color: #fff;
+  padding: 6px 8px;
+  width: 72px;
+  font-size: 0.9rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-serie:focus {
+  border-color: #ffd700;
+}
+
+.input-serie::placeholder {
+  color: #555;
+}
+
+/* Ocultar flechas del input number */
+.input-serie::-webkit-inner-spin-button,
+.input-serie::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.btn-eliminar-serie {
+  background: transparent;
+  border: none;
+  color: #555;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.btn-eliminar-serie:hover:not(:disabled) {
+  color: #ff4d4d;
+}
+
+.btn-eliminar-serie:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.btn-agregar-serie {
+  width: 100%;
+  margin-top: 8px;
+  background: transparent;
+  border: 1px dashed #444;
+  color: #888;
+  border-radius: 8px;
+  padding: 8px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.btn-agregar-serie:hover {
+  border-color: #ffd700;
+  color: #ffd700;
+}
+
+/* ── Footer ──────────────────────────────────────────── */
+.sesion-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 16px;
+  background: linear-gradient(to top, #0f0f0f 70%, transparent);
+  z-index: 100;
+}
+
+.btn-finalizar {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #ffd700, #e6b800);
+  color: #000;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(255, 215, 0, 0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn-finalizar:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
+}
+
+/* ── Modal de advertencia ────────────────────────────── */
+.modal-advertencia {
+  background-color: #1e1e1e;
+  border: 1px solid #3a3a3a;
+  border-radius: 20px;
+  color: #fff;
+}
+
+.advertencia-icon {
+  font-size: 2.5rem;
+  color: #ffc107;
+  width: 100%;
+  text-align: center;
+  display: block;
+  padding-top: 8px;
+}
+
+.lista-sin-datos {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 8px 0;
+}
+
+.lista-sin-datos li {
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  border-radius: 8px;
+  padding: 6px 12px;
+  margin-bottom: 6px;
+  font-size: 0.9rem;
+  color: #ff9999;
+}
+
+.btn-confirmar-salir {
+  background: #ff4d4d;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-confirmar-salir:hover {
+  background: #e03c3c;
+}
+
+.btn-volver-sesion {
+  background: transparent;
+  color: #888;
+  border: 1px solid #444;
+  border-radius: 10px;
+  padding: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.btn-volver-sesion:hover {
+  color: #fff;
+  border-color: #666;
+}

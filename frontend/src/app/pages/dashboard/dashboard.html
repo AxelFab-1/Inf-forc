@@ -1,0 +1,157 @@
+<div class="body-app bg-dark text-white" style="padding-bottom: 80px; padding-top: 85px; min-height: 100vh;">
+  <app-header></app-header>
+
+  <main class="container">
+    <h2 class="fw-bold mb-4 mt-3">¡Bienvenido, {{ nombreSocio }}!</h2>
+
+    <div class="row g-4">
+
+      <!-- ═══ BOTÓN DE ENTRENAMIENTO ═══ -->
+      <div class="col-12 col-lg-5">
+
+        <!-- Cargando rutina -->
+        <div *ngIf="cargandoRutina"
+             class="h-100 d-flex flex-column align-items-center justify-content-center rounded-4 py-5"
+             style="background-color: #1a1a1a; min-height: 150px;">
+          <div class="spinner-border text-warning mb-2" role="status"></div>
+          <small class="text-white-50">Cargando tu rutina...</small>
+        </div>
+
+        <!-- Tiene rutina: abre modal -->
+        <div *ngIf="!cargandoRutina && rutinaActiva" class="h-100">
+          <button class="btn w-100 h-100 shadow-sm text-dark fw-bold fs-4 d-flex flex-column
+                         justify-content-center align-items-center py-5 py-lg-0 rounded-4"
+                  style="background-color: #ffd700; min-height: 150px;"
+                  data-bs-toggle="modal" data-bs-target="#entrenamientoModal">
+            <i class="bi bi-play-circle-fill mb-2" style="font-size: 2.5rem;"></i>
+            Comenzar entrenamiento
+          </button>
+        </div>
+
+        <!-- Sin rutina: ir a elegir -->
+        <div *ngIf="!cargandoRutina && !rutinaActiva" class="h-100">
+          <button (click)="irAElegirRutina()"
+                  class="btn w-100 h-100 shadow-sm fw-bold fs-5 d-flex flex-column
+                         justify-content-center align-items-center py-5 py-lg-0 rounded-4"
+                  style="background-color: #2a2a2a; border: 2px dashed #ffd700; color: #ffd700; min-height: 150px;">
+            <i class="bi bi-lightning-charge mb-2" style="font-size: 2rem;"></i>
+            Elegir mi rutina
+            <small class="fw-normal mt-1 text-white-50" style="font-size: 0.75rem;">
+              Aún no tienes una rutina activa
+            </small>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ═══ CALENDARIO ═══ -->
+      <div class="col-12 col-lg-7">
+        <div class="rounded-4 p-3 shadow-sm h-100" style="background-color: #1a1a1a;">
+          <h5 class="text-center fw-bold mb-3" style="color: #ffd700;">{{ mesActualNombre }}</h5>
+
+          <div class="dias-semana d-flex justify-content-between text-white-50 small mb-2">
+            <span>Lu</span><span>Ma</span><span>Mi</span>
+            <span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
+          </div>
+
+          <!-- Spinner mientras carga las asistencias -->
+          <div *ngIf="cargandoAsistencias" class="text-center py-4">
+            <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
+          </div>
+
+          <div id="calendarioGrid" class="mb-3" *ngIf="!cargandoAsistencias">
+            <div *ngFor="let vacio of diasVacios"></div>
+            <div *ngFor="let dia of diasMes"
+                 class="dia-calendario"
+                 [ngClass]="{
+                   'dia-actual':    dia === diaHoy,
+                   'dia-entrenado': diasEntrenados.includes(dia),
+                   'dia-hoy-entrenado': dia === diaHoy && diasEntrenados.includes(dia)
+                 }">
+              {{ dia }}
+            </div>
+          </div>
+
+          <div class="d-flex mt-3">
+            <!-- Único botón de acción: ir al historial completo -->
+            <button
+              (click)="irAHistorial()"
+              class="btn btn-outline-warning w-100 py-2 btn-sm fw-bold">
+              <i class="bi bi-clock-history me-1"></i> Ver historial completo
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══════════ MODAL DE ENTRENAMIENTO ═══════════ -->
+  <div class="modal fade" id="entrenamientoModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content text-white border-secondary" style="background-color: #1a1a1a;">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title fw-bold">
+            <i class="bi bi-lightning-charge-fill me-2" style="color:#ffd700;"></i>
+            Plan de Hoy
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body" *ngIf="rutinaActiva">
+
+          <!-- Nombre de la rutina -->
+          <p class="text-white-50 small mb-3">
+            Rutina activa: <strong class="text-white">{{ rutinaActiva.nombreOriginal }}</strong>
+          </p>
+
+          <!-- Opción A: Día sugerido -->
+          <div class="rounded-3 p-3 mb-3" style="background-color: #252525; border: 1px solid #ffd700;">
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="bi bi-star-fill" style="color:#ffd700; font-size:0.85rem;"></i>
+              <span class="text-white-50 small">Día sugerido según tu progreso</span>
+            </div>
+            <div class="fw-bold text-white fs-6">
+              {{ rutinaActiva.dias?.[indiceDiaSiguiente]?.nombreDia || 'Día 1' }}
+            </div>
+          </div>
+
+          <!-- Toggle: elegir día diferente -->
+          <button class="btn btn-link text-white-50 small p-0 mb-3 text-decoration-none"
+                  (click)="toggleModoEleccion()">
+            <i class="bi me-1"
+               [class.bi-chevron-down]="!modoEleccionDia"
+               [class.bi-chevron-up]="modoEleccionDia"></i>
+            {{ modoEleccionDia ? 'Usar el día sugerido' : 'Quiero elegir un día diferente' }}
+          </button>
+
+          <!-- Opción B: selector de día específico -->
+          <div *ngIf="modoEleccionDia" class="mb-3">
+            <select class="form-select bg-dark text-white border-secondary"
+                    [(ngModel)]="indiceDiaManual"
+                    (ngModelChange)="onCambioDiaManual()">
+              <option *ngFor="let dia of rutinaActiva.dias; let i = index"
+                      [ngValue]="i">
+                {{ dia.nombreDia }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Botón de inicio -->
+          <button (click)="iniciarEntrenamiento()"
+                  type="button"
+                  class="btn w-100 py-3 fs-5 text-dark fw-bold rounded-pill"
+                  style="background-color: #ffd700;">
+            <i class="bi bi-play-fill me-1"></i>
+            ¡Empezar {{ modoEleccionDia
+              ? (rutinaActiva.dias?.[indiceDiaManual]?.nombreDia || 'el día')
+              : (rutinaActiva.dias?.[indiceDiaSiguiente]?.nombreDia || 'el día') }}!
+          </button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-footer-menu></app-footer-menu>
+</div>

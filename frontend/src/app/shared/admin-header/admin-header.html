@@ -1,0 +1,32 @@
+<nav class="navbar shadow-sm" style="background-color: #1a1a1a;">
+  <div class="container-fluid px-4">
+
+    <!-- Marca -->
+    <a class="navbar-brand fw-bold fs-5 mb-0" style="color: #ffd700;">
+      <i class="bi bi-lightning-charge-fill me-2"></i>Infinity Force
+      <span class="fs-6 text-white-50 fw-normal ms-2">| Admin</span>
+      <span *ngIf="nombreAdmin" class="fs-6 text-white-50 fw-normal ms-1">— {{ nombreAdmin }}</span>
+    </a>
+
+    <!-- Navegación central -->
+    <div class="d-flex gap-2">
+      <a routerLink="/admin/usuarios"
+         routerLinkActive="active"
+         class="nav-link-admin px-3 py-2 rounded-pill fw-semibold small">
+        <i class="bi bi-people-fill me-1"></i> Usuarios
+      </a>
+      <a routerLink="/admin/inventario"
+         routerLinkActive="active"
+         class="nav-link-admin px-3 py-2 rounded-pill fw-semibold small">
+        <i class="bi bi-box-seam-fill me-1"></i> Inventario
+      </a>
+    </div>
+
+    <!-- Botón salir -->
+    <button class="btn btn-outline-danger btn-sm px-3 rounded-pill fw-bold"
+            (click)="cerrarSesion()">
+      <i class="bi bi-box-arrow-right me-1"></i> Salir
+    </button>
+
+  </div>
+</nav>
