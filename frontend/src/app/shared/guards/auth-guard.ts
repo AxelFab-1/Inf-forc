@@ -5,6 +5,7 @@ import { decodificarToken } from '../utils/jwt-decoder';
 @Injectable({
   providedIn: 'root',
 })
+
 export class AuthGuard implements CanActivate {
   constructor(private router: Router) {}
 
@@ -24,8 +25,8 @@ export class AuthGuard implements CanActivate {
       return false;
     }
 
-    // 👇 NUEVO: Validación de expiración del token
-    const fechaExpiracion = datosUsuario.exp; // Viene en segundos
+    
+    const fechaExpiracion = datosUsuario.exp; 
     const tiempoActual = Math.floor(Date.now() / 1000);
 
     if (fechaExpiracion && fechaExpiracion < tiempoActual) {

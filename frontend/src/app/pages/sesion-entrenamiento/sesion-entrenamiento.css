@@ -1,8 +1,4 @@
-/* ═══════════════════════════════════════════════════════
-   SESIÓN DE ENTRENAMIENTO — Estilos
-   Dark mode con acentos dorados (#ffd700)
-   Mobile-first, pantalla completa
-═══════════════════════════════════════════════════════ */
+
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
@@ -11,7 +7,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* ── Layout base ─────────────────────────────────────── */
 .sesion-app {
   display: flex;
   flex-direction: column;
@@ -20,7 +15,6 @@
   color: #fff;
 }
 
-/* ── Header ──────────────────────────────────────────── */
 .sesion-header {
   position: sticky;
   top: 0;
@@ -75,7 +69,6 @@
   flex-shrink: 0;
 }
 
-/* ── Main content ────────────────────────────────────── */
 .sesion-main {
   flex: 1;
   padding: 16px;
@@ -93,14 +86,12 @@
   text-align: center;
 }
 
-/* ── Lista de ejercicios ─────────────────────────────── */
 .ejercicios-lista {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-/* ── Tarjeta de ejercicio ────────────────────────────── */
 .ejercicio-card {
   background-color: #1e1e1e;
   border: 1px solid #2e2e2e;
@@ -192,7 +183,6 @@
   transition: transform 0.25s;
 }
 
-/* ── Cuerpo expandible ───────────────────────────────── */
 .ejercicio-body {
   border-top: 1px solid #2e2e2e;
   padding: 16px;
@@ -204,7 +194,6 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ── Imagen ──────────────────────────────────────────── */
 .ejercicio-imagen-wrap {
   margin-bottom: 12px;
   border-radius: 10px;
@@ -218,7 +207,6 @@
   border-radius: 10px;
 }
 
-/* ── Video ───────────────────────────────────────────── */
 .ejercicio-video-wrap {
   margin-bottom: 12px;
   border-radius: 10px;
@@ -232,7 +220,6 @@
   border-radius: 10px;
 }
 
-/* ── Tabla de series ─────────────────────────────────── */
 .series-tabla-wrap {
   width: 100%;
 }
@@ -295,7 +282,6 @@
   color: #555;
 }
 
-/* Ocultar flechas del input number */
 .input-serie::-webkit-inner-spin-button,
 .input-serie::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -338,7 +324,6 @@
   color: #ffd700;
 }
 
-/* ── Footer ──────────────────────────────────────────── */
 .sesion-footer {
   position: fixed;
   bottom: 0;
@@ -369,7 +354,6 @@
   box-shadow: 0 2px 10px rgba(255, 215, 0, 0.2);
 }
 
-/* ── Modal de advertencia ────────────────────────────── */
 .modal-advertencia {
   background-color: #1e1e1e;
   border: 1px solid #3a3a3a;

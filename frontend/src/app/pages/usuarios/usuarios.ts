@@ -1,51 +1,58 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule], 
   templateUrl: './usuarios.html',
   styleUrl: './usuarios.css',
 })
 export class Usuarios implements OnInit {
 
-  // ─── Listado de usuarios ────────────────────────────────────
   usuarios: any[] = [];
   cargandoUsuarios: boolean = true;
 
-  // ─── Panel lateral: modo CREATE o EDIT ──────────────────────
   modo: 'crear' | 'editar' = 'crear';
   usuarioSeleccionado: any = null;
+  usuarioEditandoId: string = ''; 
 
-  // Formulario CREAR: todos los campos
-  nuevoUsuario = {
-    nombres: '', apellidos: '', dni: '',
-    codigoAcceso: '', contrasena: '', sede: '', rol: 'cliente',
-  };
+  registroForm: FormGroup;
+  editarForm: FormGroup;
 
-  // Formulario EDITAR: SOLO nombres y apellidos (regla estricta)
-  usuarioEditando = {
-    id: '', nombres: '', apellidos: '', // 👇 CAMBIO: Usamos 'id' en lugar de '_id'
-    // Solo para mostrar como bloqueados
-    dni: '', codigoAcceso: '', sede: '', rol: '',
-  };
-
-  // ─── Alertas ─────────────────────────────────────────────────
   alerta: { tipo: 'success' | 'danger'; mensaje: string } | null = null;
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private adminService: AdminService 
-  ) {}
+    private adminService: AdminService,
+    private fb: FormBuilder 
+  ) {
+    this.registroForm = this.fb.group({
+      nombres: ['', [Validators.required, Validators.maxLength(50)]],
+      apellidos: ['', [Validators.required, Validators.maxLength(50)]],
+      dni: ['', [Validators.required, Validators.maxLength(8), Validators.pattern('^[0-9]+$')]],
+      codigoAcceso: ['', [Validators.required, Validators.maxLength(5), Validators.pattern('^[0-9]+$')]],
+      contrasena: ['', [Validators.required, Validators.maxLength(64)]],
+      sede: ['', [Validators.required]],
+      rol: ['cliente', [Validators.required]] 
+    });
+
+    this.editarForm = this.fb.group({
+      nombres: ['', [Validators.required, Validators.maxLength(50)]],
+      apellidos: ['', [Validators.required, Validators.maxLength(50)]],
+      dni: [{ value: '', disabled: true }], 
+      codigoAcceso: [{ value: '', disabled: true }],
+      sede: [{ value: '', disabled: true }],
+      rol: [{ value: '', disabled: true }]
+    });
+  }
 
   ngOnInit() {
     this.cargarUsuarios();
   }
 
-  // ─── Carga de usuarios ───────────────────────────────────────
   cargarUsuarios() {
     this.cargandoUsuarios = true;
     
@@ -64,19 +71,20 @@ export class Usuarios implements OnInit {
     });
   }
 
-  // ─── Selección para editar ───────────────────────────────────
   seleccionarUsuario(usuario: any) {
     this.modo = 'editar';
     this.usuarioSeleccionado = usuario;
-    this.usuarioEditando = {
-      id:           usuario.id || usuario._id, // 👇 CAMBIO: Capturamos el ID correcto
-      nombres:      usuario.nombres,
-      apellidos:    usuario.apellidos,
-      dni:          usuario.dni,
+    this.usuarioEditandoId = usuario.id || usuario._id; 
+
+    this.editarForm.patchValue({
+      nombres: usuario.nombres,
+      apellidos: usuario.apellidos,
+      dni: usuario.dni,
       codigoAcceso: usuario.codigoAcceso,
-      sede:         usuario.sede,
-      rol:          usuario.rol,
-    };
+      sede: usuario.sede,
+      rol: usuario.rol
+    });
+
     this.alerta = null;
     this.cdr.detectChanges();
   }
@@ -84,23 +92,26 @@ export class Usuarios implements OnInit {
   limpiarPanel() {
     this.modo = 'crear';
     this.usuarioSeleccionado = null;
-    this.nuevoUsuario = { nombres: '', apellidos: '', dni: '', codigoAcceso: '', contrasena: '', sede: '', rol: 'cliente' };
+    this.usuarioEditandoId = '';
+    this.registroForm.reset({ rol: 'cliente', sede: '' });
     this.alerta = null;
     this.cdr.detectChanges();
   }
 
-  // ─── POST: Registrar nuevo usuario ───────────────────────────
-  registrarUsuario(formulario: any) {
-    if (formulario.invalid) {
+  registrarUsuario() {
+    if (this.registroForm.invalid) {
+      this.registroForm.markAllAsTouched(); 
       this.mostrarAlerta('danger', 'Por favor, completa todos los campos correctamente.');
       return;
     }
 
-    this.adminService.registrarUsuario(this.nuevoUsuario).subscribe({
+    const payload = this.registroForm.value;
+
+    this.adminService.registrarUsuario(payload).subscribe({
       next: (data) => {
         if (data.exito) {
           this.mostrarAlerta('success', data.mensaje || 'Usuario registrado.');
-          formulario.resetForm({ rol: 'cliente', sede: '' });
+          this.registroForm.reset({ rol: 'cliente', sede: '' });
           this.cargarUsuarios();
         } else {
           this.mostrarAlerta('danger', data.mensaje);
@@ -113,20 +124,19 @@ export class Usuarios implements OnInit {
     });
   }
 
-  // ─── PUT: Editar solo nombres y apellidos ────────────────────
-  guardarEdicion(formulario: any) {
-    if (formulario.invalid) {
+  guardarEdicion() {
+    if (this.editarForm.invalid) {
+      this.editarForm.markAllAsTouched();
       this.mostrarAlerta('danger', 'Completa los campos requeridos.');
       return;
     }
 
     const payload = {
-      nombres:   this.usuarioEditando.nombres,
-      apellidos: this.usuarioEditando.apellidos,
+      nombres: this.editarForm.get('nombres')?.value,
+      apellidos: this.editarForm.get('apellidos')?.value,
     };
 
-    // 👇 CAMBIO: Enviamos el ID correctamente a la URL
-    this.adminService.actualizarUsuario(this.usuarioEditando.id, payload).subscribe({
+    this.adminService.actualizarUsuario(this.usuarioEditandoId, payload).subscribe({
       next: (data) => {
         if (data.exito) {
           this.mostrarAlerta('success', 'Usuario actualizado correctamente.');
@@ -141,12 +151,13 @@ export class Usuarios implements OnInit {
     });
   }
 
-  // ─── Helper sincronizar contraseña con DNI ───────────────────
   sincronizarContrasena() {
-    this.nuevoUsuario.contrasena = this.nuevoUsuario.dni;
+    const dniActual = this.registroForm.get('dni')?.value;
+    if (dniActual !== null && dniActual !== undefined) {
+      this.registroForm.get('contrasena')?.setValue(dniActual);
+    }
   }
 
-  // ─── Helper alertas ─────────────────────────────────────────
   mostrarAlerta(tipo: 'success' | 'danger', mensaje: string) {
     this.alerta = { tipo, mensaje };
     this.cdr.detectChanges();

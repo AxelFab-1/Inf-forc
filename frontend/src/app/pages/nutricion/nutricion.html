@@ -1,23 +1,16 @@
-<!-- ══════════════════════════════════════════════════════════════════════════
-     NUTRICIÓN — Vista principal
-═══════════════════════════════════════════════════════════════════════════ -->
 
-<!-- Alerta global -->
 <div *ngIf="alerta" class="alert alert-{{ alerta.tipo }} alert-dismissible fade show global-alert" role="alert">
   <strong>{{ alerta.tipo === 'success' ? '¡Listo!' : 'Error:' }}</strong> {{ alerta.mensaje }}
   <button type="button" class="btn-close" (click)="cerrarAlerta()"></button>
 </div>
 
-<!-- Pantalla de carga -->
 <div *ngIf="cargando" class="loading-screen">
   <div class="spinner-border text-warning" role="status"></div>
   <p class="text-white-50 mt-3 small">Cargando tu perfil nutricional...</p>
 </div>
 
-<!-- ═══════════════════════════════ VISTA PRINCIPAL (tiene perfil) ═══════════ -->
 <div *ngIf="!cargando && tienePerfil && ultimoRegistro" class="nutricion-container">
 
-  <!-- Encabezado -->
   <div class="page-header mb-4">
     <div>
       <h2 class="page-title">Mi Nutrición</h2>
@@ -29,114 +22,53 @@
   </div>
 
   <div class="sections-grid">
-
-    <!-- ─── SECCIÓN 1: IMC ─────────────────────────────────────────────────── -->
     <section class="info-card">
-      <div class="card-badge">
-        <i class="bi bi-speedometer2 me-2"></i>Diagnóstico IMC
-      </div>
-
+      <div class="card-badge"><i class="bi bi-speedometer2 me-2"></i>Diagnóstico IMC</div>
       <div class="imc-display">
         <div class="imc-circle" [style.borderColor]="colorIMC(ultimoRegistro.imcCalculado)">
-          <span class="imc-value" [style.color]="colorIMC(ultimoRegistro.imcCalculado)">
-            {{ ultimoRegistro.imcCalculado }}
-          </span>
+          <span class="imc-value" [style.color]="colorIMC(ultimoRegistro.imcCalculado)">{{ ultimoRegistro.imcCalculado }}</span>
           <span class="imc-label">IMC</span>
         </div>
         <div class="imc-details">
           <div class="detail-row">
             <span class="detail-label">Categoría</span>
-            <span class="detail-value" [style.color]="colorIMC(ultimoRegistro.imcCalculado)">
-              {{ categoriaIMC(ultimoRegistro.imcCalculado) }}
-            </span>
+            <span class="detail-value" [style.color]="colorIMC(ultimoRegistro.imcCalculado)">{{ categoriaIMC(ultimoRegistro.imcCalculado) }}</span>
           </div>
-          <div class="detail-row">
-            <span class="detail-label">Objetivo</span>
-            <span class="detail-value">{{ ultimoRegistro.objetivo }}</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Peso actual</span>
-            <span class="detail-value">{{ ultimoRegistro.pesoKg }} kg</span>
-          </div>
-          <div class="detail-row">
-            <span class="detail-label">Actividad</span>
-            <span class="detail-value">{{ ultimoRegistro.nivelActividad }}</span>
-          </div>
+          <div class="detail-row"><span class="detail-label">Objetivo</span><span class="detail-value">{{ ultimoRegistro.objetivo }}</span></div>
+          <div class="detail-row"><span class="detail-label">Peso actual</span><span class="detail-value">{{ ultimoRegistro.pesoKg }} kg</span></div>
+          <div class="detail-row"><span class="detail-label">Actividad</span><span class="detail-value">{{ ultimoRegistro.nivelActividad }}</span></div>
         </div>
       </div>
-
       <div class="disclaimer-box">
         <i class="bi bi-info-circle me-2 text-warning"></i>
-        <span>Esta es una recomendación inicial. El IMC no tiene en cuenta el índice de masa muscular ni de grasa corporal, por lo que puede haber imprecisiones. Para un diagnóstico exacto, consulte a un médico o nutricionista.</span>
+        <span>Esta es una recomendación inicial. El IMC no tiene en cuenta el índice de masa muscular ni de grasa corporal...</span>
       </div>
     </section>
 
-    <!-- ─── SECCIÓN 2: MACROS ──────────────────────────────────────────────── -->
     <section class="info-card">
-      <div class="card-badge">
-        <i class="bi bi-pie-chart-fill me-2"></i>Distribución de Macros
-      </div>
-
-      <!-- Calorías totales -->
-      <div class="calories-display">
-        <span class="calories-value">{{ ultimoRegistro.caloriasRecomendadas }}</span>
-        <span class="calories-unit">kcal / día</span>
-      </div>
-
-      <!-- Barras de macros -->
+      <div class="card-badge"><i class="bi bi-pie-chart-fill me-2"></i>Distribución de Macros</div>
+      <div class="calories-display"><span class="calories-value">{{ ultimoRegistro.caloriasRecomendadas }}</span><span class="calories-unit">kcal / día</span></div>
       <div class="macros-list">
-
         <div class="macro-item">
-          <div class="macro-header">
-            <span class="macro-name">
-              <span class="macro-dot" style="background:#e74c3c;"></span>Proteínas
-            </span>
-            <span class="macro-grams">{{ ultimoRegistro.proteinasG }}g</span>
-          </div>
-          <div class="macro-bar-bg">
-            <div class="macro-bar" style="background:#e74c3c; width: 30%;"></div>
-          </div>
+          <div class="macro-header"><span class="macro-name"><span class="macro-dot" style="background:#e74c3c;"></span>Proteínas</span><span class="macro-grams">{{ ultimoRegistro.proteinasG }}g</span></div>
+          <div class="macro-bar-bg"><div class="macro-bar" style="background:#e74c3c; width: 30%;"></div></div>
           <span class="macro-pct">30% · 4 kcal/g</span>
         </div>
-
         <div class="macro-item">
-          <div class="macro-header">
-            <span class="macro-name">
-              <span class="macro-dot" style="background:#f39c12;"></span>Carbohidratos
-            </span>
-            <span class="macro-grams">{{ ultimoRegistro.carbohidratosG }}g</span>
-          </div>
-          <div class="macro-bar-bg">
-            <div class="macro-bar" style="background:#f39c12; width: 45%;"></div>
-          </div>
+          <div class="macro-header"><span class="macro-name"><span class="macro-dot" style="background:#f39c12;"></span>Carbohidratos</span><span class="macro-grams">{{ ultimoRegistro.carbohidratosG }}g</span></div>
+          <div class="macro-bar-bg"><div class="macro-bar" style="background:#f39c12; width: 45%;"></div></div>
           <span class="macro-pct">45% · 4 kcal/g</span>
         </div>
-
         <div class="macro-item">
-          <div class="macro-header">
-            <span class="macro-name">
-              <span class="macro-dot" style="background:#3498db;"></span>Grasas
-            </span>
-            <span class="macro-grams">{{ ultimoRegistro.grasasG }}g</span>
-          </div>
-          <div class="macro-bar-bg">
-            <div class="macro-bar" style="background:#3498db; width: 25%;"></div>
-          </div>
+          <div class="macro-header"><span class="macro-name"><span class="macro-dot" style="background:#3498db;"></span>Grasas</span><span class="macro-grams">{{ ultimoRegistro.grasasG }}g</span></div>
+          <div class="macro-bar-bg"><div class="macro-bar" style="background:#3498db; width: 25%;"></div></div>
           <span class="macro-pct">25% · 9 kcal/g</span>
         </div>
-
-      </div>
-
-      <div class="disclaimer-box">
-        <i class="bi bi-info-circle me-2 text-warning"></i>
-        <span>Estos cálculos son estimaciones matemáticas (Mifflin-St Jeor). Consulte a un profesional para un plan personalizado.</span>
       </div>
     </section>
-
   </div>
 </div>
 
-<!-- ═══════════════════════════ SIN PERFIL (nunca llenó datos) ════════════ -->
 <div *ngIf="!cargando && !tienePerfil" class="empty-state">
   <i class="bi bi-clipboard2-pulse fs-1 mb-3 d-block opacity-50" style="color:#ffd700;"></i>
   <h5 class="text-white">Completa tu primera evaluación</h5>
@@ -146,34 +78,21 @@
   </button>
 </div>
 
-
-<!-- ══════════════════════════════════════════════════════════════════════════
-     MODAL 1 — PRIMERA EVALUACIÓN
-═══════════════════════════════════════════════════════════════════════════ -->
 <div class="modal-overlay" *ngIf="mostrarModalPrimeraVez" (click)="cerrarModalPrimeraVez()">
   <div class="modal-card" (click)="$event.stopPropagation()">
-
     <div class="modal-card-header">
-      <h5 class="mb-0 fw-bold">
-        <i class="bi bi-clipboard2-pulse me-2" style="color:#ffd700;"></i>
-        Primera Evaluación Nutricional
-      </h5>
-      <button class="btn-close-modal" (click)="cerrarModalPrimeraVez()">
-        <i class="bi bi-x-lg"></i>
-      </button>
+      <h5 class="mb-0 fw-bold"><i class="bi bi-clipboard2-pulse me-2" style="color:#ffd700;"></i>Primera Evaluación Nutricional</h5>
+      <button class="btn-close-modal" (click)="cerrarModalPrimeraVez()"><i class="bi bi-x-lg"></i></button>
     </div>
 
-    <div *ngIf="alertaModal" class="alert alert-{{ alertaModal.tipo }} py-2 px-3 small mb-3" role="alert">
-      {{ alertaModal.mensaje }}
-    </div>
+    <div *ngIf="alertaModal" class="alert alert-{{ alertaModal.tipo }} py-2 px-3 small mb-3" role="alert">{{ alertaModal.mensaje }}</div>
 
-    <form #formPrimera="ngForm" (ngSubmit)="guardarPrimeraEvaluacion(formPrimera)" novalidate>
-
+    <form [formGroup]="primeraForm" (ngSubmit)="guardarPrimeraEvaluacion()" novalidate>
       <div class="row g-3 mb-3">
         <div class="col-12 col-md-6">
           <label class="form-label text-warning fw-semibold small">Sexo</label>
-          <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                  name="sexo" [(ngModel)]="primeraEvaluacion.sexo" required>
+          <select formControlName="sexo" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                  [ngClass]="{'is-invalid': primeraForm.get('sexo')?.invalid && primeraForm.get('sexo')?.touched}">
             <option value="" disabled selected>Selecciona...</option>
             <option value="masculino">Masculino</option>
             <option value="femenino">Femenino</option>
@@ -181,28 +100,30 @@
         </div>
         <div class="col-12 col-md-6">
           <label class="form-label text-warning fw-semibold small">Fecha de Nacimiento</label>
-          <input type="date" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-                 name="fechaNacimiento" [(ngModel)]="primeraEvaluacion.fechaNacimiento" required />
+          <input type="date" formControlName="fechaNacimiento" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 [ngClass]="{'is-invalid': primeraForm.get('fechaNacimiento')?.invalid && primeraForm.get('fechaNacimiento')?.touched}" />
         </div>
       </div>
 
       <div class="row g-3 mb-3">
         <div class="col-12 col-md-6">
           <label class="form-label text-warning fw-semibold small">Estatura (cm)</label>
-          <input type="number" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-                 name="estaturaCm" [(ngModel)]="primeraEvaluacion.estaturaCm" min="100" max="250" required />
+          <input type="number" formControlName="estaturaCm" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 [ngClass]="{'is-invalid': primeraForm.get('estaturaCm')?.invalid && primeraForm.get('estaturaCm')?.touched}" />
+          <div class="invalid-feedback">Estatura obligatoria (100 a 250 cm).</div>
         </div>
         <div class="col-12 col-md-6">
           <label class="form-label text-warning fw-semibold small">Peso actual (kg)</label>
-          <input type="number" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-                 name="pesoKg" [(ngModel)]="primeraEvaluacion.pesoKg" min="30" max="300" step="0.1" required />
+          <input type="number" step="0.1" formControlName="pesoKg" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 [ngClass]="{'is-invalid': primeraForm.get('pesoKg')?.invalid && primeraForm.get('pesoKg')?.touched}" />
+          <div class="invalid-feedback">Peso obligatorio (30 a 300 kg).</div>
         </div>
       </div>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Nivel de Actividad</label>
-        <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                name="nivelActividad" [(ngModel)]="primeraEvaluacion.nivelActividad" required>
+        <select formControlName="nivelActividad" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                [ngClass]="{'is-invalid': primeraForm.get('nivelActividad')?.invalid && primeraForm.get('nivelActividad')?.touched}">
           <option value="" disabled selected>Selecciona...</option>
           <option value="sedentario">Sedentario (sin ejercicio)</option>
           <option value="ligero">Ligero (1-3 días/semana)</option>
@@ -213,8 +134,8 @@
 
       <div class="mb-4">
         <label class="form-label text-warning fw-semibold small">Objetivo</label>
-        <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                name="objetivo" [(ngModel)]="primeraEvaluacion.objetivo" required>
+        <select formControlName="objetivo" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                [ngClass]="{'is-invalid': primeraForm.get('objetivo')?.invalid && primeraForm.get('objetivo')?.touched}">
           <option value="" disabled selected>Selecciona...</option>
           <option value="Volumen">Volumen (+300 kcal)</option>
           <option value="Definición">Definición (-300 kcal)</option>
@@ -227,44 +148,31 @@
         <i *ngIf="!guardando" class="bi bi-calculator me-2"></i>
         {{ guardando ? 'Calculando...' : 'Calcular y Guardar' }}
       </button>
-
     </form>
   </div>
 </div>
 
-
-<!-- ══════════════════════════════════════════════════════════════════════════
-     MODAL 2 — ACTUALIZACIÓN
-═══════════════════════════════════════════════════════════════════════════ -->
 <div class="modal-overlay" *ngIf="mostrarModalActualizar" (click)="cerrarModalActualizar()">
   <div class="modal-card modal-card--sm" (click)="$event.stopPropagation()">
-
     <div class="modal-card-header">
-      <h5 class="mb-0 fw-bold">
-        <i class="bi bi-arrow-repeat me-2" style="color:#ffd700;"></i>
-        Actualizar Mis Datos
-      </h5>
-      <button class="btn-close-modal" (click)="cerrarModalActualizar()">
-        <i class="bi bi-x-lg"></i>
-      </button>
+      <h5 class="mb-0 fw-bold"><i class="bi bi-arrow-repeat me-2" style="color:#ffd700;"></i>Actualizar Mis Datos</h5>
+      <button class="btn-close-modal" (click)="cerrarModalActualizar()"><i class="bi bi-x-lg"></i></button>
     </div>
 
-    <div *ngIf="alertaModal" class="alert alert-{{ alertaModal.tipo }} py-2 px-3 small mb-3" role="alert">
-      {{ alertaModal.mensaje }}
-    </div>
+    <div *ngIf="alertaModal" class="alert alert-{{ alertaModal.tipo }} py-2 px-3 small mb-3" role="alert">{{ alertaModal.mensaje }}</div>
 
-    <form #formActualizar="ngForm" (ngSubmit)="guardarActualizacion(formActualizar)" novalidate>
-
+    <form [formGroup]="actualizarForm" (ngSubmit)="guardarActualizacion()" novalidate>
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Nuevo Peso (kg)</label>
-        <input type="number" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               name="pesoKg" [(ngModel)]="actualizacion.pesoKg" min="30" max="300" step="0.1" required />
+        <input type="number" step="0.1" formControlName="pesoKg" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               [ngClass]="{'is-invalid': actualizarForm.get('pesoKg')?.invalid && actualizarForm.get('pesoKg')?.touched}" />
+        <div class="invalid-feedback">Ingresa un peso válido (30 a 300 kg).</div>
       </div>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Nivel de Actividad</label>
-        <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                name="nivelActividad" [(ngModel)]="actualizacion.nivelActividad" required>
+        <select formControlName="nivelActividad" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                [ngClass]="{'is-invalid': actualizarForm.get('nivelActividad')?.invalid && actualizarForm.get('nivelActividad')?.touched}">
           <option value="" disabled>Selecciona...</option>
           <option value="sedentario">Sedentario</option>
           <option value="ligero">Ligero</option>
@@ -275,8 +183,8 @@
 
       <div class="mb-4">
         <label class="form-label text-warning fw-semibold small">Objetivo</label>
-        <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                name="objetivo" [(ngModel)]="actualizacion.objetivo" required>
+        <select formControlName="objetivo" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                [ngClass]="{'is-invalid': actualizarForm.get('objetivo')?.invalid && actualizarForm.get('objetivo')?.touched}">
           <option value="" disabled>Selecciona...</option>
           <option value="Volumen">Volumen (+300 kcal)</option>
           <option value="Definición">Definición (-300 kcal)</option>
@@ -289,7 +197,6 @@
         <i *ngIf="!guardando" class="bi bi-check-lg me-2"></i>
         {{ guardando ? 'Guardando...' : 'Guardar y Recalcular' }}
       </button>
-
     </form>
   </div>
 </div>

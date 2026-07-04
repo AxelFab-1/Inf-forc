@@ -1,14 +1,12 @@
 <div class="master-detail-layout">
 
   <aside class="detail-panel">
-
     <div class="panel-header">
       <h5 class="mb-0 fw-bold" style="color: #ffd700;">
         <i class="bi" [ngClass]="modo === 'crear' ? 'bi-person-plus-fill' : 'bi-pencil-fill'"></i>
         {{ modo === 'crear' ? 'Nuevo Usuario' : 'Editar Usuario' }}
       </h5>
-      <button *ngIf="modo === 'editar'" class="btn btn-sm btn-outline-secondary rounded-pill"
-              (click)="limpiarPanel()">
+      <button *ngIf="modo === 'editar'" class="btn btn-sm btn-outline-secondary rounded-pill" (click)="limpiarPanel()">
         <i class="bi bi-x-lg me-1"></i> Limpiar
       </button>
     </div>
@@ -18,53 +16,43 @@
       <button type="button" class="btn-close btn-sm" (click)="cerrarAlerta()"></button>
     </div>
 
-    <form *ngIf="modo === 'crear'"
-          #registroForm="ngForm"
-          (ngSubmit)="registrarUsuario(registroForm)"
-          [ngClass]="{ 'was-validated': registroForm.submitted && registroForm.invalid }"
-          novalidate>
+    <form *ngIf="modo === 'crear'" [formGroup]="registroForm" (ngSubmit)="registrarUsuario()" novalidate>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Nombres</label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               name="nombres" [(ngModel)]="nuevoUsuario.nombres"
-               maxlength="50" required />
+        <input type="text" formControlName="nombres" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               [ngClass]="{'is-invalid': registroForm.get('nombres')?.invalid && registroForm.get('nombres')?.touched}" maxlength="50" />
       </div>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Apellidos</label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               name="apellidos" [(ngModel)]="nuevoUsuario.apellidos"
-               maxlength="50" required />
+        <input type="text" formControlName="apellidos" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               [ngClass]="{'is-invalid': registroForm.get('apellidos')?.invalid && registroForm.get('apellidos')?.touched}" maxlength="50" />
       </div>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">DNI</label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               name="dni" [(ngModel)]="nuevoUsuario.dni"
-               (input)="sincronizarContrasena()" maxlength="8" required />
+        <input type="text" formControlName="dni" (input)="sincronizarContrasena()" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               [ngClass]="{'is-invalid': registroForm.get('dni')?.invalid && registroForm.get('dni')?.touched}" maxlength="8" />
       </div>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Código de Acceso</label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               name="codigoAcceso" [(ngModel)]="nuevoUsuario.codigoAcceso"
-               maxlength="5" required />
+        <input type="text" formControlName="codigoAcceso" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               [ngClass]="{'is-invalid': registroForm.get('codigoAcceso')?.invalid && registroForm.get('codigoAcceso')?.touched}" maxlength="5" />
         <div class="form-text text-white-50 small">5 dígitos numéricos.</div>
       </div>
-      
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Contraseña (auto: DNI)</label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               name="contrasena" [(ngModel)]="nuevoUsuario.contrasena" 
-               maxlength="64" required />
+        <input type="text" formControlName="contrasena" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               [ngClass]="{'is-invalid': registroForm.get('contrasena')?.invalid && registroForm.get('contrasena')?.touched}" maxlength="64" />
       </div>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Sede</label>
-        <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                name="sede" [(ngModel)]="nuevoUsuario.sede" required>
+        <select formControlName="sede" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                [ngClass]="{'is-invalid': registroForm.get('sede')?.invalid && registroForm.get('sede')?.touched}">
           <option value="" disabled selected>Selecciona...</option>
           <option value="Sede 1">Sede 1</option>
           <option value="Sede 2">Sede 2</option>
@@ -74,8 +62,7 @@
 
       <div class="mb-4">
         <label class="form-label text-warning fw-semibold small">Rol</label>
-        <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                name="rol" [(ngModel)]="nuevoUsuario.rol" required>
+        <select formControlName="rol" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none">
           <option value="cliente">Cliente</option>
           <option value="administrador">Administrador</option>
         </select>
@@ -86,47 +73,39 @@
       </button>
     </form>
 
-    <form *ngIf="modo === 'editar'"
-          #editarForm="ngForm"
-          (ngSubmit)="guardarEdicion(editarForm)"
-          novalidate>
+
+    <form *ngIf="modo === 'editar'" [formGroup]="editarForm" (ngSubmit)="guardarEdicion()" novalidate>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Nombres</label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               name="nombresEdit" [(ngModel)]="usuarioEditando.nombres"
-               maxlength="50" required />
+        <input type="text" formControlName="nombres" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               [ngClass]="{'is-invalid': editarForm.get('nombres')?.invalid && editarForm.get('nombres')?.touched}" maxlength="50" />
       </div>
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Apellidos</label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               name="apellidosEdit" [(ngModel)]="usuarioEditando.apellidos"
-               maxlength="50" required />
+        <input type="text" formControlName="apellidos" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+               [ngClass]="{'is-invalid': editarForm.get('apellidos')?.invalid && editarForm.get('apellidos')?.touched}" maxlength="50" />
       </div>
 
       <div class="mb-3">
         <label class="form-label text-white-50 fw-semibold small">DNI <span class="badge bg-secondary ms-1" style="font-size:0.6rem;">Solo lectura</span></label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-white-50 shadow-none"
-               [value]="usuarioEditando.dni" [disabled]="true" />
+        <input type="text" formControlName="dni" class="form-control form-control-sm bg-dark border-secondary text-white-50 shadow-none" />
       </div>
 
       <div class="mb-3">
         <label class="form-label text-white-50 fw-semibold small">Código de Acceso <span class="badge bg-secondary ms-1" style="font-size:0.6rem;">Solo lectura</span></label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-white-50 shadow-none"
-               [value]="usuarioEditando.codigoAcceso" [disabled]="true" />
+        <input type="text" formControlName="codigoAcceso" class="form-control form-control-sm bg-dark border-secondary text-white-50 shadow-none" />
       </div>
 
       <div class="mb-3">
         <label class="form-label text-white-50 fw-semibold small">Sede <span class="badge bg-secondary ms-1" style="font-size:0.6rem;">Solo lectura</span></label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-white-50 shadow-none"
-               [value]="usuarioEditando.sede" [disabled]="true" />
+        <input type="text" formControlName="sede" class="form-control form-control-sm bg-dark border-secondary text-white-50 shadow-none" />
       </div>
 
       <div class="mb-4">
         <label class="form-label text-white-50 fw-semibold small">Rol <span class="badge bg-secondary ms-1" style="font-size:0.6rem;">Solo lectura</span></label>
-        <input type="text" class="form-control form-control-sm bg-dark border-secondary text-white-50 shadow-none"
-               [value]="usuarioEditando.rol" [disabled]="true" />
+        <input type="text" formControlName="rol" class="form-control form-control-sm bg-dark border-secondary text-white-50 shadow-none" />
       </div>
 
       <button type="submit" class="btn w-100 fw-bold py-2" style="background-color:#ffd700; color:#000;">

@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { decodificarToken } from '../../shared/utils/jwt-decoder';
 
-
 import { EntrenamientoService } from '../../services/entrenamiento';
 
 declare var bootstrap: any;
@@ -21,7 +20,6 @@ export class ArmarRutina implements OnInit {
   catalogoMaquinas: any[] = [];
   diaSeleccionadoIndex: number | null = null;
 
-  // 👇 Inyectamos el servicio
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -34,7 +32,6 @@ export class ArmarRutina implements OnInit {
     this.cargarDatosIniciales();
   }
 
-  
   cargarDatosIniciales() {
     this.entrenamientoService.getPlantillas().subscribe({
       next: (data) => {
@@ -86,7 +83,6 @@ export class ArmarRutina implements OnInit {
     this.cdr.detectChanges();
   }
 
-  
   guardarRutina() {
     const token = localStorage.getItem('jwt_token');
     let idCliente = null;
@@ -122,8 +118,9 @@ export class ArmarRutina implements OnInit {
           alert('Error al guardar: ' + data.mensaje);
         }
       },
-      error: () => {
-        alert('Ocurrió un error de conexión al intentar guardar la rutina.');
+      error: (err) => { 
+        const mensajeDelBackend = err.error?.mensaje || 'Ocurrió un error de conexión al intentar guardar la rutina.';
+        alert('Error: ' + mensajeDelBackend);
       }
     });
   }

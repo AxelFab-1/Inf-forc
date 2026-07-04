@@ -1,59 +1,45 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
-// 👇 Importamos el nuevo servicio
-import { EntrenamientoService } from '../../services/entrenamiento'; 
+import { EntrenamientoService } from '../../services/entrenamiento';
 
 declare var bootstrap: any;
-
-interface SerieFila {
-  numeroSerie: number;
-  repeticiones: number | null;
-  pesoKg: number | null;
-}
 
 @Component({
   selector: 'app-sesion-entrenamiento',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './sesion-entrenamiento.html',
   styleUrl: './sesion-entrenamiento.css',
 })
 export class SesionEntrenamiento implements OnInit, OnDestroy {
-  // Datos del día de entrenamiento
   diaActual: any = null;
   rutinaId: string = '';
   indiceDia: number = 0;
 
-  // Catálogo completo de ejercicios
   catalogoEjercicios: { [id: string]: any } = {};
   cargandoCatalogo: boolean = true;
 
-  // Cronómetro
   reloj: string = '00:00:00';
   segundosTotales: number = 0;
   private intervaloCronometro: any;
 
-  // Registro de series por ejercicio
-  registroSeries: { [ejercicioId: string]: SerieFila[] } = {};
+  sesionForm!: FormGroup;
 
-  // Control de UI
   ejercicioExpandido: string | null = null;
   videoActivo: string | null = null;
 
-  // Modal de advertencia
   ejerciciosSinDatos: string[] = [];
   mostrarModalAdvertencia: boolean = false;
 
   private fechaInicio: string = '';
 
-  // 👇 Inyectamos el servicio en el constructor
   constructor(
-    private router: Router, 
+    private router: Router,
     private cdr: ChangeDetectorRef,
-    private entrenamientoService: EntrenamientoService
+    private entrenamientoService: EntrenamientoService,
+    private fb: FormBuilder,
   ) {}
 
   ngOnInit() {
@@ -68,7 +54,11 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
     this.indiceDia = state.indiceDia ?? 0;
     this.fechaInicio = new Date().toISOString();
 
-    this.inicializarRegistroSeries();
+    this.sesionForm = this.fb.group({
+      ejercicios: this.fb.array([]),
+    });
+
+    this.inicializarFormularioDinamico();
     this.cargarCatalogoEjercicios();
     this.iniciarCronometro();
   }
@@ -77,19 +67,37 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
     clearInterval(this.intervaloCronometro);
   }
 
-  private inicializarRegistroSeries() {
+  get ejerciciosFormArray(): FormArray {
+    return this.sesionForm.get('ejercicios') as FormArray;
+  }
+
+  getSeriesFormArray(indexEjercicio: number): FormArray {
+    return this.ejerciciosFormArray.at(indexEjercicio).get('series') as FormArray;
+  }
+
+  private inicializarFormularioDinamico() {
     if (!this.diaActual?.ejerciciosBase) return;
 
     for (const ej of this.diaActual.ejerciciosBase) {
-      const id = this.resolverEjercicioId(ej);
-      this.registroSeries[id] = [{ numeroSerie: 1, repeticiones: null, pesoKg: null }];
+      const ejercicioGroup = this.fb.group({
+        id: [this.resolverEjercicioId(ej)],
+        nombre: [ej.nombre],
+        series: this.fb.array([this.crearSerieFormGroup(1)]),
+      });
+      this.ejerciciosFormArray.push(ejercicioGroup);
     }
   }
 
-  // 👇 Refactorizado para usar el Servicio
+  private crearSerieFormGroup(numeroSerie: number): FormGroup {
+    return this.fb.group({
+      numeroSerie: [numeroSerie],
+      repeticiones: [null, [Validators.min(1), Validators.max(100)]],
+      pesoKg: [null, [Validators.min(0), Validators.max(600)]],
+    });
+  }
+
   private cargarCatalogoEjercicios() {
     this.cargandoCatalogo = true;
-    
     this.entrenamientoService.getEjercicios().subscribe({
       next: (data) => {
         if (data.exito && data.datos) {
@@ -104,11 +112,10 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
       error: () => {
         this.cargandoCatalogo = false;
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 
-  // ─── Helpers de ID ───────────────────────────────────────────
   resolverEjercicioId(ej: any): string {
     return ej.ejercicioId?.$oid || ej.ejercicioId || ej._id?.$oid || ej._id || '';
   }
@@ -130,7 +137,6 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
     return this.getEjercicioCompleto(ej)?.videoUrl || null;
   }
 
-  // ─── Cronómetro ──────────────────────────────────────────────
   private iniciarCronometro() {
     this.intervaloCronometro = setInterval(() => {
       this.segundosTotales++;
@@ -142,7 +148,6 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
     }, 1000);
   }
 
-  // ─── Control de acordeón ─────────────────────────────────────
   toggleEjercicio(id: string) {
     this.ejercicioExpandido = this.ejercicioExpandido === id ? null : id;
     this.videoActivo = null;
@@ -152,46 +157,51 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
     this.videoActivo = this.videoActivo === id ? null : id;
   }
 
-  // ─── Gestión de series ────────────────────────────────────────
-  getSeries(ej: any): SerieFila[] {
-    return this.registroSeries[this.resolverEjercicioId(ej)] || [];
-  }
-
-  agregarSerie(ej: any) {
-    const id = this.resolverEjercicioId(ej);
-    const series = this.registroSeries[id];
-    series.push({ numeroSerie: series.length + 1, repeticiones: null, pesoKg: null });
+  agregarSerie(indexEjercicio: number) {
+    const series = this.getSeriesFormArray(indexEjercicio);
+    series.push(this.crearSerieFormGroup(series.length + 1));
     this.cdr.detectChanges();
   }
 
-  eliminarSerie(ej: any, index: number) {
-    const id = this.resolverEjercicioId(ej);
-    const series = this.registroSeries[id];
-    if (series.length <= 1) return; 
-    series.splice(index, 1);
-    series.forEach((s, i) => (s.numeroSerie = i + 1));
+  eliminarSerie(indexEjercicio: number, indexSerie: number) {
+    const series = this.getSeriesFormArray(indexEjercicio);
+    if (series.length <= 1) return;
+    series.removeAt(indexSerie);
+
+    series.controls.forEach((control, i) => {
+      control.get('numeroSerie')?.setValue(i + 1);
+    });
     this.cdr.detectChanges();
   }
 
-  // ─── Verificación de ejercicios vacíos ───────────────────────
-  private getEjerciciosSinDatos(): string[] {
+  private analizarEjerciciosSinDatos(): string[] {
     const vacios: string[] = [];
-    for (const ej of this.diaActual.ejerciciosBase) {
-      const id = this.resolverEjercicioId(ej);
-      const series = this.registroSeries[id] || [];
-      const tieneAlgunDato = series.some(
-        s => (s.repeticiones !== null && s.repeticiones > 0)
-      );
-      if (!tieneAlgunDato) {
-        vacios.push(ej.nombre);
+
+    this.ejerciciosFormArray.controls.forEach((ejCtrl) => {
+      const nombre = ejCtrl.get('nombre')?.value;
+      const seriesArray = ejCtrl.get('series') as FormArray;
+
+      const tieneAlgunDatoValido = seriesArray.controls.some((s) => {
+        const reps = s.get('repeticiones')?.value;
+        return reps !== null && reps > 0;
+      });
+
+      if (!tieneAlgunDatoValido) {
+        vacios.push(nombre);
       }
-    }
+    });
+
     return vacios;
   }
 
-  // ─── Finalizar sesión ─────────────────────────────────────────
   finalizarSesion() {
-    this.ejerciciosSinDatos = this.getEjerciciosSinDatos();
+    if (this.sesionForm.invalid) {
+      this.sesionForm.markAllAsTouched();
+      alert('Por favor, corrige los valores numéricos de las series (Reps > 0 y Pesos válidos).');
+      return;
+    }
+
+    this.ejerciciosSinDatos = this.analizarEjerciciosSinDatos();
 
     if (this.ejerciciosSinDatos.length > 0) {
       const modalEl = document.getElementById('advertenciaModal');
@@ -214,29 +224,41 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
     this.guardarYSalir();
   }
 
-  // 👇 Refactorizado para usar el Servicio
   private guardarYSalir() {
     clearInterval(this.intervaloCronometro);
-
     const ejerciciosRealizados: any[] = [];
-    for (const ej of this.diaActual.ejerciciosBase) {
-      const id = this.resolverEjercicioId(ej);
-      const series = (this.registroSeries[id] || []).filter(
-        s => s.repeticiones !== null && s.repeticiones > 0
-      );
-      if (series.length > 0) {
+
+    this.ejerciciosFormArray.controls.forEach((ejCtrl, index) => {
+      const id = ejCtrl.get('id')?.value;
+      const nombre = ejCtrl.get('nombre')?.value;
+      const originalEj = this.diaActual.ejerciciosBase[index];
+      const pesoCorporal = this.esPesoCorporal(originalEj);
+
+      const seriesArray = ejCtrl.get('series') as FormArray;
+      const seriesValidas: any[] = [];
+
+      seriesArray.controls.forEach((sCtrl) => {
+        const reps = sCtrl.get('repeticiones')?.value;
+        const peso = sCtrl.get('pesoKg')?.value;
+
+        if (reps !== null && reps > 0) {
+          seriesValidas.push({
+            numeroSerie: sCtrl.get('numeroSerie')?.value,
+            repeticiones: reps,
+            pesoKg: pesoCorporal ? null : peso || 0,
+          });
+        }
+      });
+
+      if (seriesValidas.length > 0) {
         ejerciciosRealizados.push({
           ejercicioId: id,
-          nombre: ej.nombre,
-          pesoCorporal: this.esPesoCorporal(ej),
-          series: series.map(s => ({
-            numeroSerie: s.numeroSerie,
-            repeticiones: s.repeticiones,
-            pesoKg: this.esPesoCorporal(ej) ? null : s.pesoKg,
-          })),
+          nombre,
+          pesoCorporal,
+          series: seriesValidas,
         });
       }
-    }
+    });
 
     const sesion = {
       rutinaId: this.rutinaId,
@@ -251,13 +273,13 @@ export class SesionEntrenamiento implements OnInit, OnDestroy {
       next: () => {
         this.router.navigate(['/dashboard'], { state: { sesionCompletada: true } });
       },
-      error: () => {
-        this.router.navigate(['/dashboard']);
-      }
+      error: (err) => {
+        const mensaje = err.error?.mensaje || 'No se pudo guardar la sesión en el servidor.';
+        alert('Error: ' + mensaje);
+      },
     });
   }
 
-  // ─── Salir sin guardar ────────────────────────────────────────
   salirSinGuardar() {
     clearInterval(this.intervaloCronometro);
     this.router.navigate(['/dashboard']);

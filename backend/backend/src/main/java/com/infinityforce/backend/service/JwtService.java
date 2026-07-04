@@ -12,11 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
-/**
- * Servicio centralizado para la gestión de JSON Web Tokens (JWT).
- * La clave secreta se lee desde application.properties para evitar
- * que esté hardcodeada en el código fuente.
- */
+
 @Service
 public class JwtService {
 
@@ -26,18 +22,13 @@ public class JwtService {
     @Value("${app.jwt.expiration}")
     private long expirationMs;
 
-    /**
-     * Construye la clave de firma HMAC-SHA256 a partir de la clave configurada.
-     */
     private Key getSigningKey() {
         return Keys.hmacShaKeyFor(secretKeyString.getBytes(StandardCharsets.UTF_8));
     }
 
     /**
-     * Genera un token JWT firmado para el usuario indicado.
-     *
-     * @param usuario El usuario autenticado.
-     * @return El token JWT como String.
+     * @param usuario 
+     * @return 
      */
     public String generarToken(Usuario usuario) {
         String rol = (usuario.getRol() != null) ? usuario.getRol() : "cliente";
@@ -55,11 +46,8 @@ public class JwtService {
     }
 
     /**
-     * Valida un token JWT y devuelve sus claims si es correcto.
-     * Lanza una excepción de jjwt si el token es inválido o ha expirado.
-     *
-     * @param token El token JWT a validar.
-     * @return Los claims del token.
+     * @param token 
+     * @return 
      */
     public Claims validarToken(String token) {
         return Jwts.parserBuilder()
@@ -70,10 +58,8 @@ public class JwtService {
     }
 
     /**
-     * Extrae el ID de usuario (subject) de un token JWT ya validado.
-     *
-     * @param token El token JWT.
-     * @return El ID del usuario como String.
+     * @param token 
+     * @return 
      */
     public String extraerUserId(String token) {
         return validarToken(token).getSubject();

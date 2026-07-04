@@ -11,11 +11,12 @@
         <h4 class="mb-4 fw-bold">Acceso a Socios</h4>
       </div>
 
-      <form (ngSubmit)="hacerLogin()" class="needs-validation" novalidate>
+      <form [formGroup]="loginForm" (ngSubmit)="hacerLogin()" novalidate>
+        
         <div
           *ngIf="mensajeError"
           class="alert alert-danger alert-dismissible fade show mb-4"
-          role="alert"
+          role="alert"                                
         >
           <strong>¡Error!</strong> {{ mensajeError }}
           <button
@@ -30,17 +31,19 @@
           <label for="codigoAcceso" class="form-label fw-semibold">Código de Acceso</label>
           <input
             type="text"
-            [(ngModel)]="codigo"
-            (input)="codigo = codigo.replace(/[^0-9]/g, '')"
-            name="codigo"
+            formControlName="codigo"
+            (input)="limpiarCodigoLetras($event)"
             inputmode="numeric"
-            pattern="[0-9]{5}"
             maxlength="5"
             class="form-control"
+            [ngClass]="{'is-invalid': loginForm.get('codigo')?.invalid && loginForm.get('codigo')?.touched}"
             id="codigoAcceso"
             placeholder="Ej: 10045"
-            required
           />
+          <div *ngIf="loginForm.get('codigo')?.invalid && loginForm.get('codigo')?.touched" class="invalid-feedback">
+            <span *ngIf="loginForm.get('codigo')?.hasError('required')">El código es obligatorio.</span>
+            <span *ngIf="loginForm.get('codigo')?.hasError('minlength')">Debe tener exactamente 5 dígitos.</span>
+          </div>
         </div>
 
         <div class="mb-4">
@@ -48,15 +51,12 @@
           <div class="input-group">
             <input
               [type]="mostrarPassword ? 'text' : 'password'"
-              [(ngModel)]="contrasena"
-              name="contrasena"
-              inputmode="numeric"
-              pattern="[0-9]{8}"
+              formControlName="contrasena"
               maxlength="50"
               class="form-control"
+              [ngClass]="{'is-invalid': loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched}"
               id="contrasena"
               placeholder="Ingresa tu contraseña"
-              required
             />
             <button 
               class="btn btn-outline-secondary" 
@@ -65,6 +65,9 @@
               style="border-color: #dee2e6;">
               <i class="bi" [ngClass]="mostrarPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
             </button>
+            <div *ngIf="loginForm.get('contrasena')?.invalid && loginForm.get('contrasena')?.touched" class="invalid-feedback w-100">
+              La contraseña es obligatoria.
+            </div>
           </div>
         </div>
 

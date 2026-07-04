@@ -9,13 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Controlador HTTP para el recurso Ejercicio.
- * Responsabilidad única: despachar peticiones HTTP y delegar a EjercicioService.
- *
- * La lógica de filtrado (próximo paso del roadmap) vivirá en EjercicioService,
- * no aquí.
- */
+
 @RestController
 @RequestMapping("/api")
 public class EjercicioController {

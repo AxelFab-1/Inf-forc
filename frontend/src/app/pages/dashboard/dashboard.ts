@@ -6,7 +6,6 @@ import { FooterMenu } from '../../shared/footer-menu/footer-menu';
 import { Header } from '../../shared/header/header';
 import { decodificarToken } from '../../shared/utils/jwt-decoder';
 
-// 👇 Importamos tu servicio de entrenamiento
 import { EntrenamientoService } from '../../services/entrenamiento';
 
 declare var bootstrap: any;
@@ -21,7 +20,6 @@ declare var bootstrap: any;
 export class Dashboard implements OnInit {
   nombreSocio: string = 'Socio';
 
-  // ─── Calendario ───────────────────────────────────────
   mesActualNombre: string = '';
   diasVacios: number[] = [];
   diasMes: number[] = [];
@@ -30,7 +28,6 @@ export class Dashboard implements OnInit {
   diasEntrenados: number[] = [];
   cargandoAsistencias: boolean = true;
 
-  // ─── Rutina del socio ─────────────────────────────────
   rutinaActiva: any = null;
   cargandoRutina: boolean = true;
   indiceDiaSiguiente: number = 0;
@@ -38,7 +35,6 @@ export class Dashboard implements OnInit {
   modoEleccionDia: boolean = false;
   indiceDiaManual: number = 0;
 
-  // 👇 Inyectamos el servicio en el constructor
   constructor(
     private cdr: ChangeDetectorRef, 
     private router: Router,
@@ -59,11 +55,10 @@ export class Dashboard implements OnInit {
     this.cargarRutinaActiva();
   }
 
-  // ─── Calendario ───────────────────────────────────────
   configurarCalendario() {
     const fechaActual = new Date();
     this.diaHoy = fechaActual.getDate();
-    const mesHoy   = fechaActual.getMonth(); // 0-based
+    const mesHoy   = fechaActual.getMonth(); 
     const anioHoy  = fechaActual.getFullYear();
 
     const nombresMeses = [
@@ -79,7 +74,6 @@ export class Dashboard implements OnInit {
     this.diasMes = Array.from({ length: totalDiasMes }, (_, i) => i + 1);
   }
 
-  // 👇 Refactorizado: Cargar asistencias con el servicio
   cargarAsistenciasMesActual() {
     this.cargandoAsistencias = true;
 
@@ -101,7 +95,6 @@ export class Dashboard implements OnInit {
     });
   }
 
-  // 👇 Refactorizado: Cargar rutina activa con el servicio
   cargarRutinaActiva() {
     this.cargandoRutina = true;
 
@@ -125,7 +118,6 @@ export class Dashboard implements OnInit {
     });
   }
 
-  // 👇 Refactorizado: Cargar índice del siguiente día con el servicio
   cargarIndiceSiguienteDia(totalDias: number) {
     this.entrenamientoService.getSiguienteDia(totalDias).subscribe({
       next: (data) => {

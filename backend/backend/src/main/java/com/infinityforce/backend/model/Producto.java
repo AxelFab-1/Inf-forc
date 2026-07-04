@@ -12,7 +12,6 @@ public class Producto {
     @JsonProperty("_id")
     private String id;
 
-    // FIX 1: Evitar que el nombre sea solo números
     @NotBlank(message = "El nombre del producto es obligatorio")
     @Size(min = 3, max = 100)
     @Pattern(regexp = ".*[a-zA-ZáéíóúÁÉÍÓÚñÑ].*", message = "El nombre debe contener al menos una letra")
@@ -21,7 +20,6 @@ public class Producto {
     @NotBlank(message = "La categoría es obligatoria")
     private String categoria;
 
-    // FIX 2 y 3: Precio mínimo de 0.01 y máximo de 8 dígitos (hasta 99,999,999.99)
     @NotNull(message = "El precio es obligatorio")
     @DecimalMin(value = "0.01", message = "El precio debe ser mayor a 0")
     @Digits(integer = 8, fraction = 2, message = "El precio es demasiado alto")
@@ -37,8 +35,7 @@ public class Producto {
     
     private boolean activo = true;
 
-    // ... (Getters y Setters se mantienen igual)
-    // GETTERS Y SETTERS
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
 

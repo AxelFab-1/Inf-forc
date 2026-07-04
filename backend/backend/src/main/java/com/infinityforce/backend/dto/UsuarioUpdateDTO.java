@@ -10,7 +10,6 @@ public class UsuarioUpdateDTO {
     @Size(min = 2, max = 50, message = "El apellido debe tener entre 2 y 50 caracteres")
     private String apellidos;
 
-    // Constructores, Getters y Setters
     public UsuarioUpdateDTO() {}
 
     public String getNombres() { return nombres; }

@@ -58,7 +58,7 @@ public class Usuario {
     @Pattern(regexp = "^(Activa|Inactiva|Suspendida)$", message = "Estado inválido")
     private String estadoMembresia;
 
-    // ─── Campos biométricos ──────────────────────────────────────────────
+
     
     @Pattern(regexp = "^(M|F)$", message = "Sexo debe ser M o F")
     private String sexo;
@@ -91,7 +91,6 @@ public class Usuario {
         @Positive private Double carbohidratosG;
         @Positive private Double grasasG;
 
-        // Getters y Setters de RegistroBiometrico
         public Date getFechaRegistro() { return fechaRegistro; }
         public void setFechaRegistro(Date fechaRegistro) { this.fechaRegistro = fechaRegistro; }
 
@@ -120,7 +119,6 @@ public class Usuario {
         public void setGrasasG(Double grasasG) { this.grasasG = grasasG; }
     }
 
-    // ─── Getters y Setters de Usuario ────────────────────────────────────────
 
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }

@@ -1,107 +1,87 @@
-<div class="sesion-app">
-
-  <!-- ═══════════════════ HEADER STICKY ═══════════════════ -->
-  <header class="sesion-header">
-    <button class="btn-salir" (click)="salirSinGuardar()" title="Salir sin guardar">
-      <i class="bi bi-x-lg"></i>
-    </button>
-
-    <div class="sesion-dia-nombre" *ngIf="diaActual">
-      {{ diaActual.nombreDia }}
-    </div>
-
-    <div class="sesion-cronometro">
-      <i class="bi bi-stopwatch me-1"></i>{{ reloj }}
-    </div>
+<div class="sesion-app" [formGroup]="sesionForm"> <header class="sesion-header">
+    <button class="btn-salir" (click)="salirSinGuardar()" title="Salir sin guardar"><i class="bi bi-x-lg"></i></button>
+    <div class="sesion-dia-nombre" *ngIf="diaActual">{{ diaActual.nombreDia }}</div>
+    <div class="sesion-cronometro"><i class="bi bi-stopwatch me-1"></i>{{ reloj }}</div>
   </header>
 
-  <!-- ═══════════════════ CONTENIDO ═══════════════════ -->
   <main class="sesion-main">
-
-    <!-- Cargando -->
     <div *ngIf="cargandoCatalogo" class="sesion-loading">
       <div class="spinner-border text-warning" role="status"></div>
       <p class="mt-3 text-white-50">Cargando ejercicios...</p>
     </div>
 
-    <!-- Lista de ejercicios -->
-    <div *ngIf="!cargandoCatalogo && diaActual" class="ejercicios-lista">
+    <div *ngIf="!cargandoCatalogo && diaActual" class="ejercicios-lista" formArrayName="ejercicios">
 
       <div class="ejercicio-card"
-           *ngFor="let ej of diaActual.ejerciciosBase; let i = index"
-           [class.ejercicio-expandido]="ejercicioExpandido === resolverEjercicioId(ej)">
+           *ngFor="let ejGroup of ejerciciosFormArray.controls; let i = index"
+           [formGroupName]="i"
+           [class.ejercicio-expandido]="ejercicioExpandido === resolverEjercicioId(diaActual.ejerciciosBase[i])">
 
-        <!-- Cabecera del ejercicio (siempre visible) -->
-        <div class="ejercicio-header" (click)="toggleEjercicio(resolverEjercicioId(ej))">
+        <div class="ejercicio-header" (click)="toggleEjercicio(resolverEjercicioId(diaActual.ejerciciosBase[i]))">
           <div class="ejercicio-info">
             <span class="ejercicio-numero">{{ i + 1 }}</span>
-            <span class="ejercicio-nombre">{{ ej.nombre }}</span>
-            <span *ngIf="esPesoCorporal(ej)" class="badge-pc">Peso corporal</span>
+            <span class="ejercicio-nombre">{{ ejGroup.get('nombre')?.value }}</span>
+            <span *ngIf="esPesoCorporal(diaActual.ejerciciosBase[i])" class="badge-pc">Peso corporal</span>
           </div>
           <div class="ejercicio-acciones">
-            <button *ngIf="getVideoUrl(ej)"
+            <button *ngIf="getVideoUrl(diaActual.ejerciciosBase[i])"
                     class="btn-video"
-                    (click)="$event.stopPropagation(); toggleVideo(resolverEjercicioId(ej))"
+                    (click)="$event.stopPropagation(); toggleVideo(resolverEjercicioId(diaActual.ejerciciosBase[i]))"
                     title="Ver video">
               <i class="bi bi-play-circle-fill"></i>
             </button>
             <i class="bi chevron-icon"
-               [class.bi-chevron-down]="ejercicioExpandido !== resolverEjercicioId(ej)"
-               [class.bi-chevron-up]="ejercicioExpandido === resolverEjercicioId(ej)"></i>
+               [class.bi-chevron-down]="ejercicioExpandido !== resolverEjercicioId(diaActual.ejerciciosBase[i])"
+               [class.bi-chevron-up]="ejercicioExpandido === resolverEjercicioId(diaActual.ejerciciosBase[i])"></i>
           </div>
         </div>
 
-        <!-- Contenido expandible -->
-        <div class="ejercicio-body" *ngIf="ejercicioExpandido === resolverEjercicioId(ej)">
+        <div class="ejercicio-body" *ngIf="ejercicioExpandido === resolverEjercicioId(diaActual.ejerciciosBase[i])">
 
-          <!-- Imagen -->
-          <div *ngIf="getImagenUrl(ej)" class="ejercicio-imagen-wrap">
-            <img [src]="getImagenUrl(ej)" [alt]="ej.nombre" class="ejercicio-imagen" />
+          <div *ngIf="getImagenUrl(diaActual.ejerciciosBase[i])" class="ejercicio-imagen-wrap">
+            <img [src]="getImagenUrl(diaActual.ejerciciosBase[i])" [alt]="ejGroup.get('nombre')?.value" class="ejercicio-imagen" />
           </div>
 
-          <!-- Video inline -->
-          <div *ngIf="videoActivo === resolverEjercicioId(ej) && getVideoUrl(ej)" class="ejercicio-video-wrap">
-            <iframe [src]="getVideoUrl(ej)" class="ejercicio-video"
-                    allowfullscreen frameborder="0"></iframe>
+          <div *ngIf="videoActivo === resolverEjercicioId(diaActual.ejerciciosBase[i]) && getVideoUrl(diaActual.ejerciciosBase[i])" class="ejercicio-video-wrap">
+            <iframe [src]="getVideoUrl(diaActual.ejerciciosBase[i])" class="ejercicio-video" allowfullscreen frameborder="0"></iframe>
           </div>
 
-          <!-- Tabla de series -->
-          <div class="series-tabla-wrap">
+          <div class="series-tabla-wrap" formArrayName="series">
             <table class="series-tabla">
               <thead>
                 <tr>
                   <th>Serie</th>
                   <th>Reps</th>
-                  <th *ngIf="!esPesoCorporal(ej)">Peso (kg)</th>
-                  <th *ngIf="esPesoCorporal(ej)">Tipo</th>
+                  <th *ngIf="!esPesoCorporal(diaActual.ejerciciosBase[i])">Peso (kg)</th>
+                  <th *ngIf="esPesoCorporal(diaActual.ejerciciosBase[i])">Tipo</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let serie of getSeries(ej); let j = index">
-                  <td class="td-numero">{{ serie.numeroSerie }}</td>
+                <tr *ngFor="let serieGroup of getSeriesFormArray(i).controls; let j = index" [formGroupName]="j">
+                  <td class="td-numero">{{ serieGroup.get('numeroSerie')?.value }}</td>
                   <td>
                     <input class="input-serie"
                            type="number"
-                           min="1"
-                           [(ngModel)]="serie.repeticiones"
-                           placeholder="0" />
+                           formControlName="repeticiones"
+                           placeholder="0"
+                           [ngClass]="{'border-danger text-danger': serieGroup.get('repeticiones')?.invalid && serieGroup.get('repeticiones')?.touched}" />
                   </td>
-                  <td *ngIf="!esPesoCorporal(ej)">
+                  <td *ngIf="!esPesoCorporal(diaActual.ejerciciosBase[i])">
                     <input class="input-serie"
                            type="number"
-                           min="0"
                            step="0.5"
-                           [(ngModel)]="serie.pesoKg"
-                           placeholder="0" />
+                           formControlName="pesoKg"
+                           placeholder="0"
+                           [ngClass]="{'border-danger text-danger': serieGroup.get('pesoKg')?.invalid && serieGroup.get('pesoKg')?.touched}" />
                   </td>
-                  <td *ngIf="esPesoCorporal(ej)" class="td-pc-label">
+                  <td *ngIf="esPesoCorporal(diaActual.ejerciciosBase[i])" class="td-pc-label">
                     <span class="text-white-50 small">Corporal</span>
                   </td>
                   <td>
                     <button class="btn-eliminar-serie"
-                            (click)="eliminarSerie(ej, j)"
-                            [disabled]="getSeries(ej).length <= 1"
+                            (click)="eliminarSerie(i, j)"
+                            [disabled]="getSeriesFormArray(i).length <= 1"
                             title="Eliminar serie">
                       <i class="bi bi-dash-circle"></i>
                     </button>
@@ -110,7 +90,7 @@
               </tbody>
             </table>
 
-            <button class="btn-agregar-serie" (click)="agregarSerie(ej)">
+            <button class="btn-agregar-serie" (click)="agregarSerie(i)">
               <i class="bi bi-plus-circle me-1"></i> Agregar serie
             </button>
           </div>
@@ -119,23 +99,18 @@
       </div>
     </div>
 
-    <!-- Sin ejercicios -->
-    <div *ngIf="!cargandoCatalogo && diaActual && diaActual.ejerciciosBase?.length === 0"
-         class="sesion-vacia">
+    <div *ngIf="!cargandoCatalogo && diaActual && diaActual.ejerciciosBase?.length === 0" class="sesion-vacia">
       <i class="bi bi-clipboard-x" style="font-size:2rem; color:#ffd700;"></i>
       <p class="mt-3 text-white-50">Este día no tiene ejercicios asignados.</p>
     </div>
-
   </main>
 
-  <!-- ═══════════════════ FOOTER STICKY ═══════════════════ -->
   <footer class="sesion-footer">
     <button class="btn-finalizar" (click)="finalizarSesion()">
       <i class="bi bi-flag-fill me-2"></i> Finalizar Sesión
     </button>
   </footer>
 
-  <!-- ═══════════════════ MODAL ADVERTENCIA ═══════════════════ -->
   <div class="modal fade" id="advertenciaModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content modal-advertencia">
@@ -152,13 +127,8 @@
           </ul>
         </div>
         <div class="modal-footer border-0 flex-column gap-2">
-          <button class="btn-confirmar-salir w-100"
-                  (click)="confirmarFinalizarConAdvertencia()">
-            Sí, terminar de igual forma
-          </button>
-          <button class="btn-volver-sesion w-100" data-bs-dismiss="modal">
-            Volver y completar
-          </button>
+          <button class="btn-confirmar-salir w-100" (click)="confirmarFinalizarConAdvertencia()">Sí, terminar de igual forma</button>
+          <button class="btn-volver-sesion w-100" data-bs-dismiss="modal">Volver y completar</button>
         </div>
       </div>
     </div>

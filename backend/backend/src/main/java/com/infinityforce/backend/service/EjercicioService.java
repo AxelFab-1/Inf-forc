@@ -7,10 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * Servicio que centraliza la lógica del catálogo de ejercicios.
- * Preparado para soportar filtros avanzados en el siguiente paso del roadmap.
- */
 @Service
 public class EjercicioService {
 
@@ -18,9 +14,7 @@ public class EjercicioService {
     private EjercicioRepository ejercicioRepository;
 
     /**
-     * Devuelve el catálogo completo de ejercicios.
-     *
-     * @return Lista con todos los ejercicios registrados.
+     * @return 
      */
     public List<Ejercicio> obtenerTodos() {
         return ejercicioRepository.findAll();

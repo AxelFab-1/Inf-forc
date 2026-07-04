@@ -18,7 +18,6 @@ public class PasswordChangeDTO {
 
     public PasswordChangeDTO() {}
 
-    // Getters y Setters...
     public String getClaveActual() { return claveActual; }
     public void setClaveActual(String claveActual) { this.claveActual = claveActual; }
 

@@ -6,10 +6,8 @@
 
     <div class="row g-4">
 
-      <!-- ═══ BOTÓN DE ENTRENAMIENTO ═══ -->
       <div class="col-12 col-lg-5">
 
-        <!-- Cargando rutina -->
         <div *ngIf="cargandoRutina"
              class="h-100 d-flex flex-column align-items-center justify-content-center rounded-4 py-5"
              style="background-color: #1a1a1a; min-height: 150px;">
@@ -17,7 +15,6 @@
           <small class="text-white-50">Cargando tu rutina...</small>
         </div>
 
-        <!-- Tiene rutina: abre modal -->
         <div *ngIf="!cargandoRutina && rutinaActiva" class="h-100">
           <button class="btn w-100 h-100 shadow-sm text-dark fw-bold fs-4 d-flex flex-column
                          justify-content-center align-items-center py-5 py-lg-0 rounded-4"
@@ -28,7 +25,6 @@
           </button>
         </div>
 
-        <!-- Sin rutina: ir a elegir -->
         <div *ngIf="!cargandoRutina && !rutinaActiva" class="h-100">
           <button (click)="irAElegirRutina()"
                   class="btn w-100 h-100 shadow-sm fw-bold fs-5 d-flex flex-column
@@ -44,7 +40,6 @@
 
       </div>
 
-      <!-- ═══ CALENDARIO ═══ -->
       <div class="col-12 col-lg-7">
         <div class="rounded-4 p-3 shadow-sm h-100" style="background-color: #1a1a1a;">
           <h5 class="text-center fw-bold mb-3" style="color: #ffd700;">{{ mesActualNombre }}</h5>
@@ -54,7 +49,6 @@
             <span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
           </div>
 
-          <!-- Spinner mientras carga las asistencias -->
           <div *ngIf="cargandoAsistencias" class="text-center py-4">
             <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
           </div>
@@ -73,7 +67,6 @@
           </div>
 
           <div class="d-flex mt-3">
-            <!-- Único botón de acción: ir al historial completo -->
             <button
               (click)="irAHistorial()"
               class="btn btn-outline-warning w-100 py-2 btn-sm fw-bold">
@@ -86,7 +79,6 @@
     </div>
   </main>
 
-  <!-- ═══════════ MODAL DE ENTRENAMIENTO ═══════════ -->
   <div class="modal fade" id="entrenamientoModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content text-white border-secondary" style="background-color: #1a1a1a;">
@@ -100,12 +92,10 @@
 
         <div class="modal-body" *ngIf="rutinaActiva">
 
-          <!-- Nombre de la rutina -->
           <p class="text-white-50 small mb-3">
             Rutina activa: <strong class="text-white">{{ rutinaActiva.nombreOriginal }}</strong>
           </p>
 
-          <!-- Opción A: Día sugerido -->
           <div class="rounded-3 p-3 mb-3" style="background-color: #252525; border: 1px solid #ffd700;">
             <div class="d-flex align-items-center gap-2 mb-1">
               <i class="bi bi-star-fill" style="color:#ffd700; font-size:0.85rem;"></i>
@@ -116,7 +106,6 @@
             </div>
           </div>
 
-          <!-- Toggle: elegir día diferente -->
           <button class="btn btn-link text-white-50 small p-0 mb-3 text-decoration-none"
                   (click)="toggleModoEleccion()">
             <i class="bi me-1"
@@ -125,7 +114,6 @@
             {{ modoEleccionDia ? 'Usar el día sugerido' : 'Quiero elegir un día diferente' }}
           </button>
 
-          <!-- Opción B: selector de día específico -->
           <div *ngIf="modoEleccionDia" class="mb-3">
             <select class="form-select bg-dark text-white border-secondary"
                     [(ngModel)]="indiceDiaManual"
@@ -137,7 +125,6 @@
             </select>
           </div>
 
-          <!-- Botón de inicio -->
           <button (click)="iniciarEntrenamiento()"
                   type="button"
                   class="btn w-100 py-3 fs-5 text-dark fw-bold rounded-pill"

@@ -16,7 +16,6 @@ import { AuthGuard } from './shared/guards/auth-guard';
 export const routes: Routes = [
   { path: '', component: Login },
 
-  // ─── Rutas de Cliente ─────────────────────────────────────────
   { path: 'dashboard',              component: Dashboard,             canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
   { path: 'entrenar',               component: Entrenar,              canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
   { path: 'catalogo',               component: Catalogo,              canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
@@ -26,7 +25,6 @@ export const routes: Routes = [
   { path: 'historial-entrenamiento',component: HistorialEntrenamiento,canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
   { path: 'nutricion',              component: Nutricion,             canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
 
-  // ─── Rutas de Administrador (Layout con rutas hijas) ──────────
   {
     path: 'admin',
     component: AdminLayout,
@@ -39,7 +37,6 @@ export const routes: Routes = [
     ],
   },
 
-  // Redirigir la ruta vieja por compatibilidad
   { path: 'admin-dashboard', redirectTo: '/admin/usuarios', pathMatch: 'full' },
 
   { path: '**', redirectTo: '' },

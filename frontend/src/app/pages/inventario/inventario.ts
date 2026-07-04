@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminService } from '../../services/admin';
 
 @Component({
   selector: 'app-inventario',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule], 
   templateUrl: './inventario.html',
   styleUrl: './inventario.css',
 })
@@ -20,24 +20,34 @@ export class Inventario implements OnInit {
 
   modo: 'crear' | 'editar' = 'crear';
   productoSeleccionado: any = null;
+  productoEditandoId: string = ''; 
 
-  nuevoProducto = {
-    nombre: '', categoria: '', precio: null as number | null,
-    stock: 10, imagenUrl: '', activo: true,
-  };
-
-  productoEditando = {
-    id: '', // 👇 CAMBIO: Usamos 'id' en lugar de '_id'
-    nombre: '', categoria: '',
-    precio: null as number | null, imagenUrl: '', activo: true,
-  };
+  registroForm: FormGroup;
+  editarForm: FormGroup;
 
   alerta: { tipo: 'success' | 'danger'; mensaje: string } | null = null;
 
   constructor(
     private cdr: ChangeDetectorRef,
-    private adminService: AdminService
-  ) {}
+    private adminService: AdminService,
+    private fb: FormBuilder 
+  ) {
+    this.registroForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.maxLength(100)]],
+      categoria: ['', [Validators.required]],
+      precio: [null, [Validators.required, Validators.min(0)]],
+      stock: [10, [Validators.min(0)]], // Stock por defecto es 10
+      imagenUrl: ['', [Validators.required, Validators.maxLength(255)]],
+      activo: [true] 
+    });
+
+    this.editarForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.maxLength(100)]],
+      categoria: ['', [Validators.required]],
+      precio: [null, [Validators.required, Validators.min(0)]],
+      imagenUrl: ['', [Validators.required, Validators.maxLength(255)]]
+    });
+  }
 
   ngOnInit() {
     this.cargarProductos();
@@ -78,15 +88,15 @@ export class Inventario implements OnInit {
   seleccionarProducto(prod: any) {
     this.modo = 'editar';
     this.productoSeleccionado = prod;
-    // 👇 CAMBIO: Soporte para ambos formatos de ID
-    this.productoEditando = {
-      id:        prod.id || prod._id, 
-      nombre:    prod.nombre,
+    this.productoEditandoId = prod.id || prod._id; 
+
+    this.editarForm.patchValue({
+      nombre: prod.nombre,
       categoria: prod.categoria,
-      precio:    prod.precio,
-      imagenUrl: prod.imagenUrl,
-      activo:    prod.activo,
-    };
+      precio: prod.precio,
+      imagenUrl: prod.imagenUrl
+    });
+
     this.alerta = null;
     this.cdr.detectChanges();
   }
@@ -94,41 +104,46 @@ export class Inventario implements OnInit {
   limpiarPanel() {
     this.modo = 'crear';
     this.productoSeleccionado = null;
-    this.nuevoProducto = { nombre: '', categoria: '', precio: null, stock: 10, imagenUrl: '', activo: true };
+    this.productoEditandoId = '';
+    this.registroForm.reset({ stock: 10, activo: true });
     this.alerta = null;
     this.cdr.detectChanges();
   }
 
-  crearProducto(formulario: any) {
-    if (formulario.invalid) {
+  crearProducto() {
+    if (this.registroForm.invalid) {
+      this.registroForm.markAllAsTouched();
       this.mostrarAlerta('danger', 'Completa todos los campos correctamente.');
       return;
     }
 
-    this.adminService.crearProducto(this.nuevoProducto).subscribe({
+    const payload = this.registroForm.value;
+
+    this.adminService.crearProducto(payload).subscribe({
       next: (data) => {
         if (data.exito) {
           this.mostrarAlerta('success', 'Producto agregado al catálogo.');
-          formulario.resetForm({ stock: 10, activo: true });
+          this.registroForm.reset({ stock: 10, activo: true });
           this.cargarProductos();
         }
       },
       error: (err) => {
-        // 👇 AQUÍ ESTÁ EL CATCH DE ERRORES DEL BACKEND
         const mensajeError = err.error?.mensaje || 'Error al guardar el producto.';
         this.mostrarAlerta('danger', mensajeError);
       }
     });
   }
 
-  guardarEdicion(formulario: any) {
-    if (formulario.invalid) {
+  guardarEdicion() {
+    if (this.editarForm.invalid) {
+      this.editarForm.markAllAsTouched();
       this.mostrarAlerta('danger', 'Completa todos los campos.');
       return;
     }
 
-    // 👇 CAMBIO: Usamos this.productoEditando.id
-    this.adminService.actualizarProducto(this.productoEditando.id, this.productoEditando).subscribe({
+    const payload = this.editarForm.value;
+
+    this.adminService.actualizarProducto(this.productoEditandoId, payload).subscribe({
       next: (data) => {
         if (data.exito) {
           this.mostrarAlerta('success', 'Producto actualizado correctamente.');
@@ -143,9 +158,11 @@ export class Inventario implements OnInit {
     });
   }
 
-  eliminarProducto(prod: any) {
-    const idEliminar = prod.id || prod._id; // Soporte para ID
-    const confirmado = confirm(`¿Estás seguro de eliminar "${prod.nombre}"?`);
+  eliminarProducto() {
+    if (!this.productoSeleccionado) return;
+    
+    const idEliminar = this.productoEditandoId; 
+    const confirmado = confirm(`¿Estás seguro de eliminar "${this.productoSeleccionado.nombre}"?`);
     if (!confirmado) return;
 
     this.adminService.eliminarProducto(idEliminar).subscribe({
@@ -153,7 +170,9 @@ export class Inventario implements OnInit {
         if (data.exito) {
           this.mostrarAlerta('success', 'Producto eliminado.');
           this.cargarProductos();
-          if (this.productoSeleccionado?.id === idEliminar) this.limpiarPanel();
+          if (this.productoSeleccionado?.id === idEliminar || this.productoSeleccionado?._id === idEliminar) {
+            this.limpiarPanel();
+          }
         }
       },
       error: (err) => {

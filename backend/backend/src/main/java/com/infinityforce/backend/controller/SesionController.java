@@ -2,6 +2,7 @@ package com.infinityforce.backend.controller;
 
 import com.infinityforce.backend.model.SesionEntrenamiento;
 import com.infinityforce.backend.service.SesionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +12,6 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Controlador HTTP para las sesiones de entrenamiento.
- * Gestiona el guardado del progreso del socio y el cálculo de la secuencia de días.
- */
 @RestController
 @RequestMapping("/api")
 public class SesionController {
@@ -22,14 +19,9 @@ public class SesionController {
     @Autowired
     private SesionService sesionService;
 
-    /**
-     * Guarda una sesión de entrenamiento completada.
-     * El clienteId se extrae del JWT (Principal) para garantizar que el socio
-     * solo pueda guardar sesiones en su propio nombre.
-     */
     @PostMapping("/sesiones")
     public ResponseEntity<Map<String, Object>> guardarSesion(
-            @RequestBody SesionEntrenamiento sesion,
+            @Valid @RequestBody SesionEntrenamiento sesion,
             Principal principal) {
 
         Map<String, Object> respuesta = new HashMap<>();
@@ -40,7 +32,6 @@ public class SesionController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respuesta);
         }
 
-        // Forzar el clienteId desde el JWT, ignorando lo que venga en el body
         sesion.setClienteId(principal.getName());
 
         try {
@@ -56,9 +47,6 @@ public class SesionController {
         }
     }
 
-    /**
-     * Devuelve el historial de sesiones del socio autenticado.
-     */
     @GetMapping("/sesiones/mi-historial")
     public ResponseEntity<Map<String, Object>> getMiHistorial(Principal principal) {
         Map<String, Object> respuesta = new HashMap<>();
@@ -74,11 +62,6 @@ public class SesionController {
         return ResponseEntity.ok(respuesta);
     }
 
-    /**
-     * Calcula el índice del próximo día de entrenamiento para el socio autenticado.
-     *
-     * @param totalDias Número total de días en la rutina del socio (enviado por el frontend).
-     */
     @GetMapping("/sesiones/siguiente-dia")
     public ResponseEntity<Map<String, Object>> getSiguienteDia(
             @RequestParam int totalDias,
@@ -98,10 +81,6 @@ public class SesionController {
         return ResponseEntity.ok(respuesta);
     }
 
-    /**
-     * Devuelve el detalle completo de una sesión de entrenamiento por su ID.
-     * Usado por la pantalla de historial cuando el usuario hace clic en "Ver detalle".
-     */
     @GetMapping("/sesiones/{id}")
     public ResponseEntity<Map<String, Object>> getSesionPorId(
             @PathVariable String id,

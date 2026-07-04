@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { decodificarToken } from '../utils/jwt-decoder';
 import { AuthService } from '../../services/auth';
@@ -8,7 +8,7 @@ import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule], 
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -18,20 +18,22 @@ export class Header implements OnInit {
   menuAbierto: boolean = false;
   mostrarModalCambioClave: boolean = false;
 
-  // 👇 Objeto que coincide con el PasswordChangeDTO del backend
-  passData = {
-    claveActual: '',
-    nuevaClave: '',
-    confirmarNuevaClave: ''
-  };
+  cambioClaveForm: FormGroup;
 
   mensajeModal: { tipo: 'success' | 'danger'; texto: string } | null = null;
 
   constructor(
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private fb: FormBuilder 
+  ) {
+    this.cambioClaveForm = this.fb.group({
+      claveActual: ['', [Validators.required]],
+      nuevaClave: ['', [Validators.required, Validators.minLength(8)]],
+      confirmarNuevaClave: ['', [Validators.required]]
+    }, { validators: this.passwordsCoinciden }); 
+  }
 
   ngOnInit() {
     let nombreSocio = 'Socio';
@@ -47,6 +49,16 @@ export class Header implements OnInit {
     this.avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombreSocio)}&background=ffd700&color=000`;
   }
 
+  passwordsCoinciden(group: AbstractControl): ValidationErrors | null {
+    const nuevaClave = group.get('nuevaClave')?.value;
+    const confirmarNuevaClave = group.get('confirmarNuevaClave')?.value;
+    
+    if (nuevaClave && confirmarNuevaClave && nuevaClave !== confirmarNuevaClave) {
+      return { mismatch: true };
+    }
+    return null; 
+  }
+
   toggleMenu() {
     this.menuAbierto = !this.menuAbierto;
   }
@@ -54,7 +66,7 @@ export class Header implements OnInit {
   abrirModalCambioClave() {
     this.menuAbierto = false;
     this.mostrarModalCambioClave = true;
-    this.passData = { claveActual: '', nuevaClave: '', confirmarNuevaClave: '' };
+    this.cambioClaveForm.reset(); 
     this.mensajeModal = null;
   }
 
@@ -66,17 +78,18 @@ export class Header implements OnInit {
   guardarNuevaClave() {
     this.mensajeModal = null;
 
-    // Aunque el HTML desactiva el botón, esta es una capa extra de seguridad
-    if (this.passData.nuevaClave !== this.passData.confirmarNuevaClave) {
-      this.mensajeModal = { tipo: 'danger', texto: 'Las contraseñas no coinciden.' };
+    if (this.cambioClaveForm.invalid) {
+      this.cambioClaveForm.markAllAsTouched();
       return;
     }
 
-    // 👇 Enviamos el objeto completo (el DTO) al backend
-    this.authService.cambiarPassword(this.passData).subscribe({
+    const payload = this.cambioClaveForm.value;
+
+    this.authService.cambiarPassword(payload).subscribe({
       next: (data: any) => {
         if (data.exito) {
           this.mensajeModal = { tipo: 'success', texto: data.mensaje };
+          this.cambioClaveForm.reset(); 
           this.cdr.detectChanges();
           
           setTimeout(() => {
@@ -89,8 +102,6 @@ export class Header implements OnInit {
         }
       },
       error: (err) => {
-        // 👇 AQUÍ ES DONDE CAPTURAMOS EL MENSAJE DEL BACKEND
-        // err.error.mensaje viene de tu ResponseEntity.badRequest().body(respuesta)
         const errorMsg = err.error?.mensaje || 'Error al actualizar la contraseña.';
         this.mensajeModal = { tipo: 'danger', texto: errorMsg };
         this.cdr.detectChanges();

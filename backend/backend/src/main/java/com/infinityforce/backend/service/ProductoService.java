@@ -23,7 +23,6 @@ public class ProductoService {
     public Map<String, Object> crearProducto(Producto producto) {
         Map<String, Object> respuesta = new HashMap<>();
         
-        // Regla de negocio: Por defecto, un producto nuevo siempre nace "activo"
         producto.setActivo(true);
         Producto nuevoProducto = productoRepository.save(producto);
         
@@ -41,7 +40,6 @@ public class ProductoService {
         if (productoExistente.isPresent()) {
             Producto p = productoExistente.get();
             
-            // Actualización de campos
             p.setNombre(productoActualizado.getNombre());
             p.setCategoria(productoActualizado.getCategoria());
             p.setPrecio(productoActualizado.getPrecio());

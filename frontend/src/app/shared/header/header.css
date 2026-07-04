@@ -36,21 +36,20 @@
     background-color: #3d3d3d;
 }
 
-/* Estilos para los inputs del Modal Dark Mode */
 .input-oscuro {
-    background-color: #2c2c2c !important; /* Fondo gris oscuro */
-    color: #ffffff !important; /* Puntitos blancos brillantes */
+    background-color: #2c2c2c !important; 
+    color: #ffffff !important;
     border: 1px solid #555555 !important;
 }
 
 .input-oscuro::placeholder {
-    color: #aaaaaa !important; /* Placeholder gris clarito visible */
-    opacity: 1; /* Necesario para que Firefox no lo opaque */
+    color: #aaaaaa !important;
+    opacity: 1; 
 }
 
 .input-oscuro:focus {
     background-color: #2c2c2c !important;
     color: #ffffff !important;
-    border-color: #ffd700 !important; /* Borde dorado al escribir */
+    border-color: #ffd700 !important; 
     box-shadow: 0 0 5px rgba(255, 215, 0, 0.4) !important;
 }

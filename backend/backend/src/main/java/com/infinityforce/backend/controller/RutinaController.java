@@ -2,6 +2,7 @@ package com.infinityforce.backend.controller;
 
 import com.infinityforce.backend.model.RutinaSocio;
 import com.infinityforce.backend.service.RutinaService;
+import jakarta.validation.Valid; 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * Controlador HTTP para el recurso de Rutinas (plantillas y rutinas de socios).
- * Responsabilidad única: despachar peticiones HTTP y delegar a RutinaService.
- */
 @RestController
 @RequestMapping("/api")
 public class RutinaController {
@@ -38,7 +35,7 @@ public class RutinaController {
     }
 
     @PostMapping("/rutinas-socios")
-    public ResponseEntity<Map<String, Object>> guardarRutinaSocio(@RequestBody RutinaSocio nuevaRutina) {
+    public ResponseEntity<Map<String, Object>> guardarRutinaSocio(@Valid @RequestBody RutinaSocio nuevaRutina) {
         Map<String, Object> respuesta = rutinaService.guardarRutinaSocio(nuevaRutina);
 
         if (Boolean.TRUE.equals(respuesta.get("exito"))) {
@@ -47,10 +44,6 @@ public class RutinaController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
     }
 
-    /**
-     * Devuelve la rutina activa del socio autenticado.
-     * El clienteId se extrae del JWT via Principal — el socio solo puede ver su propia rutina.
-     */
     @GetMapping("/rutinas-socios/mi-rutina")
     public ResponseEntity<Map<String, Object>> getMiRutina(Principal principal) {
         Map<String, Object> respuesta = new HashMap<>();

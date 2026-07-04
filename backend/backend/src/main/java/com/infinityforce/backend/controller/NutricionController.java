@@ -1,6 +1,8 @@
 package com.infinityforce.backend.controller;
 
+import com.infinityforce.backend.dto.NutricionRequestDTO;
 import com.infinityforce.backend.service.NutricionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +19,6 @@ public class NutricionController {
     @Autowired
     private NutricionService nutricionService;
 
-    /**
-     * GET /api/nutricion/perfil
-     * Devuelve los datos biométricos del usuario autenticado.
-     */
     @GetMapping("/perfil")
     public ResponseEntity<Map<String, Object>> obtenerPerfil(Principal principal) {
         Map<String, Object> respuesta = new HashMap<>();
@@ -35,15 +33,9 @@ public class NutricionController {
         return ResponseEntity.ok(respuesta);
     }
 
-    /**
-     * POST /api/nutricion/registrar
-     * Primera vez: recibe todos los datos biométricos.
-     * Actualización: recibe solo pesoKg, nivelActividad y objetivo.
-     * En ambos casos calcula y hace push al historial.
-     */
     @PostMapping("/registrar")
     public ResponseEntity<Map<String, Object>> registrarBiometrico(
-            @RequestBody Map<String, Object> datos,
+            @Valid @RequestBody NutricionRequestDTO datos,
             Principal principal) {
 
         Map<String, Object> respuesta = new HashMap<>();

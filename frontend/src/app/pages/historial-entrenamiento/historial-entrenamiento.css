@@ -1,4 +1,3 @@
-/* ─── Calendario del Historial — Grid ────────────────────────────────────── */
 
 #historialGrid {
   display: grid;
@@ -29,7 +28,6 @@
   user-select: none;
 }
 
-/* Días clickeables (tienen asistencia) */
 .dia-historial.dia-clickeable {
   cursor: pointer;
 }
@@ -38,21 +36,18 @@
   filter: brightness(1.3);
 }
 
-/* Día de hoy (en el mes actual) */
 .dia-historial.dia-actual {
   border: 2px solid #ffd700;
   color: #ffd700;
   font-weight: 700;
 }
 
-/* Día entrenado */
 .dia-historial.dia-entrenado {
   background-color: #2a6b2a;
   color: #8eff8e;
   font-weight: 700;
 }
 
-/* Día seleccionado */
 .dia-historial.dia-seleccionado {
   background-color: #ffd700 !important;
   color: #000 !important;
@@ -60,7 +55,6 @@
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
 }
 
-/* Leyenda */
 .leyenda-punto {
   width: 12px;
   height: 12px;

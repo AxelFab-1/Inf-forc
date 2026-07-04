@@ -1,63 +1,57 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-
-// 👇 Importamos el nuevo servicio
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NutricionService } from '../../services/nutricion';
 
 @Component({
   selector: 'app-nutricion',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule], 
   templateUrl: './nutricion.html',
   styleUrl: './nutricion.css',
 })
 export class Nutricion implements OnInit {
 
-  // ─── Estado de carga ──────────────────────────────────────────
   cargando: boolean = true;
 
-  // ─── Modales ──────────────────────────────────────────────────
   mostrarModalPrimeraVez: boolean = false;
   mostrarModalActualizar: boolean = false;
 
-  // ─── Datos del usuario y último registro ──────────────────────
   tienePerfil: boolean = false;
   ultimoRegistro: any = null;
 
-  // ─── Formulario Primera Evaluación ───────────────────────────
-  primeraEvaluacion = {
-    sexo: '',
-    fechaNacimiento: '',
-    estaturaCm: null as number | null,
-    pesoKg: null as number | null,
-    nivelActividad: '',
-    objetivo: '',
-  };
+  primeraForm: FormGroup;
+  actualizarForm: FormGroup;
 
-  // ─── Formulario Actualización ─────────────────────────────────
-  actualizacion = {
-    pesoKg: null as number | null,
-    nivelActividad: '',
-    objetivo: '',
-  };
-
-  // ─── Alertas ─────────────────────────────────────────────────
   alerta: { tipo: 'success' | 'danger'; mensaje: string } | null = null;
   alertaModal: { tipo: 'success' | 'danger'; mensaje: string } | null = null;
   guardando: boolean = false;
 
-  // 👇 Inyectamos el servicio en el constructor
   constructor(
     private cdr: ChangeDetectorRef,
-    private nutricionService: NutricionService
-  ) {}
+    private nutricionService: NutricionService,
+    private fb: FormBuilder 
+  ) {
+    this.primeraForm = this.fb.group({
+      sexo: ['', [Validators.required]],
+      fechaNacimiento: ['', [Validators.required]],
+      estaturaCm: [null, [Validators.required, Validators.min(100), Validators.max(250)]],
+      pesoKg: [null, [Validators.required, Validators.min(30), Validators.max(300)]],
+      nivelActividad: ['', [Validators.required]],
+      objetivo: ['', [Validators.required]]
+    });
+
+    this.actualizarForm = this.fb.group({
+      pesoKg: [null, [Validators.required, Validators.min(30), Validators.max(300)]],
+      nivelActividad: ['', [Validators.required]],
+      objetivo: ['', [Validators.required]]
+    });
+  }
 
   ngOnInit() {
     this.cargarPerfil();
   }
 
-  // ─── Cargar perfil desde el backend ──────────────────────────
   cargarPerfil() {
     this.cargando = true;
     
@@ -85,16 +79,19 @@ export class Nutricion implements OnInit {
     });
   }
 
-  // ─── Guardar primera evaluación ───────────────────────────────
-  guardarPrimeraEvaluacion(formulario: any) {
-    if (formulario.invalid) {
-      this.alertaModal = { tipo: 'danger', mensaje: 'Completa todos los campos.' };
+  guardarPrimeraEvaluacion() {
+    if (this.primeraForm.invalid) {
+      this.primeraForm.markAllAsTouched(); 
+      this.alertaModal = { tipo: 'danger', mensaje: 'Por favor, completa todos los campos correctamente.' };
       return;
     }
+    
     this.guardando = true;
     this.alertaModal = null;
 
-    this.nutricionService.registrarPerfil(this.primeraEvaluacion).subscribe({
+    const payload = this.primeraForm.value;
+
+    this.nutricionService.registrarPerfil(payload).subscribe({
       next: (data) => {
         if (data.exito) {
           this.ultimoRegistro = data.ultimoRegistro;
@@ -114,16 +111,19 @@ export class Nutricion implements OnInit {
     });
   }
 
-  // ─── Guardar actualización de datos ──────────────────────────
-  guardarActualizacion(formulario: any) {
-    if (formulario.invalid) {
-      this.alertaModal = { tipo: 'danger', mensaje: 'Completa todos los campos.' };
+  guardarActualizacion() {
+    if (this.actualizarForm.invalid) {
+      this.actualizarForm.markAllAsTouched();
+      this.alertaModal = { tipo: 'danger', mensaje: 'Por favor, completa todos los campos correctamente.' };
       return;
     }
+    
     this.guardando = true;
     this.alertaModal = null;
 
-    this.nutricionService.registrarPerfil(this.actualizacion).subscribe({
+    const payload = this.actualizarForm.value;
+
+    this.nutricionService.registrarPerfil(payload).subscribe({
       next: (data) => {
         if (data.exito) {
           this.ultimoRegistro = data.ultimoRegistro;
@@ -142,13 +142,13 @@ export class Nutricion implements OnInit {
     });
   }
 
-  // ─── Modales ──────────────────────────────────────────────────
   abrirModalActualizar() {
-    this.actualizacion = {
+    this.actualizarForm.patchValue({
       pesoKg: this.ultimoRegistro?.pesoKg || null,
       nivelActividad: this.ultimoRegistro?.nivelActividad || '',
       objetivo: this.ultimoRegistro?.objetivo || '',
-    };
+    });
+    
     this.alertaModal = null;
     this.mostrarModalActualizar = true;
     this.cdr.detectChanges();
@@ -157,16 +157,17 @@ export class Nutricion implements OnInit {
   cerrarModalPrimeraVez() {
     this.mostrarModalPrimeraVez = false;
     this.alertaModal = null;
+    this.primeraForm.reset();
     this.cdr.detectChanges();
   }
 
   cerrarModalActualizar() {
     this.mostrarModalActualizar = false;
     this.alertaModal = null;
+    this.actualizarForm.reset();
     this.cdr.detectChanges();
   }
 
-  // ─── Helpers UI ──────────────────────────────────────────────
   categoriaIMC(imc: number): string {
     if (imc < 18.5) return 'Bajo peso';
     if (imc < 25)   return 'Peso normal';

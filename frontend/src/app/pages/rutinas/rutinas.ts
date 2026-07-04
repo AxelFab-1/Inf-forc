@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { decodificarToken } from '../../shared/utils/jwt-decoder';
 
-// 👇 Importamos el servicio central de entrenamiento
 import { EntrenamientoService } from '../../services/entrenamiento';
 
 @Component({
@@ -18,7 +17,6 @@ export class Rutinas implements OnInit {
   plantillasMostradas: any[] = [];
   tipoSeleccionado: string = 'predeterminada';
 
-  // 👇 Inyectamos el servicio en el constructor
   constructor(
     private cdr: ChangeDetectorRef,
     private router: Router,
@@ -29,7 +27,6 @@ export class Rutinas implements OnInit {
     this.cargarPlantillas();
   }
 
-  // 👇 Refactorizado para usar el Servicio
   cargarPlantillas() {
     this.entrenamientoService.getPlantillas().subscribe({
       next: (data) => {
@@ -74,7 +71,6 @@ export class Rutinas implements OnInit {
         dias: plantilla.dias,
       };
 
-      // 👇 Refactorizado para usar el Servicio
       this.entrenamientoService.asignarRutina(rutinaSocio).subscribe({
         next: (data) => {
           if (data.exito) {
@@ -83,10 +79,11 @@ export class Rutinas implements OnInit {
             alert('Error: ' + data.mensaje);
           }
         },
-        error: (error) => console.error('Error:', error)
+        error: (err) => {
+          const mensaje = err.error?.mensaje || 'Error al asignar la rutina.';
+          alert('Error: ' + mensaje);
+        }
       });
-    } else {
-      this.router.navigate(['/armar-rutina', plantilla._id]);
     }
   }
 }

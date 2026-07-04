@@ -53,14 +53,12 @@ public class UsuarioService {
     public Map<String, Object> registrarUsuario(Usuario nuevoUsuario) {
         Map<String, Object> respuesta = new HashMap<>();
 
-        // MEJORA: 1. Validar que el DNI no sea duplicado
         if (usuarioRepository.existsByDni(nuevoUsuario.getDni())) {
             respuesta.put("exito", false);
             respuesta.put("mensaje", "El DNI ingresado ya se encuentra registrado en el sistema.");
             return respuesta;
         }
 
-        // MEJORA: 2. Validar que el código de acceso no sea duplicado
         if (usuarioRepository.existsByCodigoAcceso(nuevoUsuario.getCodigoAcceso())) {
             respuesta.put("exito", false);
             respuesta.put("mensaje", "El código de acceso ya está en uso. Por favor, ingresa uno distinto.");
@@ -88,20 +86,16 @@ public class UsuarioService {
         return usuarioRepository.findAll();
     }
 
-    /**
-     * Cambio de contraseña utilizando el DTO para mayor seguridad y validación.
-     */
+
     public Map<String, Object> cambiarPassword(String idUsuario, PasswordChangeDTO dto) {
         Map<String, Object> respuesta = new HashMap<>();
 
-        // 1. Validar coincidencia de nuevas contraseñas
         if (!dto.getNuevaClave().equals(dto.getConfirmarNuevaClave())) {
             respuesta.put("exito", false);
             respuesta.put("mensaje", "La nueva contraseña y la confirmación no coinciden.");
             return respuesta;
         }
 
-        // 2. Buscar usuario
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
         if (usuarioOpt.isEmpty()) {
             respuesta.put("exito", false);
@@ -111,14 +105,12 @@ public class UsuarioService {
 
         Usuario usuario = usuarioOpt.get();
 
-        // 3. Validar contraseña actual
         if (!usuario.getContrasena().equals(dto.getClaveActual())) {
             respuesta.put("exito", false);
             respuesta.put("mensaje", "La contraseña actual es incorrecta.");
             return respuesta;
         }
 
-        // 4. Actualizar
         usuario.setContrasena(dto.getNuevaClave());
         usuarioRepository.save(usuario);
 
@@ -140,7 +132,6 @@ public class UsuarioService {
 
         Usuario usuario = usuarioOpt.get();
 
-        // Actualizamos solo los campos que el DTO permite
         if (datosActualizados.getNombres() != null) {
             usuario.setNombres(datosActualizados.getNombres());
         }

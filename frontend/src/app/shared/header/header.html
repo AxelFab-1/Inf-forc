@@ -37,33 +37,44 @@
       {{ mensajeModal.texto }}
     </div>
 
-    <div class="mb-3">
-      <input [(ngModel)]="passData.claveActual" type="password" class="form-control input-oscuro shadow-none" placeholder="Clave Actual">
-    </div>
-
-    <div class="mb-3">
-      <input [(ngModel)]="passData.nuevaClave" type="password" class="form-control input-oscuro shadow-none" placeholder="Nueva Clave (Mín. 8 caracteres)">
-      <div *ngIf="passData.nuevaClave.length > 0 && passData.nuevaClave.length < 8" class="text-danger small mt-1">
-         La clave debe tener al menos 8 caracteres.
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <input [(ngModel)]="passData.confirmarNuevaClave" type="password" class="form-control input-oscuro shadow-none" placeholder="Confirmar Nueva Clave">
-      <div *ngIf="passData.confirmarNuevaClave && passData.nuevaClave !== passData.confirmarNuevaClave" class="text-danger small mt-1">
-        Las contraseñas no coinciden.
-      </div>
-    </div>
-
-    <div class="d-flex justify-content-end mt-4">
-      <button class="btn btn-outline-light me-2" (click)="cerrarModalCambioClave()">Cancelar</button>
+    <form [formGroup]="cambioClaveForm" (ngSubmit)="guardarNuevaClave()">
       
-      <button class="btn fw-bold" 
-              style="background-color: #ffd700; color: #000;" 
-              (click)="guardarNuevaClave()" 
-              [disabled]="!passData.claveActual || passData.nuevaClave.length < 8 || passData.nuevaClave !== passData.confirmarNuevaClave">
-        Guardar
-      </button>
-    </div>
+      <div class="mb-3">
+        <input formControlName="claveActual" type="password" 
+               class="form-control input-oscuro shadow-none" 
+               [ngClass]="{'is-invalid': cambioClaveForm.get('claveActual')?.invalid && cambioClaveForm.get('claveActual')?.touched}"
+               placeholder="Clave Actual">
+      </div>
+
+      <div class="mb-3">
+        <input formControlName="nuevaClave" type="password" 
+               class="form-control input-oscuro shadow-none" 
+               [ngClass]="{'is-invalid': cambioClaveForm.get('nuevaClave')?.invalid && cambioClaveForm.get('nuevaClave')?.touched}"
+               placeholder="Nueva Clave (Mín. 8 caracteres)">
+        <div *ngIf="cambioClaveForm.get('nuevaClave')?.hasError('minlength') && cambioClaveForm.get('nuevaClave')?.touched" class="text-danger small mt-1">
+          La clave debe tener al menos 8 caracteres.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <input formControlName="confirmarNuevaClave" type="password" 
+               class="form-control input-oscuro shadow-none" 
+               [ngClass]="{'is-invalid': (cambioClaveForm.get('confirmarNuevaClave')?.invalid || cambioClaveForm.hasError('mismatch')) && cambioClaveForm.get('confirmarNuevaClave')?.touched}"
+               placeholder="Confirmar Nueva Clave">
+        <div *ngIf="cambioClaveForm.hasError('mismatch') && cambioClaveForm.get('confirmarNuevaClave')?.touched" class="text-danger small mt-1">
+          Las contraseñas no coinciden.
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mt-4">
+        <button type="button" class="btn btn-outline-light me-2" (click)="cerrarModalCambioClave()">Cancelar</button>
+        
+        <button type="submit" class="btn fw-bold" 
+                style="background-color: #ffd700; color: #000;" 
+                [disabled]="cambioClaveForm.invalid">
+          Guardar
+        </button>
+      </div>
+    </form>
   </div>
 </div>

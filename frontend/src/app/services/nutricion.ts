@@ -15,13 +15,10 @@ export class NutricionService {
     return { headers: new HttpHeaders(obtenerCabeceras()) };
   }
 
-  // ─── GET: Cargar perfil de nutrición ───────────────────────────
   getPerfil(): Observable<any> {
     return this.http.get(`${API_URL}/api/nutricion/perfil`, this.getHeaders());
   }
 
-  // ─── POST: Registrar o actualizar evaluación ───────────────────
-  // Reutilizamos el mismo endpoint para primera vez y actualización
   registrarPerfil(datos: any): Observable<any> {
     return this.http.post(`${API_URL}/api/nutricion/registrar`, datos, this.getHeaders());
   }

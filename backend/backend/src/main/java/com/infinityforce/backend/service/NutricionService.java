@@ -1,5 +1,6 @@
 package com.infinityforce.backend.service;
 
+import com.infinityforce.backend.dto.NutricionRequestDTO;
 import com.infinityforce.backend.model.Usuario;
 import com.infinityforce.backend.model.Usuario.RegistroBiometrico;
 import com.infinityforce.backend.repository.UsuarioRepository;
@@ -14,10 +15,6 @@ public class NutricionService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    /**
-     * Busca al usuario y devuelve sus datos biométricos actuales
-     * (datos estáticos + último registro del historial si existe).
-     */
     public Map<String, Object> obtenerPerfil(String clienteId) {
         Map<String, Object> respuesta = new HashMap<>();
         Optional<Usuario> opt = usuarioRepository.findById(clienteId);
@@ -44,16 +41,7 @@ public class NutricionService {
         return respuesta;
     }
 
-    /**
-     * ESCENARIO 1 — Primera evaluación:
-     * Recibe todos los datos, actualiza campos estáticos del usuario,
-     * calcula y hace push al historial.
-     *
-     * ESCENARIO 2 — Actualización:
-     * Recibe solo peso, nivelActividad y objetivo.
-     * Usa datos estáticos ya guardados para recalcular.
-     */
-    public Map<String, Object> registrarBiometrico(String clienteId, Map<String, Object> datos) {
+    public Map<String, Object> registrarBiometrico(String clienteId, NutricionRequestDTO datos) {
         Map<String, Object> respuesta = new HashMap<>();
         Optional<Usuario> opt = usuarioRepository.findById(clienteId);
 
@@ -65,19 +53,15 @@ public class NutricionService {
 
         Usuario u = opt.get();
 
-        // ── Detectar si es primera vez ────────────────────────────────────────
         boolean esPrimeraVez = (u.getEstaturaCm() == null || u.getFechaNacimiento() == null);
 
         if (esPrimeraVez) {
-            // Actualizar campos estáticos
-            u.setSexo((String) datos.get("sexo"));
-            u.setEstaturaCm(toDouble(datos.get("estaturaCm")));
+            u.setSexo(datos.getSexo());
+            u.setEstaturaCm(datos.getEstaturaCm());
 
-            // fechaNacimiento viene como String ISO desde el frontend
-            String fechaStr = (String) datos.get("fechaNacimiento");
+            String fechaStr = datos.getFechaNacimiento();
             if (fechaStr != null) {
                 try {
-                    // Parsear como fecha simple yyyy-MM-dd
                     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
                     u.setFechaNacimiento(sdf.parse(fechaStr));
                 } catch (Exception e) {
@@ -88,25 +72,15 @@ public class NutricionService {
             }
         }
 
-        // ── Parámetros comunes ────────────────────────────────────────────────
-        Double pesoKg        = toDouble(datos.get("pesoKg"));
-        String nivelActividad = (String) datos.get("nivelActividad");
-        String objetivo       = (String) datos.get("objetivo");
+        Double pesoKg        = datos.getPesoKg();
+        String nivelActividad = datos.getNivelActividad();
+        String objetivo       = datos.getObjetivo();
 
-        if (pesoKg == null || nivelActividad == null || objetivo == null) {
-            respuesta.put("exito", false);
-            respuesta.put("mensaje", "Faltan datos obligatorios: pesoKg, nivelActividad, objetivo.");
-            return respuesta;
-        }
-
-        // ── Calcular edad ─────────────────────────────────────────────────────
         int edadAnios = calcularEdad(u.getFechaNacimiento());
 
-        // ── Calcular IMC ──────────────────────────────────────────────────────
         double estaturaMt = u.getEstaturaCm() / 100.0;
         double imc = pesoKg / (estaturaMt * estaturaMt);
 
-        // ── TMB (Mifflin-St Jeor) ─────────────────────────────────────────────
         double tmb;
         if ("masculino".equalsIgnoreCase(u.getSexo())) {
             tmb = (10 * pesoKg) + (6.25 * u.getEstaturaCm()) - (5 * edadAnios) + 5;
@@ -114,31 +88,26 @@ public class NutricionService {
             tmb = (10 * pesoKg) + (6.25 * u.getEstaturaCm()) - (5 * edadAnios) - 161;
         }
 
-        // ── Factor de actividad ───────────────────────────────────────────────
         double factor = switch (nivelActividad.toLowerCase()) {
             case "ligero"   -> 1.375;
             case "moderado" -> 1.55;
             case "intenso"  -> 1.725;
-            default         -> 1.2; // sedentario
+            default         -> 1.2; 
         };
 
         double caloriasMantenimiento = tmb * factor;
 
-        // ── Ajuste por objetivo ───────────────────────────────────────────────
         double caloriasFinales = switch (objetivo.toLowerCase()) {
             case "volumen"    -> caloriasMantenimiento + 300;
             case "definición",
                  "definicion" -> caloriasMantenimiento - 300;
-            default           -> caloriasMantenimiento; // mantenimiento
+            default           -> caloriasMantenimiento; 
         };
 
-        // ── Distribución de macros ────────────────────────────────────────────
-        // Proteínas 30%, Carbohidratos 45%, Grasas 25%
         double proteinasG     = (caloriasFinales * 0.30) / 4.0;
         double carbohidratosG = (caloriasFinales * 0.45) / 4.0;
         double grasasG        = (caloriasFinales * 0.25) / 9.0;
 
-        // ── Crear registro y hacer push ───────────────────────────────────────
         RegistroBiometrico registro = new RegistroBiometrico();
         registro.setFechaRegistro(new Date());
         registro.setPesoKg(round2(pesoKg));
@@ -163,23 +132,14 @@ public class NutricionService {
         return respuesta;
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
-
     private int calcularEdad(Date fechaNacimiento) {
-        if (fechaNacimiento == null) return 25; // fallback
+        if (fechaNacimiento == null) return 25; 
         Calendar nacimiento = Calendar.getInstance();
         nacimiento.setTime(fechaNacimiento);
         Calendar hoy = Calendar.getInstance();
         int edad = hoy.get(Calendar.YEAR) - nacimiento.get(Calendar.YEAR);
         if (hoy.get(Calendar.DAY_OF_YEAR) < nacimiento.get(Calendar.DAY_OF_YEAR)) edad--;
         return edad;
-    }
-
-    private Double toDouble(Object val) {
-        if (val == null) return null;
-        if (val instanceof Number) return ((Number) val).doubleValue();
-        try { return Double.parseDouble(val.toString()); }
-        catch (Exception e) { return null; }
     }
 
     private double round2(double val) {
