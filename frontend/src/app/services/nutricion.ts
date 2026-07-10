@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { API_URL } from '../shared/utils/api-config';
+import { environment } from '../../environments/environment';
 import { obtenerCabeceras } from '../shared/utils/auth-headers';
+
+const API_URL = environment.API_URL;
 
 @Injectable({
   providedIn: 'root'
