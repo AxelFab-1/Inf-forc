@@ -128,14 +128,14 @@
     </div>
 
     <div *ngIf="!cargandoUsuarios && usuarios.length > 0" class="table-responsive">
-      <table class="table table-light table-hover align-middle users-table" style="--bs-table-bg: transparent;">
+      <table class="table table-hover align-middle users-table" style="--bs-table-bg: transparent; --bs-table-color: inherit;">
         <thead>
-          <tr class="text-muted small text-uppercase" style="border-bottom: 2px solid var(--gym-gold);">
-            <th>Nombres</th>
-            <th>Apellidos</th>
-            <th>Cód. Acceso</th>
-            <th class="text-center">Estado</th>
-            <th class="text-center">Rol</th>
+          <tr class="small text-uppercase" style="border-bottom: 2px solid var(--gym-gold);">
+            <th class="text-gold">Nombres</th>
+            <th class="text-gold">Apellidos</th>
+            <th class="text-gold">Cód. Acceso</th>
+            <th class="text-center text-gold">Estado</th>
+            <th class="text-center text-gold">Rol</th>
           </tr>
         </thead>
         <tbody>
@@ -143,8 +143,8 @@
               class="user-row"
               [ngClass]="{ 'user-row--selected': usuarioSeleccionado?.id === u.id || usuarioSeleccionado?._id === u._id }"
               (click)="seleccionarUsuario(u)">
-            <td class="fw-semibold">{{ u.nombres }}</td>
-            <td>{{ u.apellidos }}</td>
+            <td class="fw-bold text-gold">{{ u.nombres }}</td>
+            <td class="text-gold">{{ u.apellidos }}</td>
             <td>
               <span class="badge rounded-pill bg-gym-dark-secondary text-gold" style="font-family:monospace; letter-spacing:2px; border: 1px solid var(--gym-border)">
                 {{ u.codigoAcceso }}
@@ -168,7 +168,7 @@
     </div>
 
     <p *ngIf="!cargandoUsuarios" class="text-muted small mt-2 mb-0">
-      Total: <strong class="text-dark">{{ usuarios.length }}</strong> usuario(s)
+      Total: <strong class="text-gold">{{ usuarios.length }}</strong> usuario(s)
     </p>
 
   </main>

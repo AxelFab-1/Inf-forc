@@ -63,7 +63,7 @@ body {
 .bg-gym-dark { background-color: var(--gym-dark) !important; }
 .bg-gym-dark-secondary { background-color: var(--gym-dark-secondary) !important; }
 .bg-gym-dark-tertiary { background-color: var(--gym-dark-tertiary) !important; }
-.text-gold { color: var(--gym-gold-text) !important; font-weight: bold; }
+.text-gold { color: var(--gym-gold) !important; font-weight: bold; }
 .bg-gold { 
     background-color: var(--gym-gold) !important; 
     color: #111827 !important; /* Texto oscuro para máxima legibilidad sobre ámbar */
@@ -152,7 +152,8 @@ body {
 }
 
 .login-card {
-    background: rgba(243, 244, 246, 0.95); /* Usando var(--gym-dark) pero con opacidad */
+    background-color: #ffffff; /* Tarjeta blanca forzada */
+
     border-radius: 15px;
     padding: 2.5rem 2rem; 
     width: 90%; 

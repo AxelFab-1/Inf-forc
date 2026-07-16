@@ -1,4 +1,4 @@
-<div class="body-login text-dark d-flex align-items-center" style="min-height: 100vh; width: 100%">
+<div class="body-login d-flex align-items-center" style="min-height: 100vh; width: 100%">
   <main class="w-100 d-flex justify-content-center">
     <div class="login-card">
       <div class="text-center">
@@ -8,7 +8,7 @@
         >
           GYM
         </div>
-        <h4 class="mb-4 fw-bold">Acceso a Socios</h4>
+        <h4 class="mb-4 fw-bold text-gold">Acceso a Socios</h4>
       </div>
 
       <form [formGroup]="loginForm" (ngSubmit)="hacerLogin()" novalidate>
@@ -28,7 +28,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="codigoAcceso" class="form-label fw-semibold">Código de Acceso</label>
+          <label for="codigoAcceso" class="form-label fw-semibold text-gold">Código de Acceso</label>
           <input
             type="text"
             formControlName="codigo"
@@ -47,7 +47,7 @@
         </div>
 
         <div class="mb-4">
-          <label for="contrasena" class="form-label fw-semibold">Contraseña</label>
+          <label for="contrasena" class="form-label fw-semibold text-gold">Contraseña</label>
           <div class="input-group">
             <input
               [type]="mostrarPassword ? 'text' : 'password'"
@@ -73,7 +73,7 @@
 
         <button type="submit" class="btn btn-gold w-100 py-2 fs-5">Entrar</button>
 
-        <div class="help-text mt-3 text-center" style="font-size: 0.85rem">
+        <div class="help-text mt-3 text-center text-gold" style="font-size: 0.85rem">
           Si es tu primera vez ingresando, usa tu DNI como contraseña.
         </div>
       </form>
