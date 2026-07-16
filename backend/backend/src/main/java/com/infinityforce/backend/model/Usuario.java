@@ -58,6 +58,8 @@ public class Usuario {
     @Pattern(regexp = "^(Activa|Inactiva|Suspendida)$", message = "Estado inválido")
     private String estadoMembresia;
 
+    private String perfilImagenUrl;
+
 
     
     @Pattern(regexp = "^(M|F)$", message = "Sexo debe ser M o F")
@@ -152,6 +154,9 @@ public class Usuario {
 
     public String getEstadoMembresia() { return estadoMembresia; }
     public void setEstadoMembresia(String estadoMembresia) { this.estadoMembresia = estadoMembresia; }
+
+    public String getPerfilImagenUrl() { return perfilImagenUrl; }
+    public void setPerfilImagenUrl(String perfilImagenUrl) { this.perfilImagenUrl = perfilImagenUrl; }
 
     public String getSexo() { return sexo; }
     public void setSexo(String sexo) { this.sexo = sexo; }

@@ -8,7 +8,7 @@
         </div>
     </header>
 
-    <main class="container pt-5" style="margin-top: 70px; padding-bottom: 30px;">
+    <main class="container pt-5" style="margin-top: 70px; padding-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
         
         <div class="d-flex justify-content-center gap-3 mb-4">
             <button (click)="filtrarPlantillas('predeterminada')" 
@@ -33,9 +33,14 @@
                             <p class="small text-white-50 mb-2">{{ plantilla.descripcion }}</p>
                         </div>
                     </div>
-                    <button (click)="seleccionarPlantilla(plantilla)" class="btn fw-bold mt-2 w-100" style="background-color: #ffd700; color: #000;">
-                        {{ plantilla.tipo === 'predeterminada' ? 'Elegir esta Rutina' : 'Empezar a Armar' }}
-                    </button>
+                    <div class="d-flex gap-2 mt-2">
+                        <button (click)="seleccionarPlantilla(plantilla)" class="btn fw-bold flex-grow-1" style="background-color: #ffd700; color: #000;">
+                            {{ plantilla.tipo === 'predeterminada' ? 'Elegir esta Rutina' : 'Empezar a Armar' }}
+                        </button>
+                        <button (click)="abrirModalInfo(plantilla)" class="btn btn-outline-light fw-bold px-3">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -45,4 +50,60 @@
         </div>
         
     </main>
+
+    <!-- Modal Info Plantilla -->
+    <div class="modal fade" id="infoPlantillaModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content text-white border-secondary" style="background-color: #1a1a1a;">
+          <div class="modal-header border-secondary">
+            <h5 class="modal-title fw-bold" style="color: #ffd700;">
+              <i class="bi bi-card-list me-2"></i>Detalles de la Rutina
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body" *ngIf="plantillaEnModal">
+            <h4 class="fw-bold mb-3">{{ plantillaEnModal.nombre }}</h4>
+            <p class="text-white-50 mb-4">{{ plantillaEnModal.descripcion }}</p>
+            
+            <div class="accordion accordion-flush" id="accordionDias">
+              <div class="accordion-item bg-transparent" *ngFor="let dia of plantillaEnModal.dias; let i = index" style="border: none;">
+                <h2 class="accordion-header" [id]="'headingDia' + i">
+                  <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" 
+                          [attr.data-bs-target]="'#collapseDia' + i" style="background-color: #252525; color: #fff; border-bottom: 1px solid #333;">
+                    {{ dia.nombreDia }}
+                  </button>
+                </h2>
+                <div [id]="'collapseDia' + i" class="accordion-collapse collapse" [attr.data-bs-parent]="'#accordionDias'">
+                  <div class="accordion-body" style="background-color: #1a1a1a; border-left: 2px solid #ffd700; padding: 1rem 0;">
+                    
+                    <div *ngIf="!dia.ejerciciosBase || dia.ejerciciosBase.length === 0" class="text-white-50 small ms-3">
+                      No hay ejercicios asignados.
+                    </div>
+
+                    <div *ngFor="let ej of dia.ejerciciosBase" class="d-flex align-items-center gap-3 mb-3 px-3">
+                      <div class="rounded overflow-hidden" style="width: 70px; height: 70px; background-color: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid #333;">
+                        <img *ngIf="ej.imagenUrl" [src]="ej.imagenUrl" alt="GIF de {{ ej.nombre }}" 
+                             style="width: 100%; height: 100%; object-fit: contain;">
+                        <i *ngIf="!ej.imagenUrl" class="bi bi-image text-white-50 fs-4"></i>
+                      </div>
+                      <div>
+                        <p class="fw-bold mb-0 text-white">{{ ej.nombre }}</p>
+                        <small class="text-white-50">{{ ej.grupoMuscular || 'Grupo' }}</small>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="modal-footer border-secondary">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
 </div>

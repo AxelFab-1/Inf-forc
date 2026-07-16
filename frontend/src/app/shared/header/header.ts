@@ -1,14 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { decodificarToken } from '../utils/jwt-decoder';
 import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule], 
+  imports: [CommonModule, ReactiveFormsModule, RouterModule], 
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -45,8 +45,26 @@ export class Header implements OnInit {
         nombreSocio = datosUsuario.nombres || nombreSocio;
         this.codigoSocio = datosUsuario.codigo || this.codigoSocio;
       }
+      
+      this.authService.getMiPerfil().subscribe({
+        next: (data) => {
+          if (data.exito && data.datos) {
+            nombreSocio = data.datos.nombres || nombreSocio;
+            if (data.datos.perfilImagenUrl) {
+              this.avatarUrl = data.datos.perfilImagenUrl;
+            } else {
+              this.avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombreSocio)}&background=ffd700&color=000`;
+            }
+            this.cdr.detectChanges();
+          }
+        },
+        error: () => {
+          this.avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombreSocio)}&background=ffd700&color=000`;
+        }
+      });
+    } else {
+      this.avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombreSocio)}&background=ffd700&color=000`;
     }
-    this.avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nombreSocio)}&background=ffd700&color=000`;
   }
 
   passwordsCoinciden(group: AbstractControl): ValidationErrors | null {

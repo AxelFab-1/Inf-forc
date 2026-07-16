@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
-import { obtenerCabeceras } from '../shared/utils/auth-headers';
+import { obtenerCabeceras, obtenerCabecerasArchivo } from '../shared/utils/auth-headers';
 
 const API_URL = environment.API_URL;
 
@@ -35,15 +35,35 @@ export class AdminService {
     return this.http.get(`${API_URL}/api/productos`, this.getHeaders());
   }
 
-  crearProducto(producto: any): Observable<any> {
-    return this.http.post(`${API_URL}/api/productos`, producto, this.getHeaders());
+  crearProducto(formData: FormData): Observable<any> {
+    const headers = new HttpHeaders(obtenerCabecerasArchivo());
+    return this.http.post(`${API_URL}/api/productos`, formData, { headers });
   }
 
-  actualizarProducto(id: string, producto: any): Observable<any> {
-    return this.http.put(`${API_URL}/api/productos/${id}`, producto, this.getHeaders());
+  actualizarProducto(id: string, formData: FormData): Observable<any> {
+    const headers = new HttpHeaders(obtenerCabecerasArchivo());
+    return this.http.put(`${API_URL}/api/productos/${id}`, formData, { headers });
   }
 
   eliminarProducto(id: string): Observable<any> {
     return this.http.delete(`${API_URL}/api/productos/${id}`, this.getHeaders());
+  }
+
+  getEjercicios(): Observable<any> {
+    return this.http.get(`${API_URL}/api/ejercicios`, this.getHeaders());
+  }
+
+  crearEjercicio(formData: FormData): Observable<any> {
+    const headers = new HttpHeaders(obtenerCabecerasArchivo());
+    return this.http.post(`${API_URL}/api/ejercicios`, formData, { headers });
+  }
+
+  actualizarEjercicio(id: string, formData: FormData): Observable<any> {
+    const headers = new HttpHeaders(obtenerCabecerasArchivo());
+    return this.http.put(`${API_URL}/api/ejercicios/${id}`, formData, { headers });
+  }
+
+  eliminarEjercicio(id: string): Observable<any> {
+    return this.http.delete(`${API_URL}/api/ejercicios/${id}`, this.getHeaders());
   }
 }

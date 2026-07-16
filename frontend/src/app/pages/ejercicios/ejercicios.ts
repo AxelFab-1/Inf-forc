@@ -4,23 +4,23 @@ import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } 
 import { AdminService } from '../../services/admin';
 
 @Component({
-  selector: 'app-inventario',
+  selector: 'app-ejercicios',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule], 
-  templateUrl: './inventario.html',
-  styleUrl: './inventario.css',
+  templateUrl: './ejercicios.html',
+  styleUrl: './ejercicios.css',
 })
-export class Inventario implements OnInit {
+export class Ejercicios implements OnInit {
 
-  productos: any[] = [];
-  productosFiltrados: any[] = [];
+  ejercicios: any[] = [];
+  ejerciciosFiltrados: any[] = [];
   textoBusqueda: string = '';
-  filtroCategoria: string = '';
-  readonly categorias = ['suplementos', 'ropa', 'accesorios'];
+  filtroGrupo: string = '';
+  readonly gruposMusculares = ['pecho', 'espalda', 'piernas', 'hombros', 'brazos', 'core', 'full body'];
 
   modo: 'crear' | 'editar' = 'crear';
-  productoSeleccionado: any = null;
-  productoEditandoId: string = ''; 
+  ejercicioSeleccionado: any = null;
+  ejercicioEditandoId: string = ''; 
   archivoSeleccionado: File | null = null;
 
   registroForm: FormGroup;
@@ -35,28 +35,38 @@ export class Inventario implements OnInit {
   ) {
     this.registroForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(100)]],
-      categoria: ['', [Validators.required]],
-      precio: [null, [Validators.required, Validators.min(0)]],
-      stock: [10, [Validators.min(0)]], 
-      activo: [true] 
+      grupoMuscular: ['', [Validators.required]],
+      subGrupo: [''],
+      tipo: ['fuerza', [Validators.required]],
+      categoria: ['pesas', [Validators.required]],
+      series: [4, [Validators.required, Validators.min(1)]],
+      repeticiones: ['10-12', [Validators.required]],
+      pesoCorporal: [false],
+      videoUrl: ['']
     });
 
     this.editarForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.maxLength(100)]],
-      categoria: ['', [Validators.required]],
-      precio: [null, [Validators.required, Validators.min(0)]]
+      grupoMuscular: ['', [Validators.required]],
+      subGrupo: [''],
+      tipo: ['fuerza', [Validators.required]],
+      categoria: ['pesas', [Validators.required]],
+      series: [4, [Validators.required, Validators.min(1)]],
+      repeticiones: ['10-12', [Validators.required]],
+      pesoCorporal: [false],
+      videoUrl: ['']
     });
   }
 
   ngOnInit() {
-    this.cargarProductos();
+    this.cargarEjercicios();
   }
 
-  cargarProductos() {
-    this.adminService.getProductos().subscribe({
+  cargarEjercicios() {
+    this.adminService.getEjercicios().subscribe({
       next: (data) => {
         if (data.exito) {
-          this.productos = data.datos;
+          this.ejercicios = data.datos;
           this.aplicarFiltros();
           this.cdr.detectChanges();
         }
@@ -66,34 +76,40 @@ export class Inventario implements OnInit {
   }
 
   aplicarFiltros() {
-    let resultado = [...this.productos];
+    let resultado = [...this.ejercicios];
     if (this.textoBusqueda.trim()) {
       const texto = this.textoBusqueda.toLowerCase();
-      resultado = resultado.filter(p => p.nombre?.toLowerCase().includes(texto));
+      resultado = resultado.filter(e => e.nombre?.toLowerCase().includes(texto));
     }
-    if (this.filtroCategoria) {
-      resultado = resultado.filter(p => p.categoria === this.filtroCategoria);
+    if (this.filtroGrupo) {
+      resultado = resultado.filter(e => e.grupoMuscular === this.filtroGrupo);
     }
-    this.productosFiltrados = resultado;
+    this.ejerciciosFiltrados = resultado;
     this.cdr.detectChanges();
   }
 
   limpiarFiltros() {
     this.textoBusqueda = '';
-    this.filtroCategoria = '';
+    this.filtroGrupo = '';
     this.aplicarFiltros();
   }
 
-  seleccionarProducto(prod: any) {
+  seleccionarEjercicio(ejer: any) {
     this.modo = 'editar';
-    this.productoSeleccionado = prod;
-    this.productoEditandoId = prod.id || prod._id; 
+    this.ejercicioSeleccionado = ejer;
+    this.ejercicioEditandoId = ejer.id || ejer._id; 
     this.archivoSeleccionado = null;
 
     this.editarForm.patchValue({
-      nombre: prod.nombre,
-      categoria: prod.categoria,
-      precio: prod.precio
+      nombre: ejer.nombre,
+      grupoMuscular: ejer.grupoMuscular,
+      subGrupo: ejer.subGrupo,
+      tipo: ejer.tipo,
+      categoria: ejer.categoria,
+      series: ejer.series,
+      repeticiones: ejer.repeticiones,
+      pesoCorporal: ejer.pesoCorporal,
+      videoUrl: ejer.videoUrl
     });
 
     this.alerta = null;
@@ -102,10 +118,16 @@ export class Inventario implements OnInit {
 
   limpiarPanel() {
     this.modo = 'crear';
-    this.productoSeleccionado = null;
-    this.productoEditandoId = '';
+    this.ejercicioSeleccionado = null;
+    this.ejercicioEditandoId = '';
     this.archivoSeleccionado = null;
-    this.registroForm.reset({ stock: 10, activo: true });
+    this.registroForm.reset({
+      series: 4, 
+      repeticiones: '10-12',
+      tipo: 'fuerza',
+      categoria: 'pesas',
+      pesoCorporal: false
+    });
     this.alerta = null;
     this.cdr.detectChanges();
   }
@@ -117,7 +139,7 @@ export class Inventario implements OnInit {
     }
   }
 
-  crearProducto() {
+  crearEjercicio() {
     if (this.registroForm.invalid) {
       this.registroForm.markAllAsTouched();
       this.mostrarAlerta('danger', 'Completa todos los campos correctamente.');
@@ -125,24 +147,24 @@ export class Inventario implements OnInit {
     }
     
     if (!this.archivoSeleccionado) {
-      this.mostrarAlerta('danger', 'Debes seleccionar una imagen.');
+      this.mostrarAlerta('danger', 'Debes seleccionar un GIF.');
       return;
     }
 
     const formData = new FormData();
-    formData.append('producto', JSON.stringify(this.registroForm.value));
+    formData.append('ejercicio', JSON.stringify(this.registroForm.value));
     formData.append('imagen', this.archivoSeleccionado);
 
-    this.adminService.crearProducto(formData).subscribe({
+    this.adminService.crearEjercicio(formData).subscribe({
       next: (data) => {
         if (data.exito) {
-          this.mostrarAlerta('success', 'Producto agregado al catálogo.');
+          this.mostrarAlerta('success', 'Ejercicio agregado al catálogo.');
           this.limpiarPanel();
-          this.cargarProductos();
+          this.cargarEjercicios();
         }
       },
       error: (err) => {
-        const mensajeError = err.error?.mensaje || 'Error al guardar el producto.';
+        const mensajeError = err.error?.mensaje || 'Error al guardar el ejercicio.';
         this.mostrarAlerta('danger', mensajeError);
       }
     });
@@ -156,39 +178,39 @@ export class Inventario implements OnInit {
     }
 
     const formData = new FormData();
-    formData.append('producto', JSON.stringify(this.editarForm.value));
+    formData.append('ejercicio', JSON.stringify(this.editarForm.value));
     if (this.archivoSeleccionado) {
       formData.append('imagen', this.archivoSeleccionado);
     }
 
-    this.adminService.actualizarProducto(this.productoEditandoId, formData).subscribe({
+    this.adminService.actualizarEjercicio(this.ejercicioEditandoId, formData).subscribe({
       next: (data) => {
         if (data.exito) {
-          this.mostrarAlerta('success', 'Producto actualizado correctamente.');
-          this.cargarProductos();
+          this.mostrarAlerta('success', 'Ejercicio actualizado correctamente.');
+          this.cargarEjercicios();
           this.limpiarPanel();
         }
       },
       error: (err) => {
-        const mensajeError = err.error?.mensaje || 'No se pudo actualizar el producto.';
+        const mensajeError = err.error?.mensaje || 'No se pudo actualizar el ejercicio.';
         this.mostrarAlerta('danger', mensajeError);
       }
     });
   }
 
-  eliminarProducto() {
-    if (!this.productoSeleccionado) return;
+  eliminarEjercicio() {
+    if (!this.ejercicioSeleccionado) return;
     
-    const idEliminar = this.productoEditandoId; 
-    const confirmado = confirm(`¿Estás seguro de eliminar "${this.productoSeleccionado.nombre}"?`);
+    const idEliminar = this.ejercicioEditandoId; 
+    const confirmado = confirm(`¿Estás seguro de eliminar "${this.ejercicioSeleccionado.nombre}"?`);
     if (!confirmado) return;
 
-    this.adminService.eliminarProducto(idEliminar).subscribe({
+    this.adminService.eliminarEjercicio(idEliminar).subscribe({
       next: (data) => {
         if (data.exito) {
-          this.mostrarAlerta('success', 'Producto eliminado.');
-          this.cargarProductos();
-          if (this.productoSeleccionado?.id === idEliminar || this.productoSeleccionado?._id === idEliminar) {
+          this.mostrarAlerta('success', 'Ejercicio eliminado.');
+          this.cargarEjercicios();
+          if (this.ejercicioSeleccionado?.id === idEliminar || this.ejercicioSeleccionado?._id === idEliminar) {
             this.limpiarPanel();
           }
         }
@@ -197,21 +219,6 @@ export class Inventario implements OnInit {
         const mensajeError = err.error?.mensaje || 'No se pudo eliminar.';
         this.mostrarAlerta('danger', mensajeError);
       }
-    });
-  }
-
-  toggleDisponibilidad(prod: any) {
-    const idActualizar = prod.id || prod._id;
-    const actualizado = { ...prod, activo: !prod.activo };
-    
-    this.adminService.actualizarProducto(idActualizar, actualizado).subscribe({
-      next: (data) => {
-        if (data.exito) {
-          prod.activo = !prod.activo;
-          this.cdr.detectChanges();
-        }
-      },
-      error: () => this.mostrarAlerta('danger', 'No se pudo cambiar el estado.')
     });
   }
 

@@ -3,13 +3,17 @@
     
     <div class="position-relative">
       <div class="d-flex align-items-center" (click)="toggleMenu()" style="cursor: pointer;">
-        <img [src]="avatarUrl" alt="Perfil" class="rounded-circle me-2" width="45" height="45" />
+        <img [src]="avatarUrl" alt="Perfil" class="rounded-circle me-2" width="45" height="45" style="object-fit: cover; border: 2px solid #ffd700;" />
         <span class="fw-bold fs-5" style="color: #ffffff">{{ codigoSocio }}</span>
         <i class="bi bi-caret-down-fill ms-2" style="color: #ffd700"></i>
       </div>
 
       <div *ngIf="menuAbierto" class="dropdown-menu show shadow p-0" 
            style="position: absolute; top: 60px; left: 0; background-color: #2c2c2c; border: 1px solid #ffd700; min-width: 180px; overflow: hidden; border-radius: 8px;">
+        
+        <a routerLink="/perfil" class="custom-dropdown-item text-decoration-none d-block">
+          <i class="bi bi-person-circle me-2"></i> Mi Perfil
+        </a>
         
         <button class="custom-dropdown-item" (click)="abrirModalCambioClave()">
           <i class="bi bi-key me-2"></i> Cambiar Clave

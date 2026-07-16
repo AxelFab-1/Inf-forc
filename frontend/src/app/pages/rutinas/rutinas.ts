@@ -17,6 +17,9 @@ export class Rutinas implements OnInit {
   plantillasMostradas: any[] = [];
   tipoSeleccionado: string = 'predeterminada';
 
+  catalogoEjercicios: any[] = [];
+  plantillaEnModal: any = null;
+
   constructor(
     private cdr: ChangeDetectorRef,
     private router: Router,
@@ -24,10 +27,19 @@ export class Rutinas implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.cargarPlantillas();
+    this.cargarDatos();
   }
 
-  cargarPlantillas() {
+  cargarDatos() {
+    this.entrenamientoService.getEjercicios().subscribe({
+      next: (data) => {
+        if (data.exito) {
+          this.catalogoEjercicios = data.datos;
+        }
+      },
+      error: (err) => console.error('Error fetching ejercicios', err)
+    });
+
     this.entrenamientoService.getPlantillas().subscribe({
       next: (data) => {
         if (data.exito) {
@@ -43,6 +55,34 @@ export class Rutinas implements OnInit {
     this.tipoSeleccionado = tipo;
     this.plantillasMostradas = this.todasLasPlantillas.filter((p) => p.tipo === tipo);
     this.cdr.detectChanges();
+  }
+
+  abrirModalInfo(plantilla: any) {
+    this.plantillaEnModal = JSON.parse(JSON.stringify(plantilla)); // Copia profunda
+
+    // Cruzar ejercicios con catálogo para obtener GIFs y grupo
+    if (this.plantillaEnModal.dias) {
+      this.plantillaEnModal.dias.forEach((dia: any) => {
+        if (dia.ejerciciosBase) {
+          dia.ejerciciosBase.forEach((ejRutina: any) => {
+            const ejCat = this.catalogoEjercicios.find(e => e.id === ejRutina.ejercicioId || e._id === ejRutina.ejercicioId);
+            if (ejCat) {
+              ejRutina.imagenUrl = ejCat.imagenUrl;
+              ejRutina.grupoMuscular = ejCat.grupoMuscular;
+            }
+          });
+        }
+      });
+    }
+    
+    this.cdr.detectChanges();
+    
+    const modalEl = document.getElementById('infoPlantillaModal');
+    if (modalEl) {
+      // @ts-ignore
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
   }
 
   seleccionarPlantilla(plantilla: any) {
@@ -84,6 +124,9 @@ export class Rutinas implements OnInit {
           alert('Error: ' + mensaje);
         }
       });
+    } else {
+      const idPlantilla = plantilla._id?.$oid || plantilla._id || plantilla.id;
+      this.router.navigate(['/armar-rutina', idPlantilla]);
     }
   }
 }

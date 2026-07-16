@@ -14,6 +14,9 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.MediaType;
+import org.springframework.web.multipart.MultipartFile;
+
 @RestController
 @RequestMapping("/api")
 public class UsuarioController {
@@ -73,6 +76,34 @@ public class UsuarioController {
             @Valid @RequestBody UsuarioUpdateDTO datosActualizados) { 
 
         Map<String, Object> respuesta = usuarioService.actualizarUsuario(id, datosActualizados);
+        if (Boolean.TRUE.equals(respuesta.get("exito"))) {
+            return ResponseEntity.ok(respuesta);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(respuesta);
+    }
+
+    @GetMapping("/usuarios/me")
+    public ResponseEntity<Map<String, Object>> obtenerMiPerfil(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("exito", false, "mensaje", "No autorizado."));
+        }
+        Map<String, Object> respuesta = usuarioService.obtenerPerfil(principal.getName());
+        if (Boolean.TRUE.equals(respuesta.get("exito"))) {
+            return ResponseEntity.ok(respuesta);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(respuesta);
+    }
+
+    @PostMapping(value = "/usuarios/me/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Map<String, Object>> subirAvatar(
+            Principal principal,
+            @RequestPart("imagen") MultipartFile imagen) {
+        
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("exito", false, "mensaje", "No autorizado."));
+        }
+
+        Map<String, Object> respuesta = usuarioService.subirAvatar(principal.getName(), imagen);
         if (Boolean.TRUE.equals(respuesta.get("exito"))) {
             return ResponseEntity.ok(respuesta);
         }

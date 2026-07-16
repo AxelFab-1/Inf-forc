@@ -1,0 +1,67 @@
+.hero-card {
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-top: 4px solid #ffd700;
+  border-radius: 16px;
+}
+
+.btn-iniciar {
+  background: linear-gradient(135deg, #ffd700, #e6b800);
+  color: #000 !important;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-iniciar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+}
+
+.hover-warning {
+  transition: color 0.2s ease;
+}
+
+.hover-warning:hover {
+  color: #ffd700 !important;
+}
+
+.card-explorar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  color: #fff;
+  height: 100%;
+  transition: background-color 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.card-explorar:hover {
+  background-color: #222;
+  border-color: #ffd700;
+  transform: translateY(-3px);
+}
+
+.card-explorar .icon-wrapper {
+  background-color: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.card-explorar:hover .icon-wrapper {
+  transform: scale(1.1);
+}

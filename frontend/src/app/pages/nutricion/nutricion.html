@@ -1,3 +1,5 @@
+<app-header></app-header>
+
 <div *ngIf="alerta" class="alert alert-{{ alerta.tipo }} alert-dismissible fade show global-alert" role="alert">
   <strong>{{ alerta.tipo === 'success' ? '¡Listo!' : 'Error:' }}</strong> {{ alerta.mensaje }}
   <button type="button" class="btn-close" (click)="cerrarAlerta()"></button>
@@ -295,3 +297,5 @@
     </form>
   </div>
 </div>
+
+<app-footer-menu></app-footer-menu>

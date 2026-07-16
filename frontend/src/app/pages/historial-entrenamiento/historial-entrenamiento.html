@@ -2,121 +2,146 @@
   <app-header></app-header>
 
   <main class="container">
-
-    <div class="d-flex align-items-center gap-3 mb-4 mt-3">
-      <button (click)="irAlDashboard()" class="btn btn-link text-white-50 p-0">
-        <i class="bi bi-arrow-left fs-5"></i>
-      </button>
-      <h2 class="fw-bold mb-0">Historial de Entrenamiento</h2>
-    </div>
-
-    <div class="rounded-4 p-3 shadow-sm mb-4" style="background-color: #1a1a1a;">
-
-      <div class="d-flex align-items-center justify-content-between mb-3">
-        <button (click)="mesAnterior()"
-                class="btn btn-outline-secondary btn-sm rounded-circle"
-                style="width: 36px; height: 36px;">
-          <i class="bi bi-chevron-left"></i>
+    <div style="max-width: 800px; margin: 0 auto;">
+      
+      <div class="d-flex align-items-center gap-3 mb-4 mt-3">
+        <button (click)="irAlDashboard()" class="btn btn-link text-white-50 p-0">
+          <i class="bi bi-arrow-left fs-5"></i>
         </button>
-
-        <h5 class="fw-bold mb-0" style="color: #ffd700;">{{ mesNombre }}</h5>
-
-        <button (click)="mesSiguiente()"
-                class="btn btn-outline-secondary btn-sm rounded-circle"
-                [disabled]="esElMesActual"
-                style="width: 36px; height: 36px;">
-          <i class="bi bi-chevron-right"></i>
-        </button>
+        <h2 class="fw-bold mb-0">Historial de Entrenamiento</h2>
       </div>
 
-      <div class="dias-semana d-flex justify-content-between text-white-50 small mb-2">
-        <span>Lu</span><span>Ma</span><span>Mi</span>
-        <span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
-      </div>
-
-      <div *ngIf="cargandoAsistencias" class="text-center py-4">
-        <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
-        <p class="text-white-50 small mt-2 mb-0">Cargando asistencias...</p>
-      </div>
-
-      <div id="historialGrid" *ngIf="!cargandoAsistencias">
-        <div *ngFor="let vacio of diasVacios"></div>
-
-        <div *ngFor="let dia of diasMes"
-             class="dia-historial"
-             [ngClass]="{
-               'dia-actual':        dia === diaHoy && esElMesActual,
-               'dia-entrenado':     diasEntrenados.includes(dia),
-               'dia-seleccionado':  dia === diaSeleccionado,
-               'dia-clickeable':    diasEntrenados.includes(dia)
-             }"
-             (click)="seleccionarDia(dia)">
-          {{ dia }}
-        </div>
-      </div>
-
-      <div *ngIf="!cargandoAsistencias" class="d-flex gap-3 mt-3 flex-wrap">
-        <div class="d-flex align-items-center gap-1">
-          <div class="leyenda-punto" style="background:#2a6b2a;"></div>
-          <small class="text-white-50">Entrenado</small>
-        </div>
-        <div class="d-flex align-items-center gap-1">
-          <div class="leyenda-punto" style="background:#ffd700;"></div>
-          <small class="text-white-50">Seleccionado</small>
-        </div>
-        <div class="d-flex align-items-center gap-1">
-          <div class="leyenda-punto" style="border: 2px solid #ffd700; background: transparent;"></div>
-          <small class="text-white-50">Hoy</small>
-        </div>
-      </div>
-    </div>
-
-    <div class="rounded-4 p-3 shadow-sm mb-4" style="background-color: #1a1a1a;">
-
-      <div *ngIf="!diaSeleccionado" class="text-center py-3 text-white-50">
-        <i class="bi bi-hand-index-thumb fs-3 mb-2 d-block"></i>
-        <p class="mb-0 small">Selecciona un día entrenado del calendario para ver opciones</p>
-      </div>
-
-      <div *ngIf="diaSeleccionado">
-        <p class="mb-3 text-white-50 small">
-          Día seleccionado:
-          <strong class="text-white">{{ diaSeleccionado }} de {{ mesNombre }}</strong>
-        </p>
-
-        <div class="d-flex gap-2 flex-column flex-sm-row">
-          <button
-            (click)="verDetalle()"
-            class="btn w-100 py-2 fw-bold"
-            style="background-color: #ffd700; color: #000;"
-            [disabled]="cargandoDetalle">
-            <span *ngIf="!cargandoDetalle">
-              <i class="bi bi-eye me-1"></i> Ver detalle
-            </span>
-            <span *ngIf="cargandoDetalle">
-              <div class="spinner-border spinner-border-sm me-1" role="status"></div>
-              Cargando...
-            </span>
+      <div class="rounded-4 p-3 shadow-sm mb-4" style="background-color: #1a1a1a;">
+        <!-- [Contenido del calendario sin cambios] -->
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <button (click)="mesAnterior()"
+                  class="btn btn-outline-secondary btn-sm rounded-circle"
+                  style="width: 36px; height: 36px;">
+            <i class="bi bi-chevron-left"></i>
           </button>
 
-          <button
-            (click)="borrarAsistencia()"
-            class="btn btn-outline-danger w-100 py-2 fw-bold">
-            <i class="bi bi-trash me-1"></i> Borrar asistencia
+          <h5 class="fw-bold mb-0" style="color: #ffd700;">{{ mesNombre }}</h5>
+
+          <button (click)="mesSiguiente()"
+                  class="btn btn-outline-secondary btn-sm rounded-circle"
+                  [disabled]="esElMesActual"
+                  style="width: 36px; height: 36px;">
+            <i class="bi bi-chevron-right"></i>
           </button>
         </div>
+
+        <div class="dias-semana d-flex justify-content-between text-white-50 small mb-2">
+          <span>Lu</span><span>Ma</span><span>Mi</span>
+          <span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
+        </div>
+
+        <div *ngIf="cargandoAsistencias" class="text-center py-4">
+          <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
+          <p class="text-white-50 small mt-2 mb-0">Cargando asistencias...</p>
+        </div>
+
+        <div id="historialGrid" *ngIf="!cargandoAsistencias">
+          <div *ngFor="let vacio of diasVacios"></div>
+
+          <div *ngFor="let dia of diasMes"
+               class="dia-historial"
+               [ngClass]="{
+                 'dia-actual':        dia === diaHoy && esElMesActual,
+                 'dia-entrenado':     diasEntrenados.includes(dia),
+                 'dia-seleccionado':  dia === diaSeleccionado,
+                 'dia-clickeable':    diasEntrenados.includes(dia)
+               }"
+               (click)="seleccionarDia(dia)">
+            {{ dia }}
+          </div>
+        </div>
+
+        <div *ngIf="!cargandoAsistencias" class="d-flex gap-3 mt-3 flex-wrap">
+          <div class="d-flex align-items-center gap-1">
+            <div class="leyenda-punto" style="background:#2a6b2a;"></div>
+            <small class="text-white-50">Entrenado</small>
+          </div>
+          <div class="d-flex align-items-center gap-1">
+            <div class="leyenda-punto" style="background:#ffd700;"></div>
+            <small class="text-white-50">Seleccionado</small>
+          </div>
+          <div class="d-flex align-items-center gap-1">
+            <div class="leyenda-punto" style="border: 2px solid #ffd700; background: transparent;"></div>
+            <small class="text-white-50">Hoy</small>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div *ngIf="!cargandoAsistencias" class="rounded-4 p-3 shadow-sm" style="background-color: #1a1a1a;">
-      <h6 class="fw-bold mb-2" style="color: #ffd700;">
-        <i class="bi bi-bar-chart-fill me-2"></i>Resumen del mes
-      </h6>
-      <p class="text-white-50 small mb-0">
-        Días entrenados: <strong class="text-white">{{ diasEntrenados.length }}</strong>
-      </p>
-    </div>
+      <div class="rounded-4 p-3 shadow-sm mb-4" style="background-color: #1a1a1a;">
+        <div *ngIf="!diaSeleccionado" class="text-center py-3 text-white-50">
+          <i class="bi bi-hand-index-thumb fs-3 mb-2 d-block"></i>
+          <p class="mb-0 small">Selecciona un día entrenado del calendario para ver opciones</p>
+        </div>
 
+        <div *ngIf="diaSeleccionado">
+          <p class="mb-3 text-white-50 small">
+            Día seleccionado:
+            <strong class="text-white">{{ diaSeleccionado }} de {{ mesNombre }}</strong>
+          </p>
+
+          <div class="d-flex gap-2 flex-column flex-sm-row">
+            <button
+              (click)="verDetalle()"
+              class="btn w-100 py-2 fw-bold"
+              style="background-color: #ffd700; color: #000;"
+              [disabled]="cargandoDetalle">
+              <span *ngIf="!cargandoDetalle">
+                <i class="bi bi-eye me-1"></i> Ver detalle
+              </span>
+              <span *ngIf="cargandoDetalle">
+                <div class="spinner-border spinner-border-sm me-1" role="status"></div>
+                Cargando...
+              </span>
+            </button>
+
+            <button
+              (click)="borrarAsistencia()"
+              class="btn btn-outline-danger w-100 py-2 fw-bold">
+              <i class="bi bi-trash me-1"></i> Borrar asistencia
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="!cargandoAsistencias">
+        <h6 class="fw-bold mb-3" style="color: #ffd700;">
+          <i class="bi bi-bar-chart-fill me-2"></i>Mis Estadísticas
+        </h6>
+        
+        <div class="row g-3">
+          <!-- KPIs Rápidos -->
+          <div class="col-12 col-md-4 d-flex flex-column gap-3">
+            <div class="rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center" style="background-color: #1a1a1a;">
+              <h3 class="fw-bold text-white mb-0">{{ diasEntrenados.length }}</h3>
+              <small class="text-white-50">Días Entrenados</small>
+            </div>
+            
+            <div class="rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center" style="background-color: #1a1a1a;">
+              <h3 class="fw-bold text-white mb-0">—</h3>
+              <small class="text-white-50">Duración Total (Próximamente)</small>
+            </div>
+          </div>
+          
+          <!-- Área de Gráficos -->
+          <div class="col-12 col-md-8">
+            <div class="rounded-4 p-4 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center text-center" 
+                 style="background-color: #1a1a1a; min-height: 200px; border: 1px dashed #333;">
+              <i class="bi bi-graph-up fs-1 mb-2" style="color: #333;"></i>
+              <h6 class="text-white-50 fw-bold mb-1">Área para Gráficas</h6>
+              <p class="text-white-50 small mb-0" style="max-width: 250px;">
+                Espacio reservado para integrar Chart.js o Ngx-Charts y mostrar el progreso de cargas o asistencias semanales.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </main>
 
   <div class="modal fade" id="detalleSesionModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
@@ -131,56 +156,58 @@
         </div>
 
         <div class="modal-body" *ngIf="sesionDetalle">
-          <div class="rounded-3 p-3 mb-3" style="background-color: #252525;">
-            <div class="row g-2">
-              <div class="col-12">
-                <small class="text-white-50">Rutina</small>
-                <p class="fw-bold mb-0">{{ sesionDetalle.nombreDia || '—' }}</p>
-              </div>
-              <div class="col-6">
-                <small class="text-white-50">Fecha</small>
-                <p class="fw-bold mb-0 small">{{ formatearFecha(sesionDetalle.fecha) }}</p>
-              </div>
-              <div class="col-6">
-                <small class="text-white-50">Duración</small>
-                <p class="fw-bold mb-0">{{ formatearDuracion(sesionDetalle.duracionSegundos) }}</p>
+          <div style="max-width: 600px; margin: 0 auto;">
+            <div class="rounded-3 p-3 mb-3" style="background-color: #252525;">
+              <div class="row g-2">
+                <div class="col-12">
+                  <small class="text-white-50">Rutina</small>
+                  <p class="fw-bold mb-0">{{ sesionDetalle.nombreDia || '—' }}</p>
+                </div>
+                <div class="col-6">
+                  <small class="text-white-50">Fecha</small>
+                  <p class="fw-bold mb-0 small">{{ formatearFecha(sesionDetalle.fecha) }}</p>
+                </div>
+                <div class="col-6">
+                  <small class="text-white-50">Duración</small>
+                  <p class="fw-bold mb-0">{{ formatearDuracion(sesionDetalle.duracionSegundos) }}</p>
+                </div>
               </div>
             </div>
-          </div>
 
-          <h6 class="fw-bold mb-2" style="color: #ffd700;">Ejercicios realizados</h6>
+            <h6 class="fw-bold mb-2" style="color: #ffd700;">Ejercicios realizados</h6>
 
-          <div *ngIf="!sesionDetalle.ejerciciosRealizados || sesionDetalle.ejerciciosRealizados.length === 0"
-               class="text-white-50 small">
-            No se registraron ejercicios.
-          </div>
+            <div *ngIf="!sesionDetalle.ejerciciosRealizados || sesionDetalle.ejerciciosRealizados.length === 0"
+                 class="text-white-50 small">
+              No se registraron ejercicios.
+            </div>
 
-          <div *ngFor="let ej of sesionDetalle.ejerciciosRealizados"
-               class="rounded-3 p-3 mb-2"
-               style="background-color: #252525;">
-            <p class="fw-bold mb-2">
-              {{ ej.nombre }}
-              <span *ngIf="ej.pesoCorporal" class="badge ms-1" style="background-color: #444; font-size: 0.65rem;">
-                Peso corporal
-              </span>
-            </p>
+            <div *ngFor="let ej of sesionDetalle.ejerciciosRealizados"
+                 class="rounded-3 p-3 mb-2 shadow-sm"
+                 style="background-color: #252525; border-left: 3px solid #ffd700;">
+              <p class="fw-bold mb-2">
+                {{ ej.nombre }}
+                <span *ngIf="ej.pesoCorporal" class="badge ms-1" style="background-color: #444; font-size: 0.65rem;">
+                  Peso corporal
+                </span>
+              </p>
 
-            <table class="table table-sm table-dark table-borderless mb-0" style="font-size: 0.8rem;">
-              <thead>
-                <tr class="text-white-50">
-                  <th>Serie</th>
-                  <th>Reps</th>
-                  <th *ngIf="!ej.pesoCorporal">Peso (kg)</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let serie of ej.series">
-                  <td>{{ serie.numeroSerie }}</td>
-                  <td>{{ serie.repeticiones }}</td>
-                  <td *ngIf="!ej.pesoCorporal">{{ serie.pesoKg ?? '—' }}</td>
-                </tr>
-              </tbody>
-            </table>
+              <table class="table table-sm table-dark table-borderless mb-0" style="font-size: 0.8rem; background-color: transparent;">
+                <thead>
+                  <tr class="text-white-50">
+                    <th>Serie</th>
+                    <th>Reps</th>
+                    <th *ngIf="!ej.pesoCorporal">Peso (kg)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let serie of ej.series">
+                    <td>{{ serie.numeroSerie }}</td>
+                    <td>{{ serie.repeticiones }}</td>
+                    <td *ngIf="!ej.pesoCorporal">{{ serie.pesoKg ?? '—' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 

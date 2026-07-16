@@ -2,6 +2,7 @@ package com.infinityforce.backend.service;
 
 import com.infinityforce.backend.model.Usuario;
 import com.infinityforce.backend.repository.UsuarioRepository;
+import com.infinityforce.backend.repository.SesionRepository;
 import com.infinityforce.backend.dto.PasswordChangeDTO;
 import com.infinityforce.backend.dto.UsuarioUpdateDTO;
 
@@ -14,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.web.multipart.MultipartFile;
+
 @Service
 public class UsuarioService {
 
@@ -21,7 +24,13 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private SesionRepository sesionRepository;
+
+    @Autowired
     private JwtService jwtService;
+
+    @Autowired
+    private CloudinaryService cloudinaryService;
 
     public Map<String, Object> login(Map<String, String> credenciales) {
         Map<String, Object> respuesta = new HashMap<>();
@@ -143,6 +152,57 @@ public class UsuarioService {
 
         respuesta.put("exito", true);
         respuesta.put("mensaje", "Usuario actualizado correctamente.");
+        return respuesta;
+    }
+
+    public Map<String, Object> subirAvatar(String idUsuario, MultipartFile imagen) {
+        Map<String, Object> respuesta = new HashMap<>();
+        try {
+            Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
+            if (usuarioOpt.isEmpty()) {
+                respuesta.put("exito", false);
+                respuesta.put("mensaje", "Usuario no encontrado.");
+                return respuesta;
+            }
+
+            Usuario usuario = usuarioOpt.get();
+
+            if (usuario.getPerfilImagenUrl() != null) {
+                // We could delete the old image here if we had its public_id, but it's optional for now.
+            }
+
+            Map<String, Object> uploadResult = cloudinaryService.subirArchivo(imagen, "fotos-perfil");
+            String nuevaUrl = uploadResult.get("url").toString();
+
+            usuario.setPerfilImagenUrl(nuevaUrl);
+            usuarioRepository.save(usuario);
+
+            respuesta.put("exito", true);
+            respuesta.put("perfilImagenUrl", nuevaUrl);
+            respuesta.put("mensaje", "Foto de perfil actualizada exitosamente.");
+            
+        } catch (Exception e) {
+            respuesta.put("exito", false);
+            respuesta.put("mensaje", "Error subiendo la foto: " + e.getMessage());
+        }
+        return respuesta;
+    }
+
+    public Map<String, Object> obtenerPerfil(String idUsuario) {
+        Map<String, Object> respuesta = new HashMap<>();
+        Optional<Usuario> usuarioOpt = usuarioRepository.findById(idUsuario);
+        if (usuarioOpt.isEmpty()) {
+            respuesta.put("exito", false);
+            respuesta.put("mensaje", "Usuario no encontrado.");
+            return respuesta;
+        }
+
+        Usuario usuario = usuarioOpt.get();
+        long totalAsistenciasGlobal = sesionRepository.countByClienteId(idUsuario);
+        usuario.setTotalAsistencias((int) totalAsistenciasGlobal);
+
+        respuesta.put("exito", true);
+        respuesta.put("datos", usuario);
         return respuesta;
     }
 }

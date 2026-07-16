@@ -17,6 +17,7 @@
 
 .dia-historial {
   aspect-ratio: 1 / 1;
+  max-height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;

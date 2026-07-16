@@ -33,14 +33,30 @@ export class ArmarRutina implements OnInit {
   }
 
   cargarDatosIniciales() {
-    this.entrenamientoService.getPlantillas().subscribe({
-      next: (data) => {
-        if (data.exito) {
-          this.plantillaEnConstruccion = data.datos.find((p: any) => p._id === this.idPlantillaUrl);
-          this.cdr.detectChanges();
+    if (this.idPlantillaUrl === 'mi-rutina') {
+      this.entrenamientoService.getMiRutina().subscribe({
+        next: (data) => {
+          if (data.exito && data.datos) {
+            this.plantillaEnConstruccion = data.datos;
+            if (!this.plantillaEnConstruccion.nombre) {
+              this.plantillaEnConstruccion.nombre = this.plantillaEnConstruccion.nombreOriginal || 'Mi Rutina Actual';
+            }
+            this.cdr.detectChanges();
+          }
         }
-      }
-    });
+      });
+    } else {
+      this.entrenamientoService.getPlantillas().subscribe({
+        next: (data) => {
+          if (data.exito) {
+            this.plantillaEnConstruccion = data.datos.find((p: any) => 
+              (p._id?.$oid || p._id || p.id) === this.idPlantillaUrl
+            );
+            this.cdr.detectChanges();
+          }
+        }
+      });
+    }
 
     this.entrenamientoService.getEjercicios().subscribe({
       next: (data) => {

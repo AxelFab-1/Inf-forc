@@ -4,21 +4,21 @@
   <main class="container">
     <h2 class="fw-bold mb-4 mt-3">¡Bienvenido, {{ nombreSocio }}!</h2>
 
-    <div class="row g-4">
+    <div class="row g-3 align-items-stretch">
 
-      <div class="col-12 col-lg-5">
+      <div class="col-12 col-md-5">
 
         <div *ngIf="cargandoRutina"
-             class="h-100 d-flex flex-column align-items-center justify-content-center rounded-4 py-5"
-             style="background-color: #1a1a1a; min-height: 150px;">
+             class="h-100 d-flex flex-column align-items-center justify-content-center rounded-4 py-4"
+             style="background-color: #1a1a1a; min-height: 120px;">
           <div class="spinner-border text-warning mb-2" role="status"></div>
           <small class="text-white-50">Cargando tu rutina...</small>
         </div>
 
         <div *ngIf="!cargandoRutina && rutinaActiva" class="h-100">
           <button class="btn w-100 h-100 shadow-sm text-dark fw-bold fs-4 d-flex flex-column
-                         justify-content-center align-items-center py-5 py-lg-0 rounded-4"
-                  style="background-color: #ffd700; min-height: 150px;"
+                         justify-content-center align-items-center py-4 rounded-4"
+                  style="background-color: #ffd700; min-height: 120px;"
                   data-bs-toggle="modal" data-bs-target="#entrenamientoModal">
             <i class="bi bi-play-circle-fill mb-2" style="font-size: 2.5rem;"></i>
             Comenzar entrenamiento
@@ -28,8 +28,8 @@
         <div *ngIf="!cargandoRutina && !rutinaActiva" class="h-100">
           <button (click)="irAElegirRutina()"
                   class="btn w-100 h-100 shadow-sm fw-bold fs-5 d-flex flex-column
-                         justify-content-center align-items-center py-5 py-lg-0 rounded-4"
-                  style="background-color: #2a2a2a; border: 2px dashed #ffd700; color: #ffd700; min-height: 150px;">
+                         justify-content-center align-items-center py-4 rounded-4"
+                  style="background-color: #2a2a2a; border: 2px dashed #ffd700; color: #ffd700; min-height: 120px;">
             <i class="bi bi-lightning-charge mb-2" style="font-size: 2rem;"></i>
             Elegir mi rutina
             <small class="fw-normal mt-1 text-white-50" style="font-size: 0.75rem;">
@@ -40,7 +40,7 @@
 
       </div>
 
-      <div class="col-12 col-lg-7">
+      <div class="col-12 col-md-7">
         <div class="rounded-4 p-3 shadow-sm h-100" style="background-color: #1a1a1a;">
           <h5 class="text-center fw-bold mb-3" style="color: #ffd700;">{{ mesActualNombre }}</h5>
 

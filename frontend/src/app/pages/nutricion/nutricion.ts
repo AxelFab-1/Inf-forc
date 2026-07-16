@@ -4,10 +4,13 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
 import { NutricionService } from '../../services/nutricion';
 import { FormsModule } from '@angular/forms';
 
+import { Header } from '../../shared/header/header';
+import { FooterMenu } from '../../shared/footer-menu/footer-menu';
+
 @Component({
   selector: 'app-nutricion',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FormsModule, Header, FooterMenu],
   templateUrl: './nutricion.html',
   styleUrl: './nutricion.css',
 })

@@ -5,7 +5,7 @@
     <div class="panel-header">
       <h5 class="mb-0 fw-bold" style="color: #ffd700;">
         <i class="bi" [ngClass]="modo === 'crear' ? 'bi-plus-circle-fill' : 'bi-pencil-fill'"></i>
-        {{ modo === 'crear' ? 'Nuevo Producto' : 'Editar Producto' }}
+        {{ modo === 'crear' ? 'Nuevo Ejercicio' : 'Editar Ejercicio' }}
       </h5>
       <button *ngIf="modo === 'editar'" class="btn btn-sm btn-outline-secondary rounded-pill"
               (click)="limpiarPanel()">
@@ -18,7 +18,7 @@
       <button type="button" class="btn-close btn-sm" (click)="cerrarAlerta()"></button>
     </div>
 
-    <form *ngIf="modo === 'crear'" [formGroup]="registroForm" (ngSubmit)="crearProducto()">
+    <form *ngIf="modo === 'crear'" [formGroup]="registroForm" (ngSubmit)="crearEjercicio()">
 
       <div class="mb-3">
         <label class="form-label text-warning fw-semibold small">Nombre</label>
@@ -27,35 +27,35 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Categoría</label>
-        <select formControlName="categoria" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                [ngClass]="{'is-invalid': registroForm.get('categoria')?.invalid && registroForm.get('categoria')?.touched}">
+        <label class="form-label text-warning fw-semibold small">Grupo Muscular</label>
+        <select formControlName="grupoMuscular" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                [ngClass]="{'is-invalid': registroForm.get('grupoMuscular')?.invalid && registroForm.get('grupoMuscular')?.touched}">
           <option value="" disabled selected>Selecciona...</option>
-          <option *ngFor="let cat of categorias" [value]="cat">{{ cat | titlecase }}</option>
+          <option *ngFor="let g of gruposMusculares" [value]="g">{{ g | titlecase }}</option>
         </select>
       </div>
 
       <div class="row g-2 mb-3">
         <div class="col-6">
-          <label class="form-label text-warning fw-semibold small">Precio (S/)</label>
-          <input type="number" formControlName="precio" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-                 [ngClass]="{'is-invalid': registroForm.get('precio')?.invalid && registroForm.get('precio')?.touched}" />
+          <label class="form-label text-warning fw-semibold small">Series</label>
+          <input type="number" formControlName="series" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 [ngClass]="{'is-invalid': registroForm.get('series')?.invalid && registroForm.get('series')?.touched}" />
         </div>
         <div class="col-6">
-          <label class="form-label text-warning fw-semibold small">Stock</label>
-          <input type="number" formControlName="stock" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-                 [ngClass]="{'is-invalid': registroForm.get('stock')?.invalid && registroForm.get('stock')?.touched}" />
+          <label class="form-label text-warning fw-semibold small">Repeticiones</label>
+          <input type="text" formControlName="repeticiones" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 [ngClass]="{'is-invalid': registroForm.get('repeticiones')?.invalid && registroForm.get('repeticiones')?.touched}" placeholder="Ej. 10-12" />
         </div>
       </div>
 
       <div class="mb-4">
-        <label class="form-label text-warning fw-semibold small">Imagen del Producto</label>
+        <label class="form-label text-warning fw-semibold small">GIF del Ejercicio</label>
         <input type="file" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
                accept="image/*" (change)="onFileSelected($event)" required />
       </div>
 
       <button type="submit" class="btn w-100 fw-bold py-2" style="background-color:#ffd700; color:#000;">
-        <i class="bi bi-plus-circle me-1"></i> Guardar Producto
+        <i class="bi bi-plus-circle me-1"></i> Guardar Ejercicio
       </button>
     </form>
 
@@ -68,27 +68,34 @@
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Categoría</label>
-        <select formControlName="categoria" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
-                [ngClass]="{'is-invalid': editarForm.get('categoria')?.invalid && editarForm.get('categoria')?.touched}">
-          <option *ngFor="let cat of categorias" [value]="cat">{{ cat | titlecase }}</option>
+        <label class="form-label text-warning fw-semibold small">Grupo Muscular</label>
+        <select formControlName="grupoMuscular" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+                [ngClass]="{'is-invalid': editarForm.get('grupoMuscular')?.invalid && editarForm.get('grupoMuscular')?.touched}">
+          <option *ngFor="let g of gruposMusculares" [value]="g">{{ g | titlecase }}</option>
         </select>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Precio (S/)</label>
-        <input type="number" formControlName="precio" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
-               [ngClass]="{'is-invalid': editarForm.get('precio')?.invalid && editarForm.get('precio')?.touched}" />
+      <div class="row g-2 mb-3">
+        <div class="col-6">
+          <label class="form-label text-warning fw-semibold small">Series</label>
+          <input type="number" formControlName="series" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 [ngClass]="{'is-invalid': editarForm.get('series')?.invalid && editarForm.get('series')?.touched}" />
+        </div>
+        <div class="col-6">
+          <label class="form-label text-warning fw-semibold small">Repeticiones</label>
+          <input type="text" formControlName="repeticiones" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+                 [ngClass]="{'is-invalid': editarForm.get('repeticiones')?.invalid && editarForm.get('repeticiones')?.touched}" />
+        </div>
       </div>
 
       <div class="mb-4">
-        <label class="form-label text-warning fw-semibold small">Nueva Imagen (Opcional)</label>
+        <label class="form-label text-warning fw-semibold small">Nuevo GIF (Opcional)</label>
         <input type="file" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
                accept="image/*" (change)="onFileSelected($event)" />
         
-        <div *ngIf="productoSeleccionado?.imagenUrl" class="mt-2 text-center">
-          <small class="text-white-50 d-block mb-1">Imagen actual:</small>
-          <img [src]="productoSeleccionado.imagenUrl" class="img-preview rounded"
+        <div *ngIf="ejercicioSeleccionado?.imagenUrl" class="mt-2 text-center">
+          <small class="text-white-50 d-block mb-1">GIF actual:</small>
+          <img [src]="ejercicioSeleccionado.imagenUrl" class="img-preview rounded"
                (error)="$any($event.target).src='https://placehold.co/120x80'" style="max-height: 80px;" />
         </div>
       </div>
@@ -98,7 +105,7 @@
           <i class="bi bi-check-lg me-1"></i> Actualizar
         </button>
         <button type="button" class="btn btn-outline-danger fw-bold py-2"
-                (click)="eliminarProducto()">
+                (click)="eliminarEjercicio()">
           <i class="bi bi-trash3"></i>
         </button>
       </div>
@@ -115,7 +122,7 @@
             <i class="bi bi-search"></i>
           </span>
           <input type="text" class="form-control bg-dark border-secondary text-light shadow-none"
-                 placeholder="Buscar producto..."
+                 placeholder="Buscar ejercicio..."
                  [(ngModel)]="textoBusqueda"
                  (input)="aplicarFiltros()" />
         </div>
@@ -123,48 +130,43 @@
 
       <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
               style="max-width: 160px;"
-              [(ngModel)]="filtroCategoria"
+              [(ngModel)]="filtroGrupo"
               (change)="aplicarFiltros()">
-        <option value="">Todas las categorías</option>
-        <option *ngFor="let cat of categorias" [value]="cat">{{ cat | titlecase }}</option>
+        <option value="">Todos los grupos</option>
+        <option *ngFor="let g of gruposMusculares" [value]="g">{{ g | titlecase }}</option>
       </select>
 
       <button class="btn btn-outline-secondary btn-sm" (click)="limpiarFiltros()"
-              *ngIf="textoBusqueda || filtroCategoria">
+              *ngIf="textoBusqueda || filtroGrupo">
         <i class="bi bi-x-circle me-1"></i> Limpiar
       </button>
 
       <span class="text-white-50 small ms-auto">
-        {{ productosFiltrados.length }} producto(s)
+        {{ ejerciciosFiltrados.length }} ejercicio(s)
       </span>
     </div>
 
-    <div *ngIf="productosFiltrados.length === 0" class="text-center text-white-50 py-5">
-      <i class="bi bi-box-seam fs-1 mb-3 d-block opacity-50"></i>
-      <p class="mb-0">No se encontraron productos.</p>
+    <div *ngIf="ejerciciosFiltrados.length === 0" class="text-center text-white-50 py-5">
+      <i class="bi bi-person-walking fs-1 mb-3 d-block opacity-50"></i>
+      <p class="mb-0">No se encontraron ejercicios.</p>
     </div>
 
     <div class="products-grid">
-      <div *ngFor="let prod of productosFiltrados"
+      <div *ngFor="let ejer of ejerciciosFiltrados"
            class="product-card"
-           [ngClass]="{ 'product-card--selected': productoSeleccionado?._id === prod._id || productoSeleccionado?.id === prod.id, 'product-card--inactive': !prod.activo }"
-           (click)="seleccionarProducto(prod)">
+           [ngClass]="{ 'product-card--selected': ejercicioSeleccionado?._id === ejer._id || ejercicioSeleccionado?.id === ejer.id }"
+           (click)="seleccionarEjercicio(ejer)">
 
         <div class="product-img-wrapper">
-          <img [src]="prod.imagenUrl" class="product-img"
+          <img [src]="ejer.imagenUrl" class="product-img"
                (error)="$any($event.target).src='https://placehold.co/200x140'" />
-          <span class="badge-categoria">{{ prod.categoria | titlecase }}</span>
+          <span class="badge-categoria">{{ ejer.grupoMuscular | titlecase }}</span>
         </div>
 
         <div class="product-info">
-          <h6 class="product-name">{{ prod.nombre }}</h6>
+          <h6 class="product-name">{{ ejer.nombre }}</h6>
           <div class="product-footer">
-            <span class="product-precio">S/ {{ prod.precio | number:'1.2-2' }}</span>
-            <button class="btn btn-xs fw-bold"
-                    [ngClass]="prod.activo ? 'btn-outline-success' : 'btn-outline-danger'"
-                    (click)="$event.stopPropagation(); toggleDisponibilidad(prod)">
-              {{ prod.activo ? 'Disponible' : 'Agotado' }}
-            </button>
+            <span class="product-precio">{{ ejer.series }}x{{ ejer.repeticiones }}</span>
           </div>
         </div>
 

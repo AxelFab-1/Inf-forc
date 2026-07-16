@@ -1,0 +1,136 @@
+<div class="body-app bg-dark text-white" style="padding-bottom: 80px; padding-top: 85px; min-height: 100vh;">
+  <app-header></app-header>
+
+  <main class="container">
+    <div class="d-flex align-items-center gap-3 mb-4 mt-3">
+      <a routerLink="/dashboard" class="btn btn-link text-white-50 p-0 text-decoration-none">
+        <i class="bi bi-arrow-left fs-5"></i>
+      </a>
+      <h2 class="fw-bold mb-0" style="color: #ffd700;">Mi Perfil</h2>
+    </div>
+
+    <div *ngIf="cargando" class="text-center py-5">
+      <div class="spinner-border text-warning" role="status"></div>
+      <p class="mt-3 text-white-50 small">Cargando tus datos...</p>
+    </div>
+
+    <div *ngIf="errorMensaje" class="alert alert-danger" role="alert">
+      {{ errorMensaje }}
+    </div>
+
+    <div *ngIf="exitoMensaje" class="alert alert-success" role="alert">
+      {{ exitoMensaje }}
+    </div>
+
+    <div class="row g-4" *ngIf="!cargando && usuario">
+      
+      <!-- Lado Izquierdo: Identidad y Foto -->
+      <div class="col-12 col-md-5 col-lg-4">
+        <div class="card bg-dark border-secondary h-100 shadow-sm rounded-4 text-center p-4" style="background-color: #1a1a1a !important;">
+          <div class="position-relative d-inline-block mx-auto mb-3">
+            <img [src]="avatarUrl" alt="Foto de Perfil" class="rounded-circle shadow" width="150" height="150" style="object-fit: cover; border: 3px solid #ffd700;">
+            
+            <!-- Botón sobre la foto -->
+            <button class="btn btn-sm btn-dark position-absolute bottom-0 end-0 rounded-circle border border-warning" 
+                    style="width: 40px; height: 40px; color: #ffd700;" 
+                    (click)="triggerFileInput()"
+                    [disabled]="subiendoFoto">
+              <i class="bi" [ngClass]="subiendoFoto ? 'bi-hourglass-split' : 'bi-camera-fill'"></i>
+            </button>
+            <input type="file" #fileInput class="d-none" accept="image/*" (change)="onFileSelected($event)">
+          </div>
+
+          <h4 class="fw-bold text-white mb-1">{{ usuario.nombres }}</h4>
+          <h5 class="text-white-50 fw-light mb-3">{{ usuario.apellidos }}</h5>
+
+          <span class="badge w-100 py-2 mb-2 fs-6" 
+                [ngClass]="usuario.estadoMembresia === 'Activa' ? 'bg-success' : 'bg-danger'">
+            Membresía {{ usuario.estadoMembresia || 'Inactiva' }}
+          </span>
+
+          <div class="mt-4 p-3 rounded-3" style="background-color: #252525;">
+            <i class="bi bi-fire fs-1" style="color: #ffd700;"></i>
+            <h2 class="fw-bold mb-0 text-white">{{ usuario.totalAsistencias || 0 }}</h2>
+            <small class="text-white-50">Entrenamientos Totales</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lado Derecho: Datos Personales y Biometría -->
+      <div class="col-12 col-md-7 col-lg-8">
+        
+        <!-- Tarjeta de Datos Personales -->
+        <div class="card bg-dark border-secondary mb-4 shadow-sm rounded-4" style="background-color: #1a1a1a !important;">
+          <div class="card-header border-secondary bg-transparent py-3">
+            <h5 class="fw-bold text-warning mb-0"><i class="bi bi-person-lines-fill me-2"></i>Datos Vitales</h5>
+          </div>
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-6 col-md-4">
+                <small class="text-white-50 d-block">DNI</small>
+                <span class="fw-bold text-white">{{ usuario.dni }}</span>
+              </div>
+              <div class="col-6 col-md-4">
+                <small class="text-white-50 d-block">Fecha Nacimiento</small>
+                <span class="fw-bold text-white">{{ (usuario.fechaNacimiento | date:'dd/MM/yyyy') || 'No registrada' }}</span>
+              </div>
+              <div class="col-6 col-md-4">
+                <small class="text-white-50 d-block">Sexo</small>
+                <span class="fw-bold text-white">{{ usuario.sexo === 'M' ? 'Masculino' : (usuario.sexo === 'F' ? 'Femenino' : 'No registrado') }}</span>
+              </div>
+              <div class="col-6 col-md-4">
+                <small class="text-white-50 d-block">Sede Actual</small>
+                <span class="fw-bold text-white">{{ usuario.sede }}</span>
+              </div>
+              <div class="col-6 col-md-4">
+                <small class="text-white-50 d-block">Estatura</small>
+                <span class="fw-bold text-white">{{ usuario.estaturaCm ? usuario.estaturaCm + ' cm' : 'No registrada' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjeta de Último Registro Biométrico -->
+        <div class="card bg-dark border-secondary shadow-sm rounded-4" style="background-color: #1a1a1a !important;">
+          <div class="card-header border-secondary bg-transparent py-3 d-flex justify-content-between align-items-center">
+            <h5 class="fw-bold text-warning mb-0"><i class="bi bi-activity me-2"></i>Físico y Objetivos</h5>
+            <a routerLink="/nutricion" class="btn btn-sm btn-outline-warning">Actualizar</a>
+          </div>
+          <div class="card-body">
+            <div *ngIf="ultimoRegistro" class="row g-3">
+              <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3 text-center" style="background-color: #252525;">
+                  <small class="text-white-50 d-block">Peso</small>
+                  <span class="fw-bold fs-5 text-white">{{ ultimoRegistro.pesoKg }} kg</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="p-3 rounded-3 text-center" style="background-color: #252525;">
+                  <small class="text-white-50 d-block">IMC</small>
+                  <span class="fw-bold fs-5" [ngClass]="ultimoRegistro.imcCalculado > 25 ? 'text-danger' : 'text-success'">
+                    {{ ultimoRegistro.imcCalculado | number:'1.1-1' }}
+                  </span>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <div class="p-3 rounded-3 h-100 d-flex flex-column justify-content-center" style="background-color: #252525;">
+                  <small class="text-white-50 d-block">Objetivo Actual</small>
+                  <span class="fw-bold fs-5 text-warning">{{ ultimoRegistro.objetivo }}</span>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="!ultimoRegistro" class="text-center text-white-50 py-4">
+              <i class="bi bi-clipboard-x fs-1 mb-2"></i>
+              <p>Aún no tienes un registro biométrico.</p>
+              <a routerLink="/nutricion" class="text-warning">Ir a calcular mi IMC</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <app-footer-menu></app-footer-menu>
+</div>

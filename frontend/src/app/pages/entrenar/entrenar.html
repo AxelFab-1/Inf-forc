@@ -1,27 +1,128 @@
-<div class="body-app bg-dark" style="padding-bottom: 80px; padding-top: 85px; min-height: 100vh">
+<div class="body-app bg-dark" style="padding-bottom: 85px; padding-top: 85px; min-height: 100vh">
   <app-header></app-header>
 
   <main class="container">
-    <div class="mt-3">
-      <h2 class="fw-bold mb-4 text-gold">Zona de Entrenamiento</h2>
+    <div class="mt-2">
+      <h2 class="fw-bold mb-4 text-gold" style="color: #ffd700;">Gestor de Rutinas</h2>
 
-      <div class="row g-4">
-        <div class="col-12 col-md-6">
-          <a routerLink="/rutinas" class="card-seleccion-grande text-decoration-none">
-            <i class="bi bi-lightning-charge-fill"></i>
-            <h3>Rutinas</h3>
-          </a>
+      <div *ngIf="cargandoRutina" class="text-center py-5">
+        <div class="spinner-border text-warning" role="status"></div>
+        <p class="text-white-50 mt-3 small">Cargando tu rutina...</p>
+      </div>
+
+      <!-- Sección 1: Tu Rutina Actual -->
+      <section *ngIf="!cargandoRutina" class="mb-5">
+        <h5 class="text-white fw-bold mb-3"><i class="bi bi-star-fill me-2 text-warning"></i>Tu Rutina Actual</h5>
+        
+        <div class="card p-4 text-center shadow-lg hero-card">
+          <div *ngIf="rutinaActiva">
+            <h3 class="fw-bold text-white mb-1">{{ rutinaActiva.nombreOriginal }}</h3>
+            <p class="text-warning fw-semibold mb-4 fs-5">{{ diaElegido?.nombreDia || 'Día' }}</p>
+            
+            <button class="btn btn-warning w-100 fw-bold py-3 fs-5 btn-iniciar" (click)="iniciarEntrenamiento()">
+              <i class="bi bi-play-circle-fill me-2"></i> Iniciar Entrenamiento
+            </button>
+            
+            <div class="mt-3">
+              <a [routerLink]="['/armar-rutina', 'mi-rutina']" class="text-white-50 text-decoration-none small hover-warning">
+                <i class="bi bi-pencil-square me-1"></i> Editar Rutina
+              </a>
+              <span class="mx-2 text-white-50">|</span>
+              <button class="btn btn-link text-white-50 text-decoration-none small hover-warning p-0" (click)="abrirModalInfo()">
+                <i class="bi bi-info-circle me-1"></i> Ver mi rutina
+              </button>
+            </div>
+          </div>
+          
+          <div *ngIf="!rutinaActiva" class="py-3">
+            <i class="bi bi-clipboard-x fs-1 text-white-50 mb-3 d-block"></i>
+            <h5 class="text-white">No tienes una rutina activa</h5>
+            <p class="text-white-50 small mb-4">Explora las plantillas o crea una nueva para empezar a entrenar.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sección 2: Explorar (Grid 1x2) -->
+      <section *ngIf="!cargandoRutina">
+        <h5 class="text-white fw-bold mb-3"><i class="bi bi-compass me-2 text-warning"></i>Explorar</h5>
+        <div class="row g-3">
+          <div class="col-6">
+            <a routerLink="/rutinas" class="card-explorar text-decoration-none">
+              <div class="icon-wrapper">
+                <i class="bi bi-ui-checks-grid"></i>
+              </div>
+              <h6 class="mt-2 mb-0 fw-bold">Plantillas / Nueva Rutina</h6>
+            </a>
+          </div>
+
+          <div class="col-6">
+            <a routerLink="/biblioteca-ejercicios" class="card-explorar text-decoration-none">
+              <div class="icon-wrapper">
+                <i class="bi bi-journal-bookmark"></i>
+              </div>
+              <h6 class="mt-2 mb-0 fw-bold">Biblioteca de Ejercicios</h6>
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Modal Info Mi Rutina -->
+  <div class="modal fade" id="infoMiRutinaModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content text-white border-secondary" style="background-color: #1a1a1a;">
+        <div class="modal-header border-secondary">
+          <h5 class="modal-title fw-bold" style="color: #ffd700;">
+            <i class="bi bi-card-list me-2"></i>Detalles de mi Rutina
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
         </div>
 
-        <div class="col-12 col-md-6">
-          <a routerLink="/nutricion" class="card-seleccion-grande text-decoration-none">
-            <i class="bi bi-egg-fried"></i>
-            <h3>Nutrición</h3>
-          </a>
+        <div class="modal-body" *ngIf="rutinaEnModal">
+          <h4 class="fw-bold mb-3">{{ rutinaEnModal.nombreOriginal }}</h4>
+          
+          <div class="accordion accordion-flush" id="accordionDiasMiRutina">
+            <div class="accordion-item bg-transparent" *ngFor="let dia of rutinaEnModal.dias; let i = index" style="border: none;">
+              <h2 class="accordion-header" [id]="'headingDiaMiRutina' + i">
+                <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" 
+                        [attr.data-bs-target]="'#collapseDiaMiRutina' + i" style="background-color: #252525; color: #fff; border-bottom: 1px solid #333;">
+                  {{ dia.nombreDia }}
+                </button>
+              </h2>
+              <div [id]="'collapseDiaMiRutina' + i" class="accordion-collapse collapse" [attr.data-bs-parent]="'#accordionDiasMiRutina'">
+                <div class="accordion-body" style="background-color: #1a1a1a; border-left: 2px solid #ffd700; padding: 1rem 0;">
+                  
+                  <div *ngIf="!dia.ejerciciosBase || dia.ejerciciosBase.length === 0" class="text-white-50 small ms-3">
+                    No hay ejercicios asignados.
+                  </div>
+
+                  <div *ngFor="let ej of dia.ejerciciosBase" class="d-flex align-items-center gap-3 mb-3 px-3">
+                    <div class="rounded overflow-hidden" style="width: 70px; height: 70px; background-color: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid #333;">
+                      <img *ngIf="ej.imagenUrl" [src]="ej.imagenUrl" alt="GIF de {{ ej.nombre }}" 
+                           style="width: 100%; height: 100%; object-fit: contain;">
+                      <i *ngIf="!ej.imagenUrl" class="bi bi-image text-white-50 fs-4"></i>
+                    </div>
+                    <div>
+                      <p class="fw-bold mb-0 text-white">{{ ej.nombre }}</p>
+                      <small class="text-white-50">{{ ej.grupoMuscular || 'Grupo' }}</small>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer border-secondary">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
   <app-footer-menu></app-footer-menu>
 </div>

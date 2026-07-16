@@ -33,7 +33,10 @@ public class Producto {
     @NotBlank(message = "La URL de la imagen es obligatoria")
     private String imagenUrl; 
     
+    private String publicId;
+    
     private boolean activo = true;
+
 
 
     public String getId() { return id; }
@@ -56,6 +59,9 @@ public class Producto {
 
     public String getImagenUrl() { return imagenUrl; }
     public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
+
+    public String getPublicId() { return publicId; }
+    public void setPublicId(String publicId) { this.publicId = publicId; }
 
     public boolean isActivo() { return activo; }
     public void setActivo(boolean activo) { this.activo = activo; }

@@ -19,7 +19,8 @@
         private Integer series;     
         private String repeticiones; 
 
-        private String imagenUrl;    
+        private String imagenUrl;
+        private String publicId;    
         private String videoUrl;     
 
 
@@ -55,6 +56,9 @@
 
         public String getImagenUrl() { return imagenUrl; }
         public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
+
+        public String getPublicId() { return publicId; }
+        public void setPublicId(String publicId) { this.publicId = publicId; }
 
         public String getVideoUrl() { return videoUrl; }
         public void setVideoUrl(String videoUrl) { this.videoUrl = videoUrl; }

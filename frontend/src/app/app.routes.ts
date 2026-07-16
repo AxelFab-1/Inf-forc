@@ -11,7 +11,11 @@ import { Rutinas } from './pages/rutinas/rutinas';
 import { SesionEntrenamiento } from './pages/sesion-entrenamiento/sesion-entrenamiento';
 import { HistorialEntrenamiento } from './pages/historial-entrenamiento/historial-entrenamiento';
 import { Nutricion } from './pages/nutricion/nutricion';
+import { Ejercicios } from './pages/ejercicios/ejercicios';
 import { AuthGuard } from './shared/guards/auth-guard';
+
+import { BibliotecaEjercicios } from './pages/biblioteca-ejercicios/biblioteca-ejercicios';
+import { Perfil } from './pages/perfil/perfil';
 
 export const routes: Routes = [
   { path: '', component: Login },
@@ -24,6 +28,8 @@ export const routes: Routes = [
   { path: 'sesion-entrenamiento',   component: SesionEntrenamiento,   canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
   { path: 'historial-entrenamiento',component: HistorialEntrenamiento,canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
   { path: 'nutricion',              component: Nutricion,             canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
+  { path: 'biblioteca-ejercicios',  component: BibliotecaEjercicios,  canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
+  { path: 'perfil',                 component: Perfil,                canActivate: [AuthGuard], data: { expectedRole: 'cliente' } },
 
   {
     path: 'admin',
@@ -34,6 +40,7 @@ export const routes: Routes = [
       { path: '',          redirectTo: 'usuarios', pathMatch: 'full' },
       { path: 'usuarios',  component: Usuarios },
       { path: 'inventario',component: Inventario },
+      { path: 'ejercicios',component: Ejercicios },
     ],
   },
 
