@@ -5,6 +5,7 @@ import { Header } from "../../shared/header/header";
 import { FooterMenu } from "../../shared/footer-menu/footer-menu";
 import { AuthService } from '../../services/auth';
 import { FormsModule } from '@angular/forms';
+import { ThemeService } from '../../services/theme';
 
 @Component({
   selector: 'app-perfil',
@@ -24,7 +25,8 @@ export class Perfil implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public themeService: ThemeService
   ) {}
 
   ngOnInit() {

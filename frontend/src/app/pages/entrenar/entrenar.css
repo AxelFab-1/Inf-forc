@@ -1,12 +1,12 @@
 .hero-card {
-  background-color: #1a1a1a;
-  border: 1px solid #333;
-  border-top: 4px solid #ffd700;
+  background-color: var(--gym-dark);
+  border: 1px solid var(--gym-border);
+  border-top: 4px solid var(--gym-gold);
   border-radius: 16px;
 }
 
 .btn-iniciar {
-  background: linear-gradient(135deg, #ffd700, #e6b800);
+  background: linear-gradient(135deg, var(--gym-gold), var(--gym-gold-hover));
   color: #000 !important;
   border: none;
   border-radius: 12px;
@@ -24,7 +24,7 @@
 }
 
 .hover-warning:hover {
-  color: #ffd700 !important;
+  color: var(--gym-gold) !important;
 }
 
 .card-explorar {
@@ -32,8 +32,8 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: #1a1a1a;
-  border: 1px solid #333;
+  background-color: var(--gym-dark);
+  border: 1px solid var(--gym-border);
   border-radius: 16px;
   padding: 1.5rem 1rem;
   text-align: center;
@@ -43,14 +43,14 @@
 }
 
 .card-explorar:hover {
-  background-color: #222;
-  border-color: #ffd700;
+  background-color: var(--gym-dark-secondary);
+  border-color: var(--gym-gold);
   transform: translateY(-3px);
 }
 
 .card-explorar .icon-wrapper {
   background-color: rgba(255, 215, 0, 0.1);
-  color: #ffd700;
+  color: var(--gym-gold);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -65,3 +65,5 @@
 .card-explorar:hover .icon-wrapper {
   transform: scale(1.1);
 }
+
+

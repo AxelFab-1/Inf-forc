@@ -17,6 +17,8 @@ import { FooterMenu } from '../../shared/footer-menu/footer-menu';
 export class Nutricion implements OnInit, AfterViewChecked {
 
   @ViewChild('chatScroll') chatScroll!: ElementRef;
+  @ViewChild('inputGaleria') inputGaleria!: ElementRef<HTMLInputElement>;
+  @ViewChild('inputCamara')  inputCamara!:  ElementRef<HTMLInputElement>;
 
   cargando: boolean = true;
 
@@ -252,7 +254,18 @@ export class Nutricion implements OnInit, AfterViewChecked {
     };
     lector.readAsDataURL(this.archivoSeleccionado);
 
+    // Resetear el input para permitir seleccionar el mismo archivo de nuevo
     input.value = '';
+  }
+
+  /** Abre el selector de galería (sin captura) */
+  triggerGaleria(): void {
+    this.inputGaleria?.nativeElement.click();
+  }
+
+  /** Abre la cámara del dispositivo */
+  triggerCamara(): void {
+    this.inputCamara?.nativeElement.click();
   }
 
   quitarImagenSeleccionada() {

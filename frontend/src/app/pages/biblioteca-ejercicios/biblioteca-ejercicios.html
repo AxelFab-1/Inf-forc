@@ -1,60 +1,60 @@
-<div class="body-app bg-dark" style="padding-top: 85px; min-height: 100vh;">
+<div class="body-app bg-gym-dark" style="padding-top: 85px; min-height: 100vh;">
   <app-header></app-header>
 
   <main class="container py-3">
     
     <div class="d-flex align-items-center mb-3">
-      <button class="btn btn-link text-warning p-0 me-3 fs-3" (click)="volverAEntrenar()">
+      <button class="btn btn-link text-gold p-0 me-3 fs-3" (click)="volverAEntrenar()">
         <i class="bi bi-arrow-left-short"></i>
       </button>
-      <h2 class="fw-bold mb-0 text-gold" style="color: #ffd700;">Biblioteca de Ejercicios</h2>
+      <h2 class="fw-bold mb-0 text-gold">Biblioteca de Ejercicios</h2>
     </div>
 
     <div class="mb-4">
       <div class="input-group">
-        <span class="input-group-text bg-dark border-secondary text-warning">
+        <span class="input-group-text bg-gym-dark-secondary border-gym text-gold">
           <i class="bi bi-search"></i>
         </span>
-        <input type="text" class="form-control bg-dark border-secondary text-white shadow-none" 
+        <input type="text" class="form-control bg-gym-dark-secondary border-gym text-dark shadow-none" 
                placeholder="Buscar ejercicio..." [(ngModel)]="terminoBusqueda" (input)="aplicarFiltros()">
       </div>
     </div>
 
     <div class="scroll-horizontal mb-4 pb-2">
       <button class="btn rounded-pill me-2 fw-bold" 
-              [ngClass]="filtroActual === 'todos' ? 'btn-warning text-dark' : 'btn-outline-secondary text-white'"
+              [ngClass]="filtroActual === 'todos' ? 'bg-gold text-dark border-gold' : 'btn-outline-dark text-muted'"
               (click)="filtrarPorCategoria('todos')">
         Todos
       </button>
       <button *ngFor="let cat of categorias" class="btn rounded-pill me-2 fw-bold"
-              [ngClass]="filtroActual === cat ? 'btn-warning text-dark' : 'btn-outline-secondary text-white'"
+              [ngClass]="filtroActual === cat ? 'bg-gold text-dark border-gold' : 'btn-outline-dark text-muted'"
               (click)="filtrarPorCategoria(cat)">
         {{ cat }}
       </button>
     </div>
 
     <div *ngIf="cargando" class="text-center py-5">
-      <div class="spinner-border text-warning" role="status"></div>
-      <p class="text-white-50 mt-3 small">Cargando ejercicios...</p>
+      <div class="spinner-border text-gold" role="status"></div>
+      <p class="text-muted mt-3 small">Cargando ejercicios...</p>
     </div>
 
-    <div *ngIf="!cargando && ejerciciosFiltrados.length === 0" class="text-center py-5 text-white-50">
-      <i class="bi bi-search fs-1 mb-3 d-block opacity-50 text-warning"></i>
+    <div *ngIf="!cargando && ejerciciosFiltrados.length === 0" class="text-center py-5 text-muted">
+      <i class="bi bi-search fs-1 mb-3 d-block opacity-50 text-gold"></i>
       <p>No se encontraron ejercicios con estos filtros.</p>
     </div>
 
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 mb-5" *ngIf="!cargando">
       <div class="col" *ngFor="let ej of ejerciciosFiltrados">
-        <div class="card bg-dark border-secondary h-100 shadow-sm rounded-4 overflow-hidden ejercicio-card-bib">
+        <div class="card bg-gym-dark border-gym h-100 shadow-sm rounded-4 overflow-hidden ejercicio-card-bib">
           <div class="gif-container bg-black">
             <img *ngIf="ej.imagenUrl" [src]="ej.imagenUrl" [alt]="ej.nombre" class="img-fluid" />
             <div *ngIf="!ej.imagenUrl" class="h-100 w-100 d-flex align-items-center justify-content-center opacity-50">
-              <i class="bi bi-image fs-1 text-white-50"></i>
+              <i class="bi bi-image fs-1 text-muted"></i>
             </div>
           </div>
-          <div class="card-body">
-            <h5 class="fw-bold text-white mb-1">{{ ej.nombre }}</h5>
-            <span class="badge bg-warning text-dark me-2">{{ ej.grupoMuscular || 'General' }}</span>
+          <div class="card-body bg-gym-dark-secondary">
+            <h5 class="fw-bold text-dark mb-1">{{ ej.nombre }}</h5>
+            <span class="badge bg-gold text-dark me-2">{{ ej.grupoMuscular || 'General' }}</span>
             <span *ngIf="ej.maquina" class="badge bg-secondary text-white"><i class="bi bi-gear-fill me-1"></i>Máquina</span>
             <span *ngIf="!ej.maquina" class="badge bg-secondary text-white"><i class="bi bi-person-fill me-1"></i>Libre</span>
           </div>

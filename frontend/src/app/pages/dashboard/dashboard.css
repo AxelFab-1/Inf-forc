@@ -14,26 +14,26 @@
   border-radius: 50%;
   font-size: 0.85rem;
   font-weight: 500;
-  color: #aaa;
+  color: var(--gym-text-muted);
   cursor: default;
   transition: background-color 0.2s ease;
 }
 
 .dia-calendario.dia-actual {
-  border: 2px solid #ffd700;
-  color: #ffd700;
+  border: 2px solid var(--gym-gold);
+  color: var(--gym-gold-text);
   font-weight: 700;
 }
 
 .dia-calendario.dia-entrenado {
-  background-color: #2a6b2a;
-  color: #8eff8e;
+  background-color: var(--gym-success-dark);
+  color: var(--gym-dark);
   font-weight: 700;
 }
 
 .dia-calendario.dia-hoy-entrenado {
-  background-color: #2a6b2a;
-  border: 2px solid #ffd700;
-  color: #ffd700;
+  background-color: var(--gym-success-dark);
+  border: 2px solid var(--gym-gold);
+  color: var(--gym-dark);
   font-weight: 700;
 }

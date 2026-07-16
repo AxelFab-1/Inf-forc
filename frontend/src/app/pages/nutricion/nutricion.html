@@ -6,16 +6,16 @@
 </div>
 
 <div *ngIf="cargando" class="loading-screen">
-  <div class="spinner-border text-warning" role="status"></div>
-  <p class="text-white-50 mt-3 small">Cargando tu perfil nutricional...</p>
+  <div class="spinner-border text-gold" role="status"></div>
+  <p class="text-muted mt-3 small">Cargando tu perfil nutricional...</p>
 </div>
 
 <div *ngIf="!cargando && tienePerfil && ultimoRegistro" class="nutricion-container">
 
   <div class="page-header mb-4">
     <div>
-      <h2 class="page-title">Mi Nutrición</h2>
-      <p class="text-white-50 mb-0 small">Basado en la fórmula de Mifflin-St Jeor con factor de actividad.</p>
+      <h2 class="page-title text-gold">Mi Nutrición</h2>
+      <p class="text-muted mb-0 small">Basado en la fórmula de Mifflin-St Jeor con factor de actividad.</p>
     </div>
     <button class="btn btn-update fw-bold" (click)="abrirModalActualizar()">
       <i class="bi bi-arrow-repeat me-2"></i>Actualizar datos
@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="disclaimer-box">
-        <i class="bi bi-info-circle me-2 text-warning"></i>
+        <i class="bi bi-info-circle me-2 text-gold"></i>
         <span>Esta es una recomendación inicial. El IMC no tiene en cuenta el índice de masa muscular ni de grasa
           corporal...</span>
       </div>
@@ -100,7 +100,7 @@
   <div class="chat-panel" (click)="$event.stopPropagation()">
 
     <div class="chat-panel-header">
-      <span><i class="bi bi-robot me-2" style="color:#ffd700;"></i>Asistente de Nutrición IA</span>
+      <span><i class="bi bi-robot me-2 text-gold"></i>Asistente de Nutrición IA</span>
       <button class="btn-close-modal" (click)="toggleChat()"><i class="bi bi-x-lg"></i></button>
     </div>
 
@@ -108,8 +108,8 @@
 
       <div class="chat-mensajes" #chatScroll>
 
-        <div *ngIf="!cargandoHistorial && mensajes.length === 0" class="chat-vacio">
-          <i class="bi bi-robot fs-1 opacity-50" style="color:#ffd700;"></i>
+        <div *ngIf="!cargandoHistorial && mensajes.length === 0" class="chat-vacio text-center text-muted">
+          <i class="bi bi-robot fs-1 opacity-50 text-gold"></i>
           <p class="small mb-0">Pregúntame sobre tu nutrición, sube una foto de tu comida,<br>o cuéntame qué comiste
             hoy.</p>
         </div>
@@ -129,17 +129,36 @@
 
       <div *ngIf="previewImagenSeleccionada" class="chat-preview-imagen">
         <img [src]="previewImagenSeleccionada" alt="Vista previa" />
-        <span class="text-white-50 small">Imagen lista para enviar</span>
+        <span class="text-muted small">Imagen lista para enviar</span>
         <button class="quitar-preview" (click)="quitarImagenSeleccionada()">
           <i class="bi bi-x-circle-fill"></i>
         </button>
       </div>
 
       <div class="chat-input-bar">
-        <label class="chat-btn-icono" title="Subir o tomar foto">
+        <!-- Botón Galería -->
+        <button class="chat-btn-icono" type="button"
+                title="Elegir desde galería"
+                [disabled]="enviandoMensaje"
+                (click)="triggerGaleria()">
+          <i class="bi bi-image"></i>
+        </button>
+        <!-- Input oculto: galería -->
+        <input #inputGaleria type="file" accept="image/*"
+               (change)="onImagenSeleccionada($event)"
+               class="chat-input-oculto" />
+
+        <!-- Botón Cámara -->
+        <button class="chat-btn-icono" type="button"
+                title="Tomar foto"
+                [disabled]="enviandoMensaje"
+                (click)="triggerCamara()">
           <i class="bi bi-camera-fill"></i>
-          <input type="file" accept="image/*" capture="environment" (change)="onImagenSeleccionada($event)" hidden />
-        </label>
+        </button>
+        <!-- Input oculto: cámara -->
+        <input #inputCamara type="file" accept="image/*" capture="environment"
+               (change)="onImagenSeleccionada($event)"
+               class="chat-input-oculto" />
 
         <input type="text" placeholder="Escribe tu mensaje..." [(ngModel)]="textoInput" (keydown)="onEnterInput($event)"
           [disabled]="enviandoMensaje" />
@@ -154,19 +173,19 @@
   </div>
 </div>
 
-<div *ngIf="!cargando && !tienePerfil" class="empty-state">
-  <i class="bi bi-clipboard2-pulse fs-1 mb-3 d-block opacity-50" style="color:#ffd700;"></i>
-  <h5 class="text-white">Completa tu primera evaluación</h5>
-  <p class="text-white-50 small">Necesitamos algunos datos para calcular tu plan nutricional.</p>
+<div *ngIf="!cargando && !tienePerfil" class="empty-state text-center text-muted">
+  <i class="bi bi-clipboard2-pulse fs-1 mb-3 d-block opacity-50 text-gold"></i>
+  <h5 class="text-dark">Completa tu primera evaluación</h5>
+  <p class="text-muted small">Necesitamos algunos datos para calcular tu plan nutricional.</p>
   <button class="btn btn-update mt-2" (click)="mostrarModalPrimeraVez = true">
     <i class="bi bi-plus-circle me-2"></i>Iniciar evaluación
   </button>
 </div>
 
 <div class="modal-overlay" *ngIf="mostrarModalPrimeraVez" (click)="cerrarModalPrimeraVez()">
-  <div class="modal-card" (click)="$event.stopPropagation()">
-    <div class="modal-card-header">
-      <h5 class="mb-0 fw-bold"><i class="bi bi-clipboard2-pulse me-2" style="color:#ffd700;"></i>Primera Evaluación
+  <div class="modal-card bg-gym-dark text-dark border-gym" (click)="$event.stopPropagation()">
+    <div class="modal-card-header border-gym">
+      <h5 class="mb-0 fw-bold"><i class="bi bi-clipboard2-pulse me-2 text-gold"></i>Primera Evaluación
         Nutricional</h5>
       <button class="btn-close-modal" (click)="cerrarModalPrimeraVez()"><i class="bi bi-x-lg"></i></button>
     </div>
@@ -177,9 +196,9 @@
     <form [formGroup]="primeraForm" (ngSubmit)="guardarPrimeraEvaluacion()" novalidate>
       <div class="row g-3 mb-3">
         <div class="col-12 col-md-6">
-          <label class="form-label text-warning fw-semibold small">Sexo</label>
+          <label class="form-label text-gold fw-semibold small">Sexo</label>
           <select formControlName="sexo"
-            class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+            class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
             [ngClass]="{'is-invalid': primeraForm.get('sexo')?.invalid && primeraForm.get('sexo')?.touched}">
             <option value="" disabled selected>Selecciona...</option>
             <option value="masculino">Masculino</option>
@@ -187,34 +206,34 @@
           </select>
         </div>
         <div class="col-12 col-md-6">
-          <label class="form-label text-warning fw-semibold small">Fecha de Nacimiento</label>
+          <label class="form-label text-gold fw-semibold small">Fecha de Nacimiento</label>
           <input type="date" formControlName="fechaNacimiento"
-            class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+            class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
             [ngClass]="{'is-invalid': primeraForm.get('fechaNacimiento')?.invalid && primeraForm.get('fechaNacimiento')?.touched}" />
         </div>
       </div>
 
       <div class="row g-3 mb-3">
         <div class="col-12 col-md-6">
-          <label class="form-label text-warning fw-semibold small">Estatura (cm)</label>
+          <label class="form-label text-gold fw-semibold small">Estatura (cm)</label>
           <input type="number" formControlName="estaturaCm"
-            class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+            class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
             [ngClass]="{'is-invalid': primeraForm.get('estaturaCm')?.invalid && primeraForm.get('estaturaCm')?.touched}" />
           <div class="invalid-feedback">Estatura obligatoria (100 a 250 cm).</div>
         </div>
         <div class="col-12 col-md-6">
-          <label class="form-label text-warning fw-semibold small">Peso actual (kg)</label>
+          <label class="form-label text-gold fw-semibold small">Peso actual (kg)</label>
           <input type="number" step="0.1" formControlName="pesoKg"
-            class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+            class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
             [ngClass]="{'is-invalid': primeraForm.get('pesoKg')?.invalid && primeraForm.get('pesoKg')?.touched}" />
           <div class="invalid-feedback">Peso obligatorio (30 a 300 kg).</div>
         </div>
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Nivel de Actividad</label>
+        <label class="form-label text-gold fw-semibold small">Nivel de Actividad</label>
         <select formControlName="nivelActividad"
-          class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+          class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
           [ngClass]="{'is-invalid': primeraForm.get('nivelActividad')?.invalid && primeraForm.get('nivelActividad')?.touched}">
           <option value="" disabled selected>Selecciona...</option>
           <option value="sedentario">Sedentario (sin ejercicio)</option>
@@ -225,9 +244,9 @@
       </div>
 
       <div class="mb-4">
-        <label class="form-label text-warning fw-semibold small">Objetivo</label>
+        <label class="form-label text-gold fw-semibold small">Objetivo</label>
         <select formControlName="objetivo"
-          class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+          class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
           [ngClass]="{'is-invalid': primeraForm.get('objetivo')?.invalid && primeraForm.get('objetivo')?.touched}">
           <option value="" disabled selected>Selecciona...</option>
           <option value="Volumen">Volumen (+300 kcal)</option>
@@ -246,9 +265,9 @@
 </div>
 
 <div class="modal-overlay" *ngIf="mostrarModalActualizar" (click)="cerrarModalActualizar()">
-  <div class="modal-card modal-card--sm" (click)="$event.stopPropagation()">
-    <div class="modal-card-header">
-      <h5 class="mb-0 fw-bold"><i class="bi bi-arrow-repeat me-2" style="color:#ffd700;"></i>Actualizar Mis Datos</h5>
+  <div class="modal-card modal-card--sm bg-gym-dark text-dark border-gym" (click)="$event.stopPropagation()">
+    <div class="modal-card-header border-gym">
+      <h5 class="mb-0 fw-bold"><i class="bi bi-arrow-repeat me-2 text-gold"></i>Actualizar Mis Datos</h5>
       <button class="btn-close-modal" (click)="cerrarModalActualizar()"><i class="bi bi-x-lg"></i></button>
     </div>
 
@@ -257,17 +276,17 @@
 
     <form [formGroup]="actualizarForm" (ngSubmit)="guardarActualizacion()" novalidate>
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Nuevo Peso (kg)</label>
+        <label class="form-label text-gold fw-semibold small">Nuevo Peso (kg)</label>
         <input type="number" step="0.1" formControlName="pesoKg"
-          class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+          class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
           [ngClass]="{'is-invalid': actualizarForm.get('pesoKg')?.invalid && actualizarForm.get('pesoKg')?.touched}" />
         <div class="invalid-feedback">Ingresa un peso válido (30 a 300 kg).</div>
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Nivel de Actividad</label>
+        <label class="form-label text-gold fw-semibold small">Nivel de Actividad</label>
         <select formControlName="nivelActividad"
-          class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+          class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
           [ngClass]="{'is-invalid': actualizarForm.get('nivelActividad')?.invalid && actualizarForm.get('nivelActividad')?.touched}">
           <option value="" disabled>Selecciona...</option>
           <option value="sedentario">Sedentario</option>
@@ -278,9 +297,9 @@
       </div>
 
       <div class="mb-4">
-        <label class="form-label text-warning fw-semibold small">Objetivo</label>
+        <label class="form-label text-gold fw-semibold small">Objetivo</label>
         <select formControlName="objetivo"
-          class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+          class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
           [ngClass]="{'is-invalid': actualizarForm.get('objetivo')?.invalid && actualizarForm.get('objetivo')?.touched}">
           <option value="" disabled>Selecciona...</option>
           <option value="Volumen">Volumen (+300 kcal)</option>

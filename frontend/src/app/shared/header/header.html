@@ -1,15 +1,14 @@
-<header class="fixed-top border-bottom border-dark shadow-sm" style="background-color: #1a1a1a">
+<header class="fixed-top border-bottom border-gym shadow-sm bg-gym-dark">
   <div class="container d-flex justify-content-between align-items-center p-3">
     
     <div class="position-relative">
-      <div class="d-flex align-items-center" (click)="toggleMenu()" style="cursor: pointer;">
-        <img [src]="avatarUrl" alt="Perfil" class="rounded-circle me-2" width="45" height="45" style="object-fit: cover; border: 2px solid #ffd700;" />
-        <span class="fw-bold fs-5" style="color: #ffffff">{{ codigoSocio }}</span>
-        <i class="bi bi-caret-down-fill ms-2" style="color: #ffd700"></i>
+      <div class="d-flex align-items-center pointer-cursor" (click)="toggleMenu()">
+        <img [src]="avatarUrl" alt="Perfil" class="rounded-circle me-2 avatar-img border-gym" width="45" height="45" />
+        <span class="fw-bold fs-5 text-dark">{{ codigoSocio }}</span>
+        <i class="bi bi-caret-down-fill ms-2 text-gold"></i>
       </div>
 
-      <div *ngIf="menuAbierto" class="dropdown-menu show shadow p-0" 
-           style="position: absolute; top: 60px; left: 0; background-color: #2c2c2c; border: 1px solid #ffd700; min-width: 180px; overflow: hidden; border-radius: 8px;">
+      <div *ngIf="menuAbierto" class="dropdown-menu show shadow p-0 dropdown-custom">
         
         <a routerLink="/perfil" class="custom-dropdown-item text-decoration-none d-block">
           <i class="bi bi-person-circle me-2"></i> Mi Perfil
@@ -19,7 +18,7 @@
           <i class="bi bi-key me-2"></i> Cambiar Clave
         </button>
         
-        <hr class="dropdown-divider border-secondary m-0">
+        <hr class="dropdown-divider border-gym m-0">
         
         <button class="custom-dropdown-item text-danger" (click)="cerrarSesion()">
           <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
@@ -28,14 +27,14 @@
     </div>
     
     <div class="d-flex align-items-center">
-      <i class="bi bi-bell-fill fs-3" style="color: #ffd700; cursor: pointer" title="Notificaciones"></i>
+      <i class="bi bi-bell-fill fs-3 text-gold pointer-cursor" title="Notificaciones"></i>
     </div>
   </div>
 </header>
 
 <div *ngIf="mostrarModalCambioClave" class="modal-overlay d-flex justify-content-center align-items-center">
-  <div class="modal-content p-4 rounded shadow bg-dark border" style="width: 400px; border-color: #ffd700 !important;">
-    <h4 class="text-white mb-3">Cambiar Contraseña</h4>
+  <div class="modal-content p-4 rounded shadow bg-gym-dark border-gym-gold">
+    <h4 class="text-dark mb-3">Cambiar Contraseña</h4>
 
     <div *ngIf="mensajeModal" class="alert alert-{{mensajeModal.tipo}} py-2 mb-3 fs-6 shadow-sm" role="alert">
       {{ mensajeModal.texto }}
@@ -73,8 +72,7 @@
       <div class="d-flex justify-content-end mt-4">
         <button type="button" class="btn btn-outline-light me-2" (click)="cerrarModalCambioClave()">Cancelar</button>
         
-        <button type="submit" class="btn fw-bold" 
-                style="background-color: #ffd700; color: #000;" 
+        <button type="submit" class="btn fw-bold bg-gold" 
                 [disabled]="cambioClaveForm.invalid">
           Guardar
         </button>

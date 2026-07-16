@@ -1,33 +1,85 @@
 
 
 :root {
-    --gym-bg: #121212;         
-    --gym-dark: #1a1a1a;      
-    --gym-gold: #ffd700;       
-    --gym-gold-hover: #e6c200; 
+    /* Superficies Claras (sin blanco puro) */
+    --gym-bg: #D1D5DB;             /* Fondo general: Gray-300 */
+    --gym-dark: #F3F4F6;           /* Tarjetas y modales: Gray-100 */
+    --gym-dark-secondary: #E5E7EB; /* Header, footer: Gray-200 */
+    --gym-dark-tertiary: #D1D5DB;  /* Fondos inactivos: Gray-300 */
+    --gym-border: #9CA3AF;         /* Bordes notorios */
+    --gym-border-light: #9CA3AF;   
+    
+    /* Acento Tecnológico (Ámbar) */
+    --gym-gold: #D97706;           /* Ámbar para botones/bordes */
+    --gym-gold-hover: #B45309;     
+    --gym-gold-text: #78350F;      /* Ámbar muy oscuro (Amber-900) para textos legibles */
+    
+    /* Textos (Inversión de contraste) */
+    --gym-text-main: #030712;      /* Texto principal casi negro */
+    --gym-text-muted: #374151;     /* Texto secundario más oscuro */
+    
+    /* Estados */
+    --gym-success-light: #D1FAE5;
+    --gym-success-dark: #059669;
+    --gym-danger: #EF4444;
+    
     --font-principal: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ============================================================
+   TEMA OSCURO — se activa con data-theme="dark" en <html>
+   ============================================================ */
+[data-theme="dark"] {
+    --gym-bg: #0f0f0f;
+    --gym-dark: #1a1a1a;
+    --gym-dark-secondary: #141414;
+    --gym-dark-tertiary: #252525;
+    --gym-border: #333333;
+    --gym-border-light: #3a3a3a;
+
+    --gym-gold: #F59E0B;
+    --gym-gold-hover: #D97706;
+    --gym-gold-text: #FCD34D;   /* Ámbar claro para textos sobre fondos oscuros */
+
+    --gym-text-main: #F9FAFB;
+    --gym-text-muted: #9CA3AF;
+
+    --gym-success-light: #064e3b;
+    --gym-success-dark: #059669;
+    --gym-danger: #EF4444;
 }
 
 
 body { 
     font-family: var(--font-principal);
     background-color: var(--gym-bg); 
-    color: #ffffff; 
+    color: var(--gym-text-main); 
     margin: 0;
     opacity: 0;
     animation: fadeIn 0.5s ease-in-out forwards;
 }
 
+.bg-gym-bg { background-color: var(--gym-bg) !important; }
 .bg-gym-dark { background-color: var(--gym-dark) !important; }
-.text-gold { color: var(--gym-gold) !important; }
+.bg-gym-dark-secondary { background-color: var(--gym-dark-secondary) !important; }
+.bg-gym-dark-tertiary { background-color: var(--gym-dark-tertiary) !important; }
+.text-gold { color: var(--gym-gold-text) !important; font-weight: bold; }
 .bg-gold { 
     background-color: var(--gym-gold) !important; 
-    color: #000 !important; 
+    color: #111827 !important; /* Texto oscuro para máxima legibilidad sobre ámbar */
 }
+.border-gym { border: 1px solid var(--gym-border) !important; }
+.border-left-gold { border-left: 2px solid var(--gym-gold) !important; }
+
+/* Sobrescritura de textos globales */
+.text-dark { color: var(--gym-text-main) !important; }
+.text-white { color: var(--gym-text-main) !important; } /* Parche: cualquier text-white antiguo ahora será oscuro */
+.text-muted { color: var(--gym-text-muted) !important; }
+.text-white-50 { color: var(--gym-text-muted) !important; } /* Parche para textos secundarios antiguos */
 
 .btn-gold { 
     background-color: var(--gym-gold); 
-    color: #000; 
+    color: #111827 !important; 
     font-weight: bold; 
     border: none;
     transition: all 0.3s ease;
@@ -35,6 +87,7 @@ body {
 
 .btn-gold:hover { 
     background-color: var(--gym-gold-hover); 
+    color: #111827 !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(230, 194, 0, 0.4);
 }
@@ -50,6 +103,9 @@ body {
 
 .body-app {
     padding-bottom: 80px; 
+    padding-top: 85px; 
+    min-height: 100vh;
+    background-color: var(--gym-bg) !important; 
 }
 
 #calendarioGrid {
@@ -65,19 +121,19 @@ body {
     justify-content: center;
     border-radius: 50%; 
     font-size: 0.95rem;
-    color: #ffffff;
+    color: var(--gym-text-main);
     transition: all 0.3s ease;
     cursor: default;
 }
 .dia-actual {
     border: 2px solid var(--gym-gold);
     font-weight: bold;
-    color: var(--gym-gold);
+    color: var(--gym-gold-text);
 }
 .dia-asistido {
-    background-color: #198754 !important;
-    color: #ffffff !important;
-    border-color: #198754 !important;
+    background-color: var(--gym-success-dark) !important;
+    color: #F3F4F6 !important;
+    border-color: var(--gym-success-dark) !important;
 }
 .dias-semana span {
     width: 100%;
@@ -90,13 +146,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at top left, var(--gym-gold) 0%, var(--gym-dark) 60%, #000000 100%);
+    background: radial-gradient(circle at top left, var(--gym-gold) 0%, var(--gym-dark) 60%, var(--gym-bg) 100%);
     background-attachment: fixed;
     padding-bottom: 0; 
 }
 
 .login-card {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(243, 244, 246, 0.95); /* Usando var(--gym-dark) pero con opacidad */
     border-radius: 15px;
     padding: 2.5rem 2rem; 
     width: 90%; 
@@ -106,7 +162,7 @@ body {
 
 .help-text {
     font-size: 0.85rem;
-    color: #6c757d;
+    color: var(--gym-text-muted);
     text-align: center;
     margin-top: 15px;
 }
@@ -120,26 +176,26 @@ body {
 
 
 .custom-input {
-    background-color: #2a2a2a !important; 
-    border: 1px solid #404040 !important; 
-    color: #ffffff !important; 
+    background-color: var(--gym-dark-tertiary) !important; 
+    border: 1px solid var(--gym-border-light) !important; 
+    color: var(--gym-text-main) !important; 
     transition: all 0.3s ease;
 }
 
 .custom-input:focus {
-    background-color: #333333 !important;
+    background-color: var(--gym-dark) !important;
     border-color: var(--gym-gold) !important;
-    color: #ffffff !important;
-    box-shadow: 0 0 0 0.25rem rgba(255, 215, 0, 0.25) !important;
+    color: var(--gym-text-main) !important;
+    box-shadow: 0 0 0 0.25rem rgba(217, 119, 6, 0.25) !important;
 }
 
 select.custom-input option {
     background-color: var(--gym-dark);
-    color: #fff;
+    color: var(--gym-text-main);
 }
 
 .help-text-dark {
-    color: #888888 !important;
+    color: var(--gym-text-muted) !important;
     font-size: 0.85rem;
 }
 
@@ -147,7 +203,7 @@ select.custom-input option {
 
 .card-seleccion-grande {
     background-color: var(--gym-dark) !important;
-    border: 1px solid #333 !important;
+    border: 1px solid var(--gym-border) !important;
     border-radius: 1.5rem;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -168,32 +224,32 @@ select.custom-input option {
 
 .card-seleccion-grande i {
     font-size: 3.5rem;
-    color: var(--gym-gold);
+    color: var(--gym-gold-text);
     margin-bottom: 1rem;
 }
 
 .card-seleccion-grande h3 {
     font-weight: bold;
-    color: #ffffff;
+    color: var(--gym-text-main);
     text-transform: uppercase;
     margin: 0;
 }
 
 .routine-item-card {
     background-color: var(--gym-dark);
-    border: 1px solid #333;
+    border: 1px solid var(--gym-border);
     border-radius: 1rem;
     transition: all 0.3s ease;
 }
 
 .routine-item-card:hover {
-    border-color: #555;
+    border-color: var(--gym-border-light);
     transform: translateX(5px);
 }
 
 .badge-dificultad {
-    background-color: rgba(255, 215, 0, 0.1);
-    color: var(--gym-gold);
+    background-color: rgba(217, 119, 6, 0.1);
+    color: var(--gym-gold-text);
     border: 1px solid var(--gym-gold);
 }
 
@@ -214,7 +270,7 @@ select.custom-input option {
 .tarjeta-categoria {
     min-width: 100px;
     background-color: var(--gym-dark);
-    border: 2px solid #333;
+    border: 2px solid var(--gym-border);
     border-radius: 15px;
     transition: all 0.3s ease;
     cursor: pointer;
@@ -233,7 +289,7 @@ select.custom-input option {
 
 .card-producto {
     background-color: var(--gym-dark);
-    border: 1px solid #333;
+    border: 1px solid var(--gym-border);
     border-radius: 1rem;
     overflow: hidden;
     transition: transform 0.3s ease;
@@ -247,10 +303,52 @@ select.custom-input option {
     height: 140px;
     width: 100%;
     object-fit: contain;
-    background-color: #ffffff; 
+    background-color: var(--gym-dark); 
     padding: 15px;
 }
 
 .item-producto {
     animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Modales y Acordeones Globales (Refactorización) */
+.modal-custom-z {
+  z-index: 1055;
+}
+
+.accordion-button-custom {
+  background-color: var(--gym-dark-secondary) !important; 
+  color: var(--gym-text-main) !important; 
+  border-bottom: 1px solid var(--gym-border) !important;
+}
+
+.accordion-body-custom {
+  border-left: 2px solid var(--gym-gold) !important; 
+  padding: 1rem 0 !important;
+}
+
+.ej-img-container {
+  width: 70px; 
+  height: 70px; 
+  flex-shrink: 0; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+
+.ej-img {
+  width: 100%; 
+  height: 100%; 
+  object-fit: contain;
+}
+
+.rutinas-container {
+    min-height: 100vh;
+}
+.rutinas-main {
+    margin-top: 70px; 
+    padding-bottom: 30px; 
+    max-width: 700px; 
+    margin-left: auto; 
+    margin-right: auto;
 }

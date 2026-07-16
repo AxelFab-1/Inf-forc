@@ -3,7 +3,7 @@
   padding: 1.5rem;
   padding-top: 85px;
   padding-bottom: 85px;
-  background-color: #121212;
+  background-color: var(--gym-bg);
   min-height: 100vh;
 }
 
@@ -37,7 +37,7 @@
 .page-title {
   font-size: 1.6rem;
   font-weight: 800;
-  color: #fff;
+  color: var(--gym-text-main);
   margin: 0;
   letter-spacing: -0.5px;
 }
@@ -57,17 +57,17 @@
 
 
 .info-card {
-  background-color: #1a1a1a;
+  background-color: var(--gym-dark);
   border-radius: 14px;
   padding: 1.5rem;
-  border-top: 3px solid #ffd700;
+  border-top: 3px solid var(--gym-gold);
 }
 
 .card-badge {
   display: inline-flex;
   align-items: center;
-  background-color: rgba(255, 215, 0, 0.12);
-  color: #ffd700;
+  background-color: rgba(245, 158, 11, 0.12);
+  color: var(--gym-gold);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -89,7 +89,7 @@
   width: 110px;
   height: 110px;
   border-radius: 50%;
-  border: 4px solid #ffd700;
+  border: 4px solid var(--gym-gold);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,7 +107,7 @@
 
 .imc-label {
   font-size: 0.65rem;
-  color: #888;
+  color: var(--gym-text-muted);
   text-transform: uppercase;
   letter-spacing: 2px;
   margin-top: 2px;
@@ -122,7 +122,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.3rem 0;
-  border-bottom: 1px solid #252525;
+  border-bottom: 1px solid var(--gym-border);
 }
 
 .detail-row:last-child {
@@ -130,12 +130,12 @@
 }
 
 .detail-label {
-  color: #888;
+  color: var(--gym-text-muted);
   font-size: 0.82rem;
 }
 
 .detail-value {
-  color: #fff;
+  color: var(--gym-text-main);
   font-weight: 600;
   font-size: 0.85rem;
 }
@@ -145,7 +145,7 @@
   text-align: center;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  background-color: #111;
+  background-color: var(--gym-dark-secondary);
   border-radius: 10px;
 }
 
@@ -153,14 +153,14 @@
   display: block;
   font-size: 3rem;
   font-weight: 900;
-  color: #ffd700;
+  color: var(--gym-gold);
   line-height: 1;
 }
 
 .calories-unit {
   display: block;
   font-size: 0.8rem;
-  color: #888;
+  color: var(--gym-text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-top: 4px;
@@ -187,7 +187,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #ccc;
+  color: var(--gym-text-main);
   font-size: 0.85rem;
   font-weight: 600;
 }
@@ -201,13 +201,13 @@
 }
 
 .macro-grams {
-  color: #fff;
+  color: var(--gym-text-main);
   font-weight: 700;
   font-size: 0.9rem;
 }
 
 .macro-bar-bg {
-  background-color: #252525;
+  background-color: var(--gym-border);
   border-radius: 4px;
   height: 8px;
   overflow: hidden;
@@ -221,7 +221,7 @@
 
 .macro-pct {
   font-size: 0.72rem;
-  color: #555;
+  color: var(--gym-text-muted);
   margin-top: 3px;
   display: block;
 }
@@ -231,19 +231,19 @@
   display: flex;
   gap: 0.5rem;
   align-items: flex-start;
-  background-color: rgba(255, 215, 0, 0.06);
-  border-left: 3px solid #ffd700;
+  background-color: rgba(245, 158, 11, 0.06);
+  border-left: 3px solid var(--gym-gold);
   border-radius: 4px;
   padding: 0.75rem;
   font-size: 0.78rem;
-  color: #aaa;
+  color: var(--gym-text-muted);
   line-height: 1.5;
 }
 
 
 .btn-update {
-  background-color: #ffd700;
-  color: #000;
+  background-color: var(--gym-gold);
+  color: #111827;
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1.25rem;
@@ -252,9 +252,9 @@
 }
 
 .btn-update:hover {
-  background-color: #e6c200;
+  background-color: var(--gym-gold-hover);
   transform: translateY(-1px);
-  color: #000;
+  color: #111827;
 }
 
 .btn-update:disabled {
@@ -292,14 +292,14 @@
 }
 
 .modal-card {
-  background-color: #1e1e1e;
+  background-color: var(--gym-dark);
   border-radius: 14px;
   padding: 1.75rem;
   width: 100%;
   max-width: 560px;
   max-height: 90vh;
   overflow-y: auto;
-  border-top: 3px solid #ffd700;
+  border-top: 3px solid var(--gym-gold);
   animation: slideUp 0.25s ease;
 }
 
@@ -324,7 +324,7 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 1.25rem;
-  color: #fff;
+  color: var(--gym-text-main);
 }
 
 .btn-close-modal {
@@ -339,8 +339,8 @@
 }
 
 .btn-close-modal:hover {
-  color: #fff;
-  background-color: #333;
+  color: var(--gym-text-main);
+  background-color: var(--gym-border);
 }
 
 /* ===== CHAT NUTRICIÓN IA ===== */
@@ -367,7 +367,7 @@
 }
 
 .chat-mensajes::-webkit-scrollbar-thumb {
-  background-color: #333;
+  background-color: var(--gym-border);
   border-radius: 10px;
 }
 
@@ -383,15 +383,15 @@
 
 .chat-burbuja-usuario {
   align-self: flex-end;
-  background-color: #ffd700;
-  color: #000;
+  background-color: var(--gym-gold);
+  color: #111827;
   border-bottom-right-radius: 4px;
 }
 
 .chat-burbuja-ia {
   align-self: flex-start;
-  background-color: #232323;
-  color: #eee;
+  background-color: var(--gym-bg);
+  color: var(--gym-text-main);
   border-bottom-left-radius: 4px;
 }
 
@@ -411,7 +411,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: #666;
+  color: var(--gym-text-muted);
   gap: 0.5rem;
 }
 
@@ -420,7 +420,7 @@
   display: flex;
   gap: 4px;
   padding: 0.7rem 1rem;
-  background-color: #232323;
+  background-color: var(--gym-bg);
   border-radius: 14px;
   border-bottom-left-radius: 4px;
 }
@@ -460,7 +460,7 @@
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  background-color: #111;
+  background-color: var(--gym-dark-secondary);
   border-radius: 10px;
   padding: 0.5rem 0.75rem;
   margin-bottom: 0.6rem;
@@ -486,7 +486,7 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background-color: #111;
+  background-color: var(--gym-dark-secondary);
   border-radius: 24px;
   padding: 0.4rem 0.5rem 0.4rem 1rem;
 }
@@ -496,18 +496,18 @@
   background: none;
   border: none;
   outline: none;
-  color: #fff;
+  color: var(--gym-text-main);
   font-size: 0.85rem;
 }
 
 .chat-input-bar input[type="text"]::placeholder {
-  color: #666;
+  color: var(--gym-text-muted);
 }
 
 .chat-btn-icono {
-  background-color: #232323;
+  background-color: var(--gym-bg);
   border: none;
-  color: #ffd700;
+  color: var(--gym-gold);
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -520,21 +520,48 @@
 }
 
 .chat-btn-icono:hover {
-  background-color: #2d2d2d;
+  background-color: var(--gym-border);
 }
 
 .chat-btn-enviar {
-  background-color: #ffd700;
-  color: #000;
+  background-color: var(--gym-gold);
+  color: #111827;
 }
 
 .chat-btn-enviar:hover {
-  background-color: #e6c200;
+  background-color: var(--gym-gold-hover);
 }
 
 .chat-btn-icono:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+/* ── Inputs nativos de archivo: totalmente invisibles ─── */
+.chat-input-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Ícono de galería: tono ámbar suavizado ────────────── */
+.chat-btn-icono .bi-image {
+  color: var(--gym-gold);
+  font-size: 1.05rem;
+}
+
+/* ── Ícono de cámara: mismo ámbar, consistencia ────────── */
+.chat-btn-icono .bi-camera-fill {
+  color: var(--gym-gold);
+  font-size: 1.05rem;
+}
+
+/* Hover diferenciado: fondo ámbar muy suave al pasar cursor */
+.chat-btn-icono:not(.chat-btn-enviar):hover {
+  background-color: rgba(217, 119, 6, 0.12);
 }
 
 /* ===== BOTÓN FLOTANTE + PANEL DE CHAT ===== */
@@ -546,21 +573,21 @@
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  background-color: #ffd700;
-  color: #000;
+  background-color: var(--gym-gold);
+  color: #111827;
   border: none;
   font-size: 1.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   z-index: 1040;
   transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
 .chat-fab:hover {
-  background-color: #e6c200;
+  background-color: var(--gym-gold-hover);
   transform: scale(1.05);
 }
 
@@ -577,8 +604,8 @@
 }
 
 .chat-panel {
-  background-color: #1a1a1a;
-  border-top: 3px solid #ffd700;
+  background-color: var(--gym-dark);
+  border-top: 3px solid var(--gym-gold);
   width: 100%;
   max-width: 420px;
   height: 100%;
@@ -593,10 +620,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
-  color: #fff;
+  color: var(--gym-text-main);
   font-weight: 700;
   font-size: 0.95rem;
-  border-bottom: 1px solid #252525;
+  border-bottom: 1px solid var(--gym-border);
   flex-shrink: 0;
 }
 

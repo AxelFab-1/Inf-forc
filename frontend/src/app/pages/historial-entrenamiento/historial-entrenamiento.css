@@ -1,64 +1,100 @@
-
 #historialGrid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
-
-.dias-semana {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  text-align: center;
-}
-
-.dias-semana span {
-  text-align: center;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
 }
 
 .dia-historial {
-  aspect-ratio: 1 / 1;
-  max-height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  font-size: 0.8rem;
-  font-weight: 500;
-  color: #666;
-  transition: all 0.15s ease;
-  user-select: none;
+    aspect-ratio: 1; 
+    max-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%; 
+    font-size: 0.95rem;
+    color: var(--gym-text-main);
+    transition: all 0.3s ease;
+    cursor: default;
 }
 
-.dia-historial.dia-clickeable {
-  cursor: pointer;
+.dia-actual {
+    border: 2px solid var(--gym-gold);
+    font-weight: bold;
+    color: var(--gym-gold-text);
 }
 
-.dia-historial.dia-clickeable:hover {
-  filter: brightness(1.3);
+.dia-entrenado {
+    background-color: var(--gym-success-dark) !important;
+    color: var(--gym-dark) !important;
+    border-color: var(--gym-success-dark) !important;
+    cursor: pointer; 
 }
 
-.dia-historial.dia-actual {
-  border: 2px solid #ffd700;
-  color: #ffd700;
-  font-weight: 700;
+.dia-entrenado:hover {
+    background-color: var(--gym-success-light) !important;
+    color: #000000 !important;
 }
 
-.dia-historial.dia-entrenado {
-  background-color: #2a6b2a;
-  color: #8eff8e;
-  font-weight: 700;
+.dia-seleccionado {
+    background-color: var(--gym-gold) !important;
+    color: var(--gym-text-main) !important;
+    font-weight: bold;
+    border-color: var(--gym-gold) !important;
 }
 
-.dia-historial.dia-seleccionado {
-  background-color: #ffd700 !important;
-  color: #000 !important;
-  font-weight: 800;
-  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
+.dias-semana span {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
 }
 
 .leyenda-punto {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* Clases refactorizadas desde HTML en línea */
+.historial-container {
+    max-width: 800px; 
+    margin: 0 auto;
+}
+
+.historial-btn-circle {
+    width: 36px; 
+    height: 36px;
+}
+
+.leyenda-hoy {
+    border: 2px solid var(--gym-gold); 
+}
+
+.grafica-placeholder {
+    min-height: 200px; 
+    border: 1px dashed var(--gym-border);
+}
+
+.grafica-icon {
+    color: var(--gym-border);
+}
+
+.grafica-text {
+    max-width: 250px;
+}
+
+.detalle-container {
+    max-width: 600px; 
+    margin: 0 auto;
+}
+
+.badge-peso-corp {
+    background-color: #444; 
+    font-size: 0.65rem;
+}
+
+.tabla-series {
+    font-size: 0.8rem; 
+    background-color: transparent;
 }

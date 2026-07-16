@@ -3,7 +3,7 @@
   overflow-x: auto;
   white-space: nowrap;
   scrollbar-width: thin;
-  scrollbar-color: #ffd700 #222;
+  scrollbar-color: var(--gym-gold) var(--gym-dark-secondary);
 }
 
 .scroll-horizontal::-webkit-scrollbar {
@@ -11,12 +11,12 @@
 }
 
 .scroll-horizontal::-webkit-scrollbar-track {
-  background: #222;
+  background: var(--gym-dark-secondary);
   border-radius: 4px;
 }
 
 .scroll-horizontal::-webkit-scrollbar-thumb {
-  background-color: #ffd700;
+  background-color: var(--gym-gold);
   border-radius: 4px;
 }
 
@@ -26,7 +26,7 @@
 
 .ejercicio-card-bib:hover {
   transform: translateY(-4px);
-  border-color: #ffd700 !important;
+  border-color: var(--gym-gold) !important;
 }
 
 .gif-container {
@@ -34,7 +34,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-bottom: 2px solid #333;
+  border-bottom: 2px solid var(--gym-border);
 }
 
 .gif-container img {

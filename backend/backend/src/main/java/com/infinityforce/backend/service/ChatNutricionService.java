@@ -115,12 +115,7 @@ public class ChatNutricionService {
         body.put("contents", contents);
 
         // 5. Llamar a Gemini
-        String response = webClient.post()
-                .uri("/models/{model}:generateContent?key={key}", model, apiKey)
-                .bodyValue(body)
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        String response = llamarGeminiConReintentos(body);
 
         String textoRespuesta;
         try {
@@ -138,6 +133,40 @@ public class ChatNutricionService {
                 clienteId, "modelo", textoRespuesta, false);
         return mensajeRepository.save(mensajeIA);
     }
+
+    private String llamarGeminiConReintentos(Map<String, Object> body) {
+        int maxIntentos = 3;
+        long esperaMs = 1000;
+
+        for (int intento = 1; intento <= maxIntentos; intento++) {
+            try {
+                return webClient.post()
+                        .uri("/models/{model}:generateContent?key={key}", model, apiKey)
+                        .bodyValue(body)
+                        .retrieve()
+                        .bodyToMono(String.class)
+                        .block();
+            } catch (Exception e) {
+                boolean esUltimoIntento = intento == maxIntentos;
+                boolean esErrorReintentable = e.getMessage() != null &&
+                        (e.getMessage().contains("503") || e.getMessage().contains("UNAVAILABLE")
+                                || e.getMessage().contains("429"));
+
+                if (esUltimoIntento || !esErrorReintentable) {
+                    throw e;
+                }
+
+                try {
+                    Thread.sleep(esperaMs);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
+                esperaMs *= 2; // backoff exponencial: 1s, 2s, 4s
+            }
+        }
+        throw new RuntimeException("No se pudo obtener respuesta de Gemini tras varios intentos.");
+    }
+    //
 
     private String construirPromptSistema(String contextoPerfil, String contextoEntrenamientos) {
         return """

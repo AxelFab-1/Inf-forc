@@ -3,7 +3,7 @@
   <aside class="detail-panel">
 
     <div class="panel-header">
-      <h5 class="mb-0 fw-bold" style="color: #ffd700;">
+      <h5 class="mb-0 fw-bold text-gold">
         <i class="bi" [ngClass]="modo === 'crear' ? 'bi-plus-circle-fill' : 'bi-pencil-fill'"></i>
         {{ modo === 'crear' ? 'Nuevo Ejercicio' : 'Editar Ejercicio' }}
       </h5>
@@ -21,14 +21,14 @@
     <form *ngIf="modo === 'crear'" [formGroup]="registroForm" (ngSubmit)="crearEjercicio()">
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Nombre</label>
-        <input type="text" formControlName="nombre" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Nombre</label>
+        <input type="text" formControlName="nombre" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                [ngClass]="{'is-invalid': registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched}" />
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Grupo Muscular</label>
-        <select formControlName="grupoMuscular" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Grupo Muscular</label>
+        <select formControlName="grupoMuscular" class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                 [ngClass]="{'is-invalid': registroForm.get('grupoMuscular')?.invalid && registroForm.get('grupoMuscular')?.touched}">
           <option value="" disabled selected>Selecciona...</option>
           <option *ngFor="let g of gruposMusculares" [value]="g">{{ g | titlecase }}</option>
@@ -37,24 +37,24 @@
 
       <div class="row g-2 mb-3">
         <div class="col-6">
-          <label class="form-label text-warning fw-semibold small">Series</label>
-          <input type="number" formControlName="series" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+          <label class="form-label text-gold fw-semibold small">Series</label>
+          <input type="number" formControlName="series" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                  [ngClass]="{'is-invalid': registroForm.get('series')?.invalid && registroForm.get('series')?.touched}" />
         </div>
         <div class="col-6">
-          <label class="form-label text-warning fw-semibold small">Repeticiones</label>
-          <input type="text" formControlName="repeticiones" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+          <label class="form-label text-gold fw-semibold small">Repeticiones</label>
+          <input type="text" formControlName="repeticiones" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                  [ngClass]="{'is-invalid': registroForm.get('repeticiones')?.invalid && registroForm.get('repeticiones')?.touched}" placeholder="Ej. 10-12" />
         </div>
       </div>
 
       <div class="mb-4">
-        <label class="form-label text-warning fw-semibold small">GIF del Ejercicio</label>
-        <input type="file" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">GIF del Ejercicio</label>
+        <input type="file" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                accept="image/*" (change)="onFileSelected($event)" required />
       </div>
 
-      <button type="submit" class="btn w-100 fw-bold py-2" style="background-color:#ffd700; color:#000;">
+      <button type="submit" class="btn w-100 fw-bold py-2 bg-gold text-dark fs-6">
         <i class="bi bi-plus-circle me-1"></i> Guardar Ejercicio
       </button>
     </form>
@@ -62,14 +62,14 @@
     <form *ngIf="modo === 'editar'" [formGroup]="editarForm" (ngSubmit)="guardarEdicion()">
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Nombre</label>
-        <input type="text" formControlName="nombre" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Nombre</label>
+        <input type="text" formControlName="nombre" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                [ngClass]="{'is-invalid': editarForm.get('nombre')?.invalid && editarForm.get('nombre')?.touched}" />
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Grupo Muscular</label>
-        <select formControlName="grupoMuscular" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Grupo Muscular</label>
+        <select formControlName="grupoMuscular" class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                 [ngClass]="{'is-invalid': editarForm.get('grupoMuscular')?.invalid && editarForm.get('grupoMuscular')?.touched}">
           <option *ngFor="let g of gruposMusculares" [value]="g">{{ g | titlecase }}</option>
         </select>
@@ -77,31 +77,31 @@
 
       <div class="row g-2 mb-3">
         <div class="col-6">
-          <label class="form-label text-warning fw-semibold small">Series</label>
-          <input type="number" formControlName="series" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+          <label class="form-label text-gold fw-semibold small">Series</label>
+          <input type="number" formControlName="series" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                  [ngClass]="{'is-invalid': editarForm.get('series')?.invalid && editarForm.get('series')?.touched}" />
         </div>
         <div class="col-6">
-          <label class="form-label text-warning fw-semibold small">Repeticiones</label>
-          <input type="text" formControlName="repeticiones" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+          <label class="form-label text-gold fw-semibold small">Repeticiones</label>
+          <input type="text" formControlName="repeticiones" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                  [ngClass]="{'is-invalid': editarForm.get('repeticiones')?.invalid && editarForm.get('repeticiones')?.touched}" />
         </div>
       </div>
 
       <div class="mb-4">
-        <label class="form-label text-warning fw-semibold small">Nuevo GIF (Opcional)</label>
-        <input type="file" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Nuevo GIF (Opcional)</label>
+        <input type="file" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                accept="image/*" (change)="onFileSelected($event)" />
         
         <div *ngIf="ejercicioSeleccionado?.imagenUrl" class="mt-2 text-center">
-          <small class="text-white-50 d-block mb-1">GIF actual:</small>
+          <small class="text-muted d-block mb-1">GIF actual:</small>
           <img [src]="ejercicioSeleccionado.imagenUrl" class="img-preview rounded"
                (error)="$any($event.target).src='https://placehold.co/120x80'" style="max-height: 80px;" />
         </div>
       </div>
 
       <div class="d-flex gap-2">
-        <button type="submit" class="btn fw-bold py-2 flex-grow-1" style="background-color:#ffd700; color:#000;">
+        <button type="submit" class="btn fw-bold py-2 flex-grow-1 bg-gold text-dark fs-6">
           <i class="bi bi-check-lg me-1"></i> Actualizar
         </button>
         <button type="button" class="btn btn-outline-danger fw-bold py-2"
@@ -118,17 +118,17 @@
     <div class="d-flex flex-wrap gap-2 mb-4 align-items-center">
       <div class="flex-grow-1" style="min-width: 180px;">
         <div class="input-group input-group-sm">
-          <span class="input-group-text bg-dark border-secondary text-white-50">
+          <span class="input-group-text bg-gym-dark-secondary border-gym text-muted">
             <i class="bi bi-search"></i>
           </span>
-          <input type="text" class="form-control bg-dark border-secondary text-light shadow-none"
+          <input type="text" class="form-control bg-gym-dark-secondary border-gym text-dark shadow-none"
                  placeholder="Buscar ejercicio..."
                  [(ngModel)]="textoBusqueda"
                  (input)="aplicarFiltros()" />
         </div>
       </div>
 
-      <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+      <select class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
               style="max-width: 160px;"
               [(ngModel)]="filtroGrupo"
               (change)="aplicarFiltros()">
@@ -141,12 +141,12 @@
         <i class="bi bi-x-circle me-1"></i> Limpiar
       </button>
 
-      <span class="text-white-50 small ms-auto">
+      <span class="text-muted small ms-auto">
         {{ ejerciciosFiltrados.length }} ejercicio(s)
       </span>
     </div>
 
-    <div *ngIf="ejerciciosFiltrados.length === 0" class="text-center text-white-50 py-5">
+    <div *ngIf="ejerciciosFiltrados.length === 0" class="text-center text-muted py-5">
       <i class="bi bi-person-walking fs-1 mb-3 d-block opacity-50"></i>
       <p class="mb-0">No se encontraron ejercicios.</p>
     </div>

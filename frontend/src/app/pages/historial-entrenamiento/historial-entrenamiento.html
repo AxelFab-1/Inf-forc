@@ -1,43 +1,40 @@
-<div class="body-app bg-dark text-white" style="padding-bottom: 80px; padding-top: 85px; min-height: 100vh;">
+<div class="body-app bg-gym-dark text-dark">
   <app-header></app-header>
 
   <main class="container">
-    <div style="max-width: 800px; margin: 0 auto;">
+    <div class="historial-container">
       
       <div class="d-flex align-items-center gap-3 mb-4 mt-3">
-        <button (click)="irAlDashboard()" class="btn btn-link text-white-50 p-0">
+        <button (click)="irAlDashboard()" class="btn btn-link text-muted p-0">
           <i class="bi bi-arrow-left fs-5"></i>
         </button>
         <h2 class="fw-bold mb-0">Historial de Entrenamiento</h2>
       </div>
 
-      <div class="rounded-4 p-3 shadow-sm mb-4" style="background-color: #1a1a1a;">
-        <!-- [Contenido del calendario sin cambios] -->
+      <div class="rounded-4 p-3 shadow-sm mb-4 bg-gym-dark-secondary">
         <div class="d-flex align-items-center justify-content-between mb-3">
           <button (click)="mesAnterior()"
-                  class="btn btn-outline-secondary btn-sm rounded-circle"
-                  style="width: 36px; height: 36px;">
+                  class="btn btn-outline-secondary btn-sm rounded-circle historial-btn-circle">
             <i class="bi bi-chevron-left"></i>
           </button>
 
-          <h5 class="fw-bold mb-0" style="color: #ffd700;">{{ mesNombre }}</h5>
+          <h5 class="fw-bold mb-0 text-gold">{{ mesNombre }}</h5>
 
           <button (click)="mesSiguiente()"
-                  class="btn btn-outline-secondary btn-sm rounded-circle"
-                  [disabled]="esElMesActual"
-                  style="width: 36px; height: 36px;">
+                  class="btn btn-outline-secondary btn-sm rounded-circle historial-btn-circle"
+                  [disabled]="esElMesActual">
             <i class="bi bi-chevron-right"></i>
           </button>
         </div>
 
-        <div class="dias-semana d-flex justify-content-between text-white-50 small mb-2">
+        <div class="dias-semana d-flex justify-content-between text-muted small mb-2">
           <span>Lu</span><span>Ma</span><span>Mi</span>
           <span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
         </div>
 
         <div *ngIf="cargandoAsistencias" class="text-center py-4">
-          <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
-          <p class="text-white-50 small mt-2 mb-0">Cargando asistencias...</p>
+          <div class="spinner-border spinner-border-sm text-gold" role="status"></div>
+          <p class="text-muted small mt-2 mb-0">Cargando asistencias...</p>
         </div>
 
         <div id="historialGrid" *ngIf="!cargandoAsistencias">
@@ -58,37 +55,36 @@
 
         <div *ngIf="!cargandoAsistencias" class="d-flex gap-3 mt-3 flex-wrap">
           <div class="d-flex align-items-center gap-1">
-            <div class="leyenda-punto" style="background:#2a6b2a;"></div>
-            <small class="text-white-50">Entrenado</small>
+            <div class="leyenda-punto bg-gym-success-dark"></div>
+            <small class="text-muted">Entrenado</small>
           </div>
           <div class="d-flex align-items-center gap-1">
-            <div class="leyenda-punto" style="background:#ffd700;"></div>
-            <small class="text-white-50">Seleccionado</small>
+            <div class="leyenda-punto bg-gold"></div>
+            <small class="text-muted">Seleccionado</small>
           </div>
           <div class="d-flex align-items-center gap-1">
-            <div class="leyenda-punto" style="border: 2px solid #ffd700; background: transparent;"></div>
-            <small class="text-white-50">Hoy</small>
+            <div class="leyenda-punto leyenda-hoy border-gym-gold bg-transparent"></div>
+            <small class="text-muted">Hoy</small>
           </div>
         </div>
       </div>
 
-      <div class="rounded-4 p-3 shadow-sm mb-4" style="background-color: #1a1a1a;">
-        <div *ngIf="!diaSeleccionado" class="text-center py-3 text-white-50">
+      <div class="rounded-4 p-3 shadow-sm mb-4 bg-gym-dark-secondary">
+        <div *ngIf="!diaSeleccionado" class="text-center py-3 text-muted">
           <i class="bi bi-hand-index-thumb fs-3 mb-2 d-block"></i>
           <p class="mb-0 small">Selecciona un día entrenado del calendario para ver opciones</p>
         </div>
 
         <div *ngIf="diaSeleccionado">
-          <p class="mb-3 text-white-50 small">
+          <p class="mb-3 text-muted small">
             Día seleccionado:
-            <strong class="text-white">{{ diaSeleccionado }} de {{ mesNombre }}</strong>
+            <strong class="text-dark">{{ diaSeleccionado }} de {{ mesNombre }}</strong>
           </p>
 
           <div class="d-flex gap-2 flex-column flex-sm-row">
             <button
               (click)="verDetalle()"
-              class="btn w-100 py-2 fw-bold"
-              style="background-color: #ffd700; color: #000;"
+              class="btn w-100 py-2 fw-bold bg-gold"
               [disabled]="cargandoDetalle">
               <span *ngIf="!cargandoDetalle">
                 <i class="bi bi-eye me-1"></i> Ver detalle
@@ -109,33 +105,36 @@
       </div>
 
       <div *ngIf="!cargandoAsistencias">
-        <h6 class="fw-bold mb-3" style="color: #ffd700;">
+        <h6 class="fw-bold mb-3 text-gold">
           <i class="bi bi-bar-chart-fill me-2"></i>Mis Estadísticas
         </h6>
         
         <div class="row g-3">
           <!-- KPIs Rápidos -->
           <div class="col-12 col-md-4 d-flex flex-column gap-3">
-            <div class="rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center" style="background-color: #1a1a1a;">
-              <h3 class="fw-bold text-white mb-0">{{ diasEntrenados.length }}</h3>
-              <small class="text-white-50">Días Entrenados</small>
+            <div class="rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center bg-gym-dark-secondary">
+              <h3 class="fw-bold text-dark mb-0">{{ diasEntrenados.length }}</h3>
+              <small class="text-muted">Días Entrenados</small>
             </div>
             
-            <div class="rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center" style="background-color: #1a1a1a;">
-              <h3 class="fw-bold text-white mb-0">—</h3>
-              <small class="text-white-50">Duración Total (Próximamente)</small>
+            <div class="rounded-4 p-3 text-center shadow-sm h-100 d-flex flex-column justify-content-center bg-gym-dark-secondary">
+              <h3 class="fw-bold text-dark mb-0">—</h3>
+              <small class="text-muted">Duración Total (Próximamente)</small>
             </div>
           </div>
           
           <!-- Área de Gráficos -->
           <div class="col-12 col-md-8">
-            <div class="rounded-4 p-4 shadow-sm h-100 d-flex flex-column justify-content-center align-items-center text-center" 
-                 style="background-color: #1a1a1a; min-height: 200px; border: 1px dashed #333;">
-              <i class="bi bi-graph-up fs-1 mb-2" style="color: #333;"></i>
-              <h6 class="text-white-50 fw-bold mb-1">Área para Gráficas</h6>
-              <p class="text-white-50 small mb-0" style="max-width: 250px;">
-                Espacio reservado para integrar Chart.js o Ngx-Charts y mostrar el progreso de cargas o asistencias semanales.
-              </p>
+            <div class="rounded-4 p-4 shadow-sm h-100 bg-gym-dark-secondary">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <h6 class="mb-0 fw-bold text-dark">Progreso de Cargas (Peso Máximo)</h6>
+                <select class="form-select form-select-sm w-auto custom-input" [(ngModel)]="ejercicioSeleccionado" (change)="actualizarGraficaProgreso()">
+                  <option *ngFor="let ej of ejerciciosUnicos" [value]="ej">{{ej}}</option>
+                </select>
+              </div>
+              <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="progresoChart"></canvas>
+              </div>
             </div>
           </div>
         </div>
@@ -144,56 +143,55 @@
     </div>
   </main>
 
-  <div class="modal fade" id="detalleSesionModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
+  <div class="modal fade modal-custom-z" id="detalleSesionModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content text-white border-secondary" style="background-color: #1a1a1a;">
-        <div class="modal-header border-secondary">
+      <div class="modal-content text-dark border-gym bg-gym-dark">
+        <div class="modal-header border-gym">
           <h5 class="modal-title fw-bold">
-            <i class="bi bi-clipboard-data me-2" style="color: #ffd700;"></i>
+            <i class="bi bi-clipboard-data me-2 text-gold"></i>
             Detalle de Entrenamiento
           </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="modal-body" *ngIf="sesionDetalle">
-          <div style="max-width: 600px; margin: 0 auto;">
-            <div class="rounded-3 p-3 mb-3" style="background-color: #252525;">
+          <div class="detalle-container">
+            <div class="rounded-3 p-3 mb-3 bg-gym-dark-tertiary">
               <div class="row g-2">
                 <div class="col-12">
-                  <small class="text-white-50">Rutina</small>
+                  <small class="text-muted">Rutina</small>
                   <p class="fw-bold mb-0">{{ sesionDetalle.nombreDia || '—' }}</p>
                 </div>
                 <div class="col-6">
-                  <small class="text-white-50">Fecha</small>
+                  <small class="text-muted">Fecha</small>
                   <p class="fw-bold mb-0 small">{{ formatearFecha(sesionDetalle.fecha) }}</p>
                 </div>
                 <div class="col-6">
-                  <small class="text-white-50">Duración</small>
+                  <small class="text-muted">Duración</small>
                   <p class="fw-bold mb-0">{{ formatearDuracion(sesionDetalle.duracionSegundos) }}</p>
                 </div>
               </div>
             </div>
 
-            <h6 class="fw-bold mb-2" style="color: #ffd700;">Ejercicios realizados</h6>
+            <h6 class="fw-bold mb-2 text-gold">Ejercicios realizados</h6>
 
             <div *ngIf="!sesionDetalle.ejerciciosRealizados || sesionDetalle.ejerciciosRealizados.length === 0"
-                 class="text-white-50 small">
+                 class="text-muted small">
               No se registraron ejercicios.
             </div>
 
             <div *ngFor="let ej of sesionDetalle.ejerciciosRealizados"
-                 class="rounded-3 p-3 mb-2 shadow-sm"
-                 style="background-color: #252525; border-left: 3px solid #ffd700;">
+                 class="rounded-3 p-3 mb-2 shadow-sm bg-gym-dark-tertiary border-left-gold">
               <p class="fw-bold mb-2">
                 {{ ej.nombre }}
-                <span *ngIf="ej.pesoCorporal" class="badge ms-1" style="background-color: #444; font-size: 0.65rem;">
+                <span *ngIf="ej.pesoCorporal" class="badge ms-1 badge-peso-corp">
                   Peso corporal
                 </span>
               </p>
 
-              <table class="table table-sm table-dark table-borderless mb-0" style="font-size: 0.8rem; background-color: transparent;">
+              <table class="table table-sm table-dark table-borderless mb-0 tabla-series">
                 <thead>
-                  <tr class="text-white-50">
+                  <tr class="text-muted">
                     <th>Serie</th>
                     <th>Reps</th>
                     <th *ngIf="!ej.pesoCorporal">Peso (kg)</th>
@@ -211,7 +209,7 @@
           </div>
         </div>
 
-        <div class="modal-footer border-secondary">
+        <div class="modal-footer border-gym">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
         </div>
       </div>

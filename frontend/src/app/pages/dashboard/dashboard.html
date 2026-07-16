@@ -1,4 +1,4 @@
-<div class="body-app bg-dark text-white" style="padding-bottom: 80px; padding-top: 85px; min-height: 100vh;">
+<div class="body-app bg-gym-dark text-dark">
   <app-header></app-header>
 
   <main class="container">
@@ -9,16 +9,16 @@
       <div class="col-12 col-md-5">
 
         <div *ngIf="cargandoRutina"
-             class="h-100 d-flex flex-column align-items-center justify-content-center rounded-4 py-4"
-             style="background-color: #1a1a1a; min-height: 120px;">
-          <div class="spinner-border text-warning mb-2" role="status"></div>
-          <small class="text-white-50">Cargando tu rutina...</small>
+             class="h-100 d-flex flex-column align-items-center justify-content-center rounded-4 py-4 bg-gym-dark-secondary"
+             style="min-height: 120px;">
+          <div class="spinner-border text-gold mb-2" role="status"></div>
+          <small class="text-muted">Cargando tu rutina...</small>
         </div>
 
         <div *ngIf="!cargandoRutina && rutinaActiva" class="h-100">
-          <button class="btn w-100 h-100 shadow-sm text-dark fw-bold fs-4 d-flex flex-column
-                         justify-content-center align-items-center py-4 rounded-4"
-                  style="background-color: #ffd700; min-height: 120px;"
+          <button class="btn w-100 h-100 shadow-sm fw-bold fs-4 d-flex flex-column
+                         justify-content-center align-items-center py-4 rounded-4 bg-gold"
+                  style="min-height: 120px;"
                   data-bs-toggle="modal" data-bs-target="#entrenamientoModal">
             <i class="bi bi-play-circle-fill mb-2" style="font-size: 2.5rem;"></i>
             Comenzar entrenamiento
@@ -28,11 +28,11 @@
         <div *ngIf="!cargandoRutina && !rutinaActiva" class="h-100">
           <button (click)="irAElegirRutina()"
                   class="btn w-100 h-100 shadow-sm fw-bold fs-5 d-flex flex-column
-                         justify-content-center align-items-center py-4 rounded-4"
-                  style="background-color: #2a2a2a; border: 2px dashed #ffd700; color: #ffd700; min-height: 120px;">
+                         justify-content-center align-items-center py-4 rounded-4 bg-gym-dark-tertiary"
+                  style="border: 2px dashed var(--gym-gold); color: var(--gym-gold); min-height: 120px;">
             <i class="bi bi-lightning-charge mb-2" style="font-size: 2rem;"></i>
             Elegir mi rutina
-            <small class="fw-normal mt-1 text-white-50" style="font-size: 0.75rem;">
+            <small class="fw-normal mt-1 text-muted" style="font-size: 0.75rem;">
               Aún no tienes una rutina activa
             </small>
           </button>
@@ -41,16 +41,16 @@
       </div>
 
       <div class="col-12 col-md-7">
-        <div class="rounded-4 p-3 shadow-sm h-100" style="background-color: #1a1a1a;">
-          <h5 class="text-center fw-bold mb-3" style="color: #ffd700;">{{ mesActualNombre }}</h5>
+        <div class="rounded-4 p-3 shadow-sm h-100 bg-gym-dark-secondary">
+          <h5 class="text-center fw-bold mb-3 text-gold">{{ mesActualNombre }}</h5>
 
-          <div class="dias-semana d-flex justify-content-between text-white-50 small mb-2">
+          <div class="dias-semana d-flex justify-content-between text-muted small mb-2">
             <span>Lu</span><span>Ma</span><span>Mi</span>
             <span>Ju</span><span>Vi</span><span>Sa</span><span>Do</span>
           </div>
 
           <div *ngIf="cargandoAsistencias" class="text-center py-4">
-            <div class="spinner-border spinner-border-sm text-warning" role="status"></div>
+            <div class="spinner-border spinner-border-sm text-gold" role="status"></div>
           </div>
 
           <div id="calendarioGrid" class="mb-3" *ngIf="!cargandoAsistencias">
@@ -79,34 +79,34 @@
     </div>
   </main>
 
-  <div class="modal fade" id="entrenamientoModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
+  <div class="modal fade modal-custom-z" id="entrenamientoModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content text-white border-secondary" style="background-color: #1a1a1a;">
-        <div class="modal-header border-secondary">
+      <div class="modal-content text-dark border-gym bg-gym-dark">
+        <div class="modal-header border-gym">
           <h5 class="modal-title fw-bold">
-            <i class="bi bi-lightning-charge-fill me-2" style="color:#ffd700;"></i>
+            <i class="bi bi-lightning-charge-fill me-2 text-gold"></i>
             Plan de Hoy
           </h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
 
         <div class="modal-body" *ngIf="rutinaActiva">
 
-          <p class="text-white-50 small mb-3">
-            Rutina activa: <strong class="text-white">{{ rutinaActiva.nombreOriginal }}</strong>
+          <p class="text-muted small mb-3">
+            Rutina activa: <strong class="text-dark">{{ rutinaActiva.nombreOriginal }}</strong>
           </p>
 
-          <div class="rounded-3 p-3 mb-3" style="background-color: #252525; border: 1px solid #ffd700;">
+          <div class="rounded-3 p-3 mb-3 bg-gym-dark-tertiary border-gym-gold">
             <div class="d-flex align-items-center gap-2 mb-1">
-              <i class="bi bi-star-fill" style="color:#ffd700; font-size:0.85rem;"></i>
-              <span class="text-white-50 small">Día sugerido según tu progreso</span>
+              <i class="bi bi-star-fill text-gold" style="font-size:0.85rem;"></i>
+              <span class="text-muted small">Día sugerido según tu progreso</span>
             </div>
-            <div class="fw-bold text-white fs-6">
+            <div class="fw-bold text-dark fs-6">
               {{ rutinaActiva.dias?.[indiceDiaSiguiente]?.nombreDia || 'Día 1' }}
             </div>
           </div>
 
-          <button class="btn btn-link text-white-50 small p-0 mb-3 text-decoration-none"
+          <button class="btn btn-link text-muted small p-0 mb-3 text-decoration-none"
                   (click)="toggleModoEleccion()">
             <i class="bi me-1"
                [class.bi-chevron-down]="!modoEleccionDia"
@@ -115,7 +115,7 @@
           </button>
 
           <div *ngIf="modoEleccionDia" class="mb-3">
-            <select class="form-select bg-dark text-white border-secondary"
+            <select class="form-select bg-gym-dark text-dark border-gym"
                     [(ngModel)]="indiceDiaManual"
                     (ngModelChange)="onCambioDiaManual()">
               <option *ngFor="let dia of rutinaActiva.dias; let i = index"
@@ -127,8 +127,7 @@
 
           <button (click)="iniciarEntrenamiento()"
                   type="button"
-                  class="btn w-100 py-3 fs-5 text-dark fw-bold rounded-pill"
-                  style="background-color: #ffd700;">
+                  class="btn w-100 py-3 fs-5 fw-bold rounded-pill bg-gold">
             <i class="bi bi-play-fill me-1"></i>
             ¡Empezar {{ modoEleccionDia
               ? (rutinaActiva.dias?.[indiceDiaManual]?.nombreDia || 'el día')

@@ -1,37 +1,37 @@
-<div class="body-app bg-dark text-white" style="padding-bottom: 90px; min-height: 100vh;">
-    <header class="fixed-top border-bottom border-dark shadow-sm" style="background-color: #1a1a1a;">
+<div class="body-app bg-gym-dark text-dark" style="padding-bottom: 90px; min-height: 100vh;">
+    <header class="fixed-top border-bottom border-gym shadow-sm bg-gym-dark">
         <div class="container d-flex align-items-center p-3">
-            <a routerLink="/rutinas" class="text-white text-decoration-none me-3">
+            <a routerLink="/rutinas" class="text-dark text-decoration-none me-3">
                 <i class="bi bi-arrow-left fs-3"></i>
             </a>
-            <h4 class="mb-0 fw-bold" style="color: #ffd700;">
+            <h4 class="mb-0 fw-bold text-gold">
                 {{ plantillaEnConstruccion?.nombre || 'Cargando plantilla...' }}
             </h4>
         </div>
     </header>
 
     <main class="container pt-5" style="margin-top: 70px; max-width: 700px;">
-        <p class="text-white-50 text-center mb-4">Agrega los ejercicios de máquina para cada día de tu entrenamiento.</p>
+        <p class="text-muted text-center mb-4">Agrega los ejercicios de máquina para cada día de tu entrenamiento.</p>
         
         <div *ngIf="plantillaEnConstruccion" class="d-flex flex-column gap-4">
             
-            <div class="card p-4" style="background-color: #222; border: 1px dashed #ffd700;" *ngFor="let dia of plantillaEnConstruccion.dias; let i = index">
+            <div class="card p-4 bg-gym-dark-secondary" style="border: 1px dashed var(--gym-gold);" *ngFor="let dia of plantillaEnConstruccion.dias; let i = index">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold text-white mb-0">{{ dia.nombreDia }}</h5>
+                    <h5 class="fw-bold text-dark mb-0">{{ dia.nombreDia }}</h5>
                     <span class="badge bg-secondary">{{ dia.ejerciciosBase.length }} Ejercicios</span>
                 </div>
                 
                 <ul class="list-group list-group-flush mb-3">
-                    <li class="list-group-item bg-transparent text-white border-secondary d-flex justify-content-between align-items-center px-0" *ngFor="let ej of dia.ejerciciosBase; let j = index">
+                    <li class="list-group-item bg-transparent text-dark border-gym d-flex justify-content-between align-items-center px-0" *ngFor="let ej of dia.ejerciciosBase; let j = index">
                         <div>
-                            <div class="fw-bold" style="color: #ffd700;">{{ ej.nombre }}</div>
+                            <div class="fw-bold text-gold">{{ ej.nombre }}</div>
                         </div>
                         <button class="btn btn-sm btn-outline-danger" (click)="eliminarEjercicio(i, j)">
                             <i class="bi bi-trash"></i>
                         </button>
                     </li>
 
-                    <li class="list-group-item bg-transparent text-white-50 px-0" *ngIf="dia.ejerciciosBase.length === 0">
+                    <li class="list-group-item bg-transparent text-muted px-0" *ngIf="dia.ejerciciosBase.length === 0">
                         Sin ejercicios agregados aún.
                     </li>
                 </ul>
@@ -43,48 +43,48 @@
         </div>
 
         <div *ngIf="!plantillaEnConstruccion" class="text-center mt-5">
-            <div class="spinner-border text-warning" role="status">
+            <div class="spinner-border text-gold" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
         </div>
 
         <div class="mt-5 text-center" *ngIf="plantillaEnConstruccion">
-            <button (click)="guardarRutina()" class="btn fw-bold px-5 py-3 rounded-pill" style="background-color: #ffd700; color: #000; font-size: 1.1rem;">
+            <button (click)="guardarRutina()" class="btn fw-bold px-5 py-3 rounded-pill bg-gold fs-5">
                 <i class="bi bi-check-circle-fill me-2"></i> Guardar Mi Rutina
             </button>
         </div>
     </main>
 
-    <div class="modal fade" id="modalCatalogo" tabindex="-1" aria-hidden="true">
+    <div class="modal fade modal-custom-z" id="modalCatalogo" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content bg-dark text-white" style="border: 1px solid #ffd700;">
-                <div class="modal-header border-secondary">
-                    <h5 class="modal-title fw-bold" style="color: #ffd700;">
+            <div class="modal-content bg-gym-dark text-dark border-gym">
+                <div class="modal-header border-gym">
+                    <h5 class="modal-title fw-bold text-gold">
                         <i class="bi bi-gear-fill me-2"></i>Catálogo de Ejercicios
                     </h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     
-                    <div class="card mb-2" style="background-color: #1a1a1a; border: 1px solid #333;" *ngFor="let ej of catalogoMaquinas">
+                    <div class="card mb-2 bg-gym-dark-secondary border-gym" *ngFor="let ej of catalogoMaquinas">
                         <div class="card-body d-flex justify-content-between align-items-center p-2">
                             <div class="d-flex align-items-center gap-3">
                                 <img *ngIf="ej.imagenUrl" [src]="ej.imagenUrl" alt="GIF" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px;" />
-                                <div *ngIf="!ej.imagenUrl" style="width: 50px; height: 50px; background-color: #333; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                                    <i class="bi bi-image text-white-50"></i>
+                                <div *ngIf="!ej.imagenUrl" style="width: 50px; height: 50px; background-color: var(--gym-border); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-image text-muted"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-bold text-white">{{ ej.nombre }}</div>
-                                    <small class="text-white-50">{{ ej.grupoMuscular }} - {{ ej.tipo }}</small>
+                                    <div class="fw-bold text-dark">{{ ej.nombre }}</div>
+                                    <small class="text-muted">{{ ej.grupoMuscular }} - {{ ej.tipo }}</small>
                                 </div>
                             </div>
-                            <button class="btn btn-sm" style="background-color: #ffd700; color: #000;" (click)="seleccionarEjercicio(ej)">
+                            <button class="btn btn-sm bg-gold" (click)="seleccionarEjercicio(ej)">
                                 <i class="bi bi-plus-lg"></i>
                             </button>
                         </div>
                     </div>
                     
-                    <div class="text-center text-white-50 my-4" *ngIf="catalogoMaquinas.length === 0">
+                    <div class="text-center text-muted my-4" *ngIf="catalogoMaquinas.length === 0">
                         Cargando máquinas...
                     </div>
                 </div>

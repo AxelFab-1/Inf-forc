@@ -58,6 +58,10 @@ export class EntrenamientoService {
     return this.http.get(`${API_URL}/api/rutinas-socios/mi-rutina`, this.getHeaders());
   }
 
+  getMiHistorial(): Observable<any> {
+    return this.http.get(`${API_URL}/api/sesiones/mi-historial`, this.getHeaders());
+  }
+
   getSiguienteDia(totalDias: number): Observable<any> {
     return this.http.get(`${API_URL}/api/sesiones/siguiente-dia?totalDias=${totalDias}`, this.getHeaders());
   }

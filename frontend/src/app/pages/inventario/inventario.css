@@ -8,10 +8,10 @@
 .detail-panel {
   width: 300px;
   flex-shrink: 0;
-  background-color: #1a1a1a;
+  background-color: var(--gym-dark-secondary);
   border-radius: 12px;
   padding: 1.25rem;
-  border-top: 3px solid #ffd700;
+  border-top: 3px solid var(--gym-gold);
   position: sticky;
   top: 1rem;
 }
@@ -42,7 +42,7 @@
 }
 
 .product-card {
-  background-color: #1a1a1a;
+  background-color: var(--gym-dark-secondary);
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
@@ -51,14 +51,14 @@
 }
 
 .product-card:hover {
-  border-color: #444;
+  border-color: var(--gym-border);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
 }
 
 .product-card--selected {
-  border-color: #ffd700 !important;
-  box-shadow: 0 0 0 3px rgba(255,215,0,0.25);
+  border-color: var(--gym-gold) !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
 }
 
 .product-card--inactive {
@@ -69,7 +69,7 @@
   position: relative;
   height: 130px;
   overflow: hidden;
-  background-color: #252525;
+  background-color: var(--gym-dark-tertiary);
 }
 
 .product-img {
@@ -88,7 +88,7 @@
   top: 8px;
   left: 8px;
   background-color: rgba(0,0,0,0.7);
-  color: #ffd700;
+  color: var(--gym-gold);
   font-size: 0.65rem;
   font-weight: 700;
   padding: 2px 8px;
@@ -102,7 +102,7 @@
 }
 
 .product-name {
-  color: #fff;
+  color: var(--gym-text-main);
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
@@ -118,7 +118,7 @@
 }
 
 .product-precio {
-  color: #ffd700;
+  color: var(--gym-gold);
   font-weight: 700;
   font-size: 0.9rem;
 }

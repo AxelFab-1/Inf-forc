@@ -1,14 +1,14 @@
-<div class="body-app bg-dark text-white" style="min-height: 100vh;">
-    <header class="fixed-top border-bottom border-dark shadow-sm" style="background-color: #1a1a1a;">
+<div class="body-app bg-gym-dark text-dark rutinas-container">
+    <header class="fixed-top border-bottom border-gym shadow-sm bg-gym-dark">
         <div class="container d-flex align-items-center p-3">
-            <a routerLink="/entrenar" class="text-white text-decoration-none me-3">
+            <a routerLink="/entrenar" class="text-dark text-decoration-none me-3">
                 <i class="bi bi-arrow-left fs-3"></i>
             </a>
-            <h4 class="mb-0 fw-bold" style="color: #ffd700;">Nuestras Rutinas</h4>
+            <h4 class="mb-0 fw-bold text-gold">Nuestras Rutinas</h4>
         </div>
     </header>
 
-    <main class="container pt-5" style="margin-top: 70px; padding-bottom: 30px; max-width: 700px; margin-left: auto; margin-right: auto;">
+    <main class="container pt-5 rutinas-main">
         
         <div class="d-flex justify-content-center gap-3 mb-4">
             <button (click)="filtrarPlantillas('predeterminada')" 
@@ -25,26 +25,26 @@
 
         <div id="contenedorPlantillas" class="row g-3">
             <div class="col-12" *ngFor="let plantilla of plantillasMostradas">
-                <div class="card p-3 d-flex flex-column gap-2" style="background-color: #222; border: 1px solid #333;">
+                <div class="card p-3 d-flex flex-column gap-2 bg-gym-dark-secondary border-gym">
                     <div class="d-flex align-items-center gap-3">
-                        <i class="bi bi-lightning-charge fs-1" style="color: #ffd700;"></i>
+                        <i class="bi bi-lightning-charge fs-1 text-gold"></i>
                         <div class="flex-grow-1">
-                            <h5 class="fw-bold text-white mb-1">{{ plantilla.nombre }}</h5>
-                            <p class="small text-white-50 mb-2">{{ plantilla.descripcion }}</p>
+                            <h5 class="fw-bold text-dark mb-1">{{ plantilla.nombre }}</h5>
+                            <p class="small text-muted mb-2">{{ plantilla.descripcion }}</p>
                         </div>
                     </div>
                     <div class="d-flex gap-2 mt-2">
-                        <button (click)="seleccionarPlantilla(plantilla)" class="btn fw-bold flex-grow-1" style="background-color: #ffd700; color: #000;">
+                        <button (click)="seleccionarPlantilla(plantilla)" class="btn fw-bold flex-grow-1 bg-gold">
                             {{ plantilla.tipo === 'predeterminada' ? 'Elegir esta Rutina' : 'Empezar a Armar' }}
                         </button>
-                        <button (click)="abrirModalInfo(plantilla)" class="btn btn-outline-light fw-bold px-3">
+                        <button (click)="abrirModalInfo(plantilla)" class="btn btn-outline-dark fw-bold px-3">
                             <i class="bi bi-info-circle"></i>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div *ngIf="plantillasMostradas.length === 0" class="col-12 text-center text-white-50 mt-4">
+            <div *ngIf="plantillasMostradas.length === 0" class="col-12 text-center text-muted mt-4">
                 <p>No se encontraron rutinas disponibles.</p>
             </div>
         </div>
@@ -52,44 +52,44 @@
     </main>
 
     <!-- Modal Info Plantilla -->
-    <div class="modal fade" id="infoPlantillaModal" tabindex="-1" aria-hidden="true" style="z-index: 1055;">
+    <div class="modal fade modal-custom-z" id="infoPlantillaModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content text-white border-secondary" style="background-color: #1a1a1a;">
-          <div class="modal-header border-secondary">
-            <h5 class="modal-title fw-bold" style="color: #ffd700;">
+        <div class="modal-content text-dark border-gym bg-gym-dark">
+          <div class="modal-header border-gym">
+            <h5 class="modal-title fw-bold text-gold">
               <i class="bi bi-card-list me-2"></i>Detalles de la Rutina
             </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
           </div>
 
           <div class="modal-body" *ngIf="plantillaEnModal">
             <h4 class="fw-bold mb-3">{{ plantillaEnModal.nombre }}</h4>
-            <p class="text-white-50 mb-4">{{ plantillaEnModal.descripcion }}</p>
+            <p class="text-muted mb-4">{{ plantillaEnModal.descripcion }}</p>
             
             <div class="accordion accordion-flush" id="accordionDias">
-              <div class="accordion-item bg-transparent" *ngFor="let dia of plantillaEnModal.dias; let i = index" style="border: none;">
+              <div class="accordion-item bg-transparent border-0" *ngFor="let dia of plantillaEnModal.dias; let i = index">
                 <h2 class="accordion-header" [id]="'headingDia' + i">
-                  <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" 
-                          [attr.data-bs-target]="'#collapseDia' + i" style="background-color: #252525; color: #fff; border-bottom: 1px solid #333;">
+                  <button class="accordion-button collapsed fw-bold accordion-button-custom" type="button" data-bs-toggle="collapse" 
+                          [attr.data-bs-target]="'#collapseDia' + i">
                     {{ dia.nombreDia }}
                   </button>
                 </h2>
                 <div [id]="'collapseDia' + i" class="accordion-collapse collapse" [attr.data-bs-parent]="'#accordionDias'">
-                  <div class="accordion-body" style="background-color: #1a1a1a; border-left: 2px solid #ffd700; padding: 1rem 0;">
+                  <div class="accordion-body accordion-body-custom bg-gym-dark">
                     
-                    <div *ngIf="!dia.ejerciciosBase || dia.ejerciciosBase.length === 0" class="text-white-50 small ms-3">
+                    <div *ngIf="!dia.ejerciciosBase || dia.ejerciciosBase.length === 0" class="text-muted small ms-3">
                       No hay ejercicios asignados.
                     </div>
 
                     <div *ngFor="let ej of dia.ejerciciosBase" class="d-flex align-items-center gap-3 mb-3 px-3">
-                      <div class="rounded overflow-hidden" style="width: 70px; height: 70px; background-color: #000; flex-shrink: 0; display: flex; align-items: center; justify-content: center; border: 1px solid #333;">
+                      <div class="rounded overflow-hidden ej-img-container bg-black border-gym">
                         <img *ngIf="ej.imagenUrl" [src]="ej.imagenUrl" alt="GIF de {{ ej.nombre }}" 
-                             style="width: 100%; height: 100%; object-fit: contain;">
-                        <i *ngIf="!ej.imagenUrl" class="bi bi-image text-white-50 fs-4"></i>
+                             class="ej-img">
+                        <i *ngIf="!ej.imagenUrl" class="bi bi-image text-muted fs-4"></i>
                       </div>
                       <div>
-                        <p class="fw-bold mb-0 text-white">{{ ej.nombre }}</p>
-                        <small class="text-white-50">{{ ej.grupoMuscular || 'Grupo' }}</small>
+                        <p class="fw-bold mb-0 text-dark">{{ ej.nombre }}</p>
+                        <small class="text-muted">{{ ej.grupoMuscular || 'Grupo' }}</small>
                       </div>
                     </div>
 
@@ -100,7 +100,7 @@
 
           </div>
 
-          <div class="modal-footer border-secondary">
+          <div class="modal-footer border-gym">
             <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
           </div>
         </div>

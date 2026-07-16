@@ -3,7 +3,7 @@
   <aside class="detail-panel">
 
     <div class="panel-header">
-      <h5 class="mb-0 fw-bold" style="color: #ffd700;">
+      <h5 class="mb-0 fw-bold text-gold">
         <i class="bi" [ngClass]="modo === 'crear' ? 'bi-plus-circle-fill' : 'bi-pencil-fill'"></i>
         {{ modo === 'crear' ? 'Nuevo Producto' : 'Editar Producto' }}
       </h5>
@@ -21,14 +21,14 @@
     <form *ngIf="modo === 'crear'" [formGroup]="registroForm" (ngSubmit)="crearProducto()">
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Nombre</label>
-        <input type="text" formControlName="nombre" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Nombre</label>
+        <input type="text" formControlName="nombre" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                [ngClass]="{'is-invalid': registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched}" />
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Categoría</label>
-        <select formControlName="categoria" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Categoría</label>
+        <select formControlName="categoria" class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                 [ngClass]="{'is-invalid': registroForm.get('categoria')?.invalid && registroForm.get('categoria')?.touched}">
           <option value="" disabled selected>Selecciona...</option>
           <option *ngFor="let cat of categorias" [value]="cat">{{ cat | titlecase }}</option>
@@ -37,24 +37,24 @@
 
       <div class="row g-2 mb-3">
         <div class="col-6">
-          <label class="form-label text-warning fw-semibold small">Precio (S/)</label>
-          <input type="number" formControlName="precio" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+          <label class="form-label text-gold fw-semibold small">Precio (S/)</label>
+          <input type="number" formControlName="precio" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                  [ngClass]="{'is-invalid': registroForm.get('precio')?.invalid && registroForm.get('precio')?.touched}" />
         </div>
         <div class="col-6">
-          <label class="form-label text-warning fw-semibold small">Stock</label>
-          <input type="number" formControlName="stock" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+          <label class="form-label text-gold fw-semibold small">Stock</label>
+          <input type="number" formControlName="stock" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                  [ngClass]="{'is-invalid': registroForm.get('stock')?.invalid && registroForm.get('stock')?.touched}" />
         </div>
       </div>
 
       <div class="mb-4">
-        <label class="form-label text-warning fw-semibold small">Imagen del Producto</label>
-        <input type="file" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Imagen del Producto</label>
+        <input type="file" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                accept="image/*" (change)="onFileSelected($event)" required />
       </div>
 
-      <button type="submit" class="btn w-100 fw-bold py-2" style="background-color:#ffd700; color:#000;">
+      <button type="submit" class="btn w-100 fw-bold py-2 bg-gold fs-6">
         <i class="bi bi-plus-circle me-1"></i> Guardar Producto
       </button>
     </form>
@@ -62,39 +62,39 @@
     <form *ngIf="modo === 'editar'" [formGroup]="editarForm" (ngSubmit)="guardarEdicion()">
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Nombre</label>
-        <input type="text" formControlName="nombre" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Nombre</label>
+        <input type="text" formControlName="nombre" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                [ngClass]="{'is-invalid': editarForm.get('nombre')?.invalid && editarForm.get('nombre')?.touched}" />
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Categoría</label>
-        <select formControlName="categoria" class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Categoría</label>
+        <select formControlName="categoria" class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                 [ngClass]="{'is-invalid': editarForm.get('categoria')?.invalid && editarForm.get('categoria')?.touched}">
           <option *ngFor="let cat of categorias" [value]="cat">{{ cat | titlecase }}</option>
         </select>
       </div>
 
       <div class="mb-3">
-        <label class="form-label text-warning fw-semibold small">Precio (S/)</label>
-        <input type="number" formControlName="precio" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Precio (S/)</label>
+        <input type="number" formControlName="precio" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                [ngClass]="{'is-invalid': editarForm.get('precio')?.invalid && editarForm.get('precio')?.touched}" />
       </div>
 
       <div class="mb-4">
-        <label class="form-label text-warning fw-semibold small">Nueva Imagen (Opcional)</label>
-        <input type="file" class="form-control form-control-sm bg-dark border-secondary text-light shadow-none"
+        <label class="form-label text-gold fw-semibold small">Nueva Imagen (Opcional)</label>
+        <input type="file" class="form-control form-control-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
                accept="image/*" (change)="onFileSelected($event)" />
         
         <div *ngIf="productoSeleccionado?.imagenUrl" class="mt-2 text-center">
-          <small class="text-white-50 d-block mb-1">Imagen actual:</small>
+          <small class="text-muted d-block mb-1">Imagen actual:</small>
           <img [src]="productoSeleccionado.imagenUrl" class="img-preview rounded"
                (error)="$any($event.target).src='https://placehold.co/120x80'" style="max-height: 80px;" />
         </div>
       </div>
 
       <div class="d-flex gap-2">
-        <button type="submit" class="btn fw-bold py-2 flex-grow-1" style="background-color:#ffd700; color:#000;">
+        <button type="submit" class="btn fw-bold py-2 flex-grow-1 bg-gold">
           <i class="bi bi-check-lg me-1"></i> Actualizar
         </button>
         <button type="button" class="btn btn-outline-danger fw-bold py-2"
@@ -111,17 +111,17 @@
     <div class="d-flex flex-wrap gap-2 mb-4 align-items-center">
       <div class="flex-grow-1" style="min-width: 180px;">
         <div class="input-group input-group-sm">
-          <span class="input-group-text bg-dark border-secondary text-white-50">
+          <span class="input-group-text bg-gym-dark-secondary border-gym text-muted">
             <i class="bi bi-search"></i>
           </span>
-          <input type="text" class="form-control bg-dark border-secondary text-light shadow-none"
+          <input type="text" class="form-control bg-gym-dark-secondary border-gym text-dark shadow-none"
                  placeholder="Buscar producto..."
                  [(ngModel)]="textoBusqueda"
                  (input)="aplicarFiltros()" />
         </div>
       </div>
 
-      <select class="form-select form-select-sm bg-dark border-secondary text-light shadow-none"
+      <select class="form-select form-select-sm bg-gym-dark-secondary border-gym text-dark shadow-none"
               style="max-width: 160px;"
               [(ngModel)]="filtroCategoria"
               (change)="aplicarFiltros()">
@@ -134,12 +134,12 @@
         <i class="bi bi-x-circle me-1"></i> Limpiar
       </button>
 
-      <span class="text-white-50 small ms-auto">
+      <span class="text-muted small ms-auto">
         {{ productosFiltrados.length }} producto(s)
       </span>
     </div>
 
-    <div *ngIf="productosFiltrados.length === 0" class="text-center text-white-50 py-5">
+    <div *ngIf="productosFiltrados.length === 0" class="text-center text-muted py-5">
       <i class="bi bi-box-seam fs-1 mb-3 d-block opacity-50"></i>
       <p class="mb-0">No se encontraron productos.</p>
     </div>

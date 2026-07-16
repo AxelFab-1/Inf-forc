@@ -10,10 +10,10 @@
 .detail-panel {
   width: 300px;
   flex-shrink: 0;
-  background-color: #1a1a1a;
+  background-color: var(--gym-dark-secondary);
   border-radius: 12px;
   padding: 1.25rem;
-  border-top: 3px solid #ffd700;
+  border-top: 3px solid var(--gym-gold);
   position: sticky;
   top: 1rem;
 }
@@ -38,13 +38,13 @@
 }
 
 .users-table thead th {
-  background-color: #1a1a1a;
+  background-color: var(--gym-dark-secondary);
   padding: 0.75rem 1rem;
 }
 
 .users-table tbody td {
   padding: 0.75rem 1rem;
-  border-color: #2a2a2a;
+  border-color: var(--gym-border);
 }
 
 .user-row {
@@ -53,12 +53,12 @@
 }
 
 .user-row:hover {
-  background-color: #252525 !important;
+  background-color: var(--gym-dark-tertiary) !important;
 }
 
 .user-row--selected {
-  background-color: #1e1a00 !important;
-  outline: 2px solid #ffd700;
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  outline: 2px solid var(--gym-gold);
   outline-offset: -2px;
 }
 

@@ -5,9 +5,72 @@
 }
 .alert-success {
   background-color: rgba(40, 167, 69, 0.15);
-  color: #8eff8e;
+  color: var(--gym-success-dark);
 }
 .alert-danger {
   background-color: rgba(220, 53, 69, 0.15);
-  color: #ff8e8e;
+  color: var(--gym-danger);
+}
+
+/* ── Theme Toggle Button ──────────────────────── */
+.btn-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: 2px solid var(--gym-border);
+  border-radius: 50px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+  color: var(--gym-text-main);
+}
+
+.btn-theme-toggle:hover {
+  border-color: var(--gym-gold);
+}
+
+.toggle-track {
+  width: 48px;
+  height: 26px;
+  background-color: var(--gym-dark-tertiary);
+  border-radius: 50px;
+  border: 1.5px solid var(--gym-border);
+  display: inline-flex;
+  align-items: center;
+  padding: 2px;
+  transition: background-color 0.35s ease;
+  flex-shrink: 0;
+}
+
+/* Pista activa (modo oscuro) */
+:host-context([data-theme="dark"]) .toggle-track {
+  background-color: var(--gym-gold);
+  border-color: var(--gym-gold);
+}
+
+.toggle-thumb {
+  width: 20px;
+  height: 20px;
+  background-color: var(--gym-dark);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: var(--gym-gold-text);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              background-color 0.3s ease;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+:host-context([data-theme="dark"]) .toggle-thumb {
+  transform: translateX(22px);
+  background-color: #1a1a1a;
+  color: #FCD34D;
+}
+
+.toggle-label {
+  font-size: 0.875rem;
+  color: var(--gym-text-main);
+  min-width: 46px;
 }

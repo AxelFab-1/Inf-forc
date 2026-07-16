@@ -1,19 +1,18 @@
-
 .nav-link-admin {
-  color: #aaa;
+  color: var(--gym-text-muted);
   text-decoration: none;
   transition: all 0.2s ease;
   border: 1px solid transparent;
 }
 
 .nav-link-admin:hover {
-  color: #ffd700;
-  border-color: #444;
-  background-color: #252525;
+  color: var(--gym-gold);
+  border-color: var(--gym-border);
+  background-color: var(--gym-dark-tertiary);
 }
 
 .nav-link-admin.active {
-  background-color: #ffd700;
+  background-color: var(--gym-gold);
   color: #000 !important;
-  border-color: #ffd700;
+  border-color: var(--gym-gold);
 }
